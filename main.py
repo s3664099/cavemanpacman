@@ -14,6 +14,16 @@ if __name__ == "__main__":
         pacman_positions = pacman_map.find_character('P')
         if pacman_positions:
             print(f"\nPac-Man starts at: {pacman_positions[0]}")
+
+        # Example: Find deer starting position (usually 'P')
+        deer_positions = pacman_map.find_deer('d')
+        if deer_positions:
+            print(f"\nDeer start at: {deer_positions}")
+
+        # Example: Find bear starting position (usually 'P')
+        bear_positions = pacman_map.find_bear('B')
+        if bear_positions:
+            print(f"\nBears start at: {bear_positions}")
         
         # Example: Count dots (usually '.' or '*')
         dots = pacman_map.find_character('.')

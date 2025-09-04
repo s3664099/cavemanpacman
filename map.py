@@ -37,12 +37,28 @@ class PacmanMap:
         return None
     
     def find_character(self, char):
-        positions = []
+        player = []
         for row in range(self.height):
             for col in range(self.width):
                 if self.map_data[row][col] == char:
-                    positions.append((row, col))
-        return positions
+                    player.append((row, col))
+        return player
+
+    def find_deer(self, char):
+        deer = []
+        for row in range(self.height):
+            for col in range(self.width):
+                if self.map_data[row][col] == char:
+                    deer.append((row, col))
+        return deer
+
+    def find_bear(self, char):
+        bear = []
+        for row in range(self.height):
+            for col in range(self.width):
+                if self.map_data[row][col] == char:
+                    bear.append((row, col))
+        return bear
     
     def print_map(self):
         """Print the map"""
