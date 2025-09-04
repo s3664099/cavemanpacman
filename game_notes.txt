@@ -1,0 +1,10 @@
+Basically Pacman
+- The walls are trees, with the exception of the centre which is rock.
+- The stuff you eat are berries.
+- The character is a female hunter/gatherer
+- The ghosts are bears, but there are only two. The bears wander aimlessly unless they see something and
+then they move towards it. Will continue in the direction unless reach a t-intersection, if see will follow, if not will wander aimlessly
+- The power pills are deer. Will wander aimlessly and if there is a berry, will take it. If sees something will move away.
+- If bear catches deer, will return to cave.
+- Extra points for player if catch deer.
+- Game ends when all berries are collected.
