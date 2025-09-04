@@ -3,6 +3,9 @@ class PacmanMap:
         self.map_data = self.load_map(file_path)
         self.height = len(self.map_data) if self.map_data else 0
         self.width = len(self.map_data[0]) if self.map_data else 0
+        self.player = []
+        self.deer = []
+        self.bear = []
     
     def load_map(self, file_path):
         """Load map from text file"""
@@ -37,28 +40,25 @@ class PacmanMap:
         return None
     
     def find_character(self, char):
-        player = []
         for row in range(self.height):
             for col in range(self.width):
                 if self.map_data[row][col] == char:
-                    player.append((row, col))
-        return player
+                    self.player.append((row,col))
+        return self.player
 
     def find_deer(self, char):
-        deer = []
         for row in range(self.height):
             for col in range(self.width):
                 if self.map_data[row][col] == char:
-                    deer.append((row, col))
-        return deer
+                    self.deer.append((row,col))
+        return self.deer
 
     def find_bear(self, char):
-        bear = []
         for row in range(self.height):
             for col in range(self.width):
                 if self.map_data[row][col] == char:
-                    bear.append((row, col))
-        return bear
+                    self.bear.append((row,col))
+        return self.bear
     
     def print_map(self):
         """Print the map"""
