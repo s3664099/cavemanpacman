@@ -1,3 +1,6 @@
+- Load the map and display it with Pygame using the icons
+
+
 Basically Pacman
 - The walls are trees, with the exception of the centre which is rock.
 - The stuff you eat are berries.
