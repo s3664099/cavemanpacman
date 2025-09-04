@@ -1,3 +1,11 @@
+"""
+File: Caveman Pacman Main 
+Author: David Sarkies
+Initial: 4 September 2025
+Update: 4 September 2025
+Version: 0.0
+"""
+
 from map import PacmanMap
 
 # Example usage
@@ -28,3 +36,6 @@ if __name__ == "__main__":
         # Example: Count dots (usually '.' or '*')
         dots = pacman_map.find_character('.')
         print(f"Number of dots: {len(dots)}")
+
+"""
+4 September 2025 - Created File

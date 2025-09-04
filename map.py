@@ -1,3 +1,11 @@
+"""
+File: Caveman Pacman Map
+Author: David Sarkies
+Initial: 4 September 2025
+Update: 4 September 2025
+Version: 0.0
+"""
+
 class PacmanMap:
     def __init__(self, file_path):
         self.map_data = self.load_map(file_path)
@@ -68,3 +76,5 @@ class PacmanMap:
     def get_dimensions(self):
         """Return map dimensions"""
         return self.width, self.height
+"""
+4 September 2025 - Created File
