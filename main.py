@@ -7,6 +7,7 @@ Version: 0.0
 """
 
 from map import PacmanMap
+from display import View
 
 # Example usage
 if __name__ == "__main__":
