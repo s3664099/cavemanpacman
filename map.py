@@ -2,8 +2,8 @@
 File: Caveman Pacman Map
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 5 September 2025
-Version: 0.1
+Update: 8 September 2025
+Version: 0.2
 """
 
 class PacmanMap:
@@ -76,6 +76,9 @@ class PacmanMap:
         
         for row in self.map_data:
             print(row)
+
+    def get_map(self):
+        return self.map_data
     
     #Return map dimensions
     def get_dimensions(self):
@@ -93,4 +96,5 @@ class PacmanMap:
 """
 4 September 2025 - Created File
 5 September 2025 - Starting tidying up file
+8 September 2025 - Added getter for retrieving map
 """

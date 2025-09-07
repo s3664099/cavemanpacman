@@ -2,8 +2,8 @@
 File: Caveman Pacman Display 
 Author: David Sarkies
 Initial: 6 September 2025
-Update: 7 September 2025
-Version: 0.1
+Update: 8 September 2025
+Version: 0.2
 """
 
 import pygame
@@ -25,18 +25,21 @@ class View:
 		self.raspberry = pygame.transform.scale(pygame.image.load("icons/raspberry.png"),(self.cell_size,self.cell_size))
 		self.wall = pygame.transform.scale(pygame.image.load("icons/wall.png"),(self.cell_size,self.cell_size))
 
-	def update_screen(pacman_map):
+	def update_screen(self,pacman_map):
 
-		self.screen.fill(0,0,0)
+		#self.screen.fill(0,0,0)
 
 		for col in range(self.width):
 			for row in range(self.height):
 				if pacman_map[row][col] == "1":
-					self.screen.blit(self.forest(col*self.cell_size,row*self.cell_size))
+					self.screen.blit(self.forest,(col*self.cell_size,row*self.cell_size))
+
+		pygame.display.update()
 
 
 
 """
 6 September 2025 - Created file
 7 September 2025 - Started building display
+8 September 2025 - Basic Map displays
 """
