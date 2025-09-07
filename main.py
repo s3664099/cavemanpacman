@@ -2,8 +2,8 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 4 September 2025
-Version: 0.0
+Update: 7 September 2025
+Version: 0.2
 """
 
 from map import PacmanMap
@@ -13,7 +13,12 @@ from display import View
 if __name__ == "__main__":
     # Create a PacmanMap object
     pacman_map = PacmanMap("map.txt")
-    
+    View(pacman_map.get_dimensions())
+
+    thing=0
+    while(True):
+        thing+=1
+
     if pacman_map.map_data:
         print(f"Map loaded: {pacman_map.width}x{pacman_map.height}")
         print("\nMap:")
@@ -36,4 +41,5 @@ if __name__ == "__main__":
         
 """
 4 September 2025 - Created File
+7 September 2025 - Added creation of View object
 """
