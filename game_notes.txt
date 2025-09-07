@@ -17,3 +17,4 @@ then they move towards it. Will continue in the direction unless reach a t-inter
 <a href="https://www.flaticon.com/free-icons/bear" title="bear icons">Bear icons created by Culmbio - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/deer" title="deer icons">Deer icons created by smalllikeart - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/stone-age" title="stone age icons">Stone age icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/cliffs" title="cliffs icons">Cliffs icons created by Mihimihi - Flaticon</a>
