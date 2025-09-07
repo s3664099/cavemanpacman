@@ -18,9 +18,9 @@ class View:
 		self.deer = pygame.transform.scale(pygame.image.load("icons/deer.png"),(self.cell_size,self.cell_size))		
 		self.forest = pygame.transform.scale(pygame.image.load("icons/forest.png"),(self.cell_size,self.cell_size))
 		self.raspberry = pygame.transform.scale(pygame.image.load("icons/raspberry.png"),(self.cell_size,self.cell_size))
-		self.cliffs = pygame.transform.scale(pygame.image.load("icons/cliffs.png"),(self.cell_size,self.cell_size))
+		self.wall = pygame.transform.scale(pygame.image.load("icons/wall.png"),(self.cell_size,self.cell_size))
 
-	#Display
+
 
 """
 6 September 2025 - Created file
