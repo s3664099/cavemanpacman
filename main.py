@@ -11,7 +11,7 @@ from display import View
 
 # Example usage
 if __name__ == "__main__":
-    # Create a PacmanMap object
+    
     pacman_map = PacmanMap("map.txt")
     game_screen = View(pacman_map.get_dimensions())
     game_screen.update_screen(pacman_map.get_map())
@@ -19,6 +19,13 @@ if __name__ == "__main__":
     thing=0
     while(True):
         thing+=1
+         #Move Cavewoman first - create controller and use arrow keys
+         #                     - Takes position, changes it based of movement,
+         #                     - If Blocked does nothing
+         #                     - If not blocked, moves to new position, previous position is blank
+         #                     - Updates map - if berry adds 1 to score
+         #                                   - if deer adds 10
+         #                                   - if bear - dies
 
     if pacman_map.map_data:
         print(f"Map loaded: {pacman_map.width}x{pacman_map.height}")
