@@ -13,7 +13,7 @@ class View:
 
 		pygame.init()
 
-		self.cell_size = 20
+		self.cell_size = 30
 		self.width = dimensions[0]
 		self.height = dimensions[1]
 		self.screen = pygame.display.set_mode((self.width*self.cell_size, self.height*self.cell_size))
@@ -33,6 +33,16 @@ class View:
 			for row in range(self.height):
 				if pacman_map[row][col] == "1":
 					self.screen.blit(self.forest,(col*self.cell_size,row*self.cell_size))
+				elif pacman_map[row][col] == "B":
+					self.screen.blit(self.bear,(col*self.cell_size,row*self.cell_size))
+				elif pacman_map[row][col] == "d":
+					self.screen.blit(self.deer,(col*self.cell_size,row*self.cell_size))
+				elif pacman_map[row][col] == "2":
+					self.screen.blit(self.wall,(col*self.cell_size,row*self.cell_size))
+				elif pacman_map[row][col] == "P":
+					self.screen.blit(self.player,(col*self.cell_size,row*self.cell_size))
+				elif pacman_map[row][col] == ".":
+					self.screen.blit(self.raspberry,(col*self.cell_size,row*self.cell_size))
 
 		pygame.display.update()
 
@@ -42,4 +52,5 @@ class View:
 6 September 2025 - Created file
 7 September 2025 - Started building display
 8 September 2025 - Basic Map displays
+				 - Completed mathematical display of map
 """
