@@ -65,12 +65,29 @@ class PacmanMap:
         for row in range(self.height):
             for col in range(self.width):
                 if self.map_data[row][col] == self.player_position:
-                    self.player.append((row,col))
+                    self.player = (row,col)
                 elif self.map_data[row][col] == self.deer_position:
                     self.deer.append((row,col))
                 elif self.map_data[row][col] == self.bear_position:
                     self.bear.append((row,col))
-            
+    
+    def move_player(self,key):
+
+        new_position = (self.player[0],self.player[1])
+
+        if key == "N":
+            new_position[0] -=1
+        elif key == "S":
+            new_position[0] +=1
+        elif key == "E":
+            new_position[1] +=1
+        elif key == "W":
+            new_position[1] -=1
+
+        self.map_data[self.player[0]][self.player[1]] = " "
+        self.map_data[new_position[0]][new_position[1]] = "P"
+        self.player = (new_position[0],new_position[1]) 
+
     #Print the map
     def print_map(self):
         
