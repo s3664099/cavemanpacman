@@ -46,8 +46,6 @@ class View:
 
 		pygame.display.update()
 
-
-
 """
 6 September 2025 - Created file
 7 September 2025 - Started building display

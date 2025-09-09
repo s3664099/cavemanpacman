@@ -2,12 +2,13 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 8 September 2025
-Version: 0.3
+Update: 9 September 2025
+Version: 0.4
 """
 
 from map import PacmanMap
 from display import View
+import control
 
 # Example usage
 if __name__ == "__main__":
@@ -15,10 +16,13 @@ if __name__ == "__main__":
     pacman_map = PacmanMap("map.txt")
     game_screen = View(pacman_map.get_dimensions())
     game_screen.update_screen(pacman_map.get_map())
+    running = True
 
     thing=0
-    while(True):
-        thing+=1
+    while(running):
+        action = control.get_keypress()
+        if action == "Q":
+            running = False
          #Move Cavewoman first - create controller and use arrow keys
          #                     - Takes position, changes it based of movement,
          #                     - If Blocked does nothing
@@ -51,4 +55,5 @@ if __name__ == "__main__":
 4 September 2025 - Created File
 7 September 2025 - Added creation of View object
 8 September 2025 - Added call to display screen
+9 September 2025 - Added controls and quit
 """
