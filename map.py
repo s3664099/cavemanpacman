@@ -2,8 +2,8 @@
 File: Caveman Pacman Map
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 8 September 2025
-Version: 0.2
+Update: 10 September 2025
+Version: 0.3
 """
 
 class PacmanMap:
@@ -34,25 +34,30 @@ class PacmanMap:
                 #Read Lines, filter our any empty lines
                 lines = [line.rstrip('\n') for line in file.readlines()]
                 lines = [line for line in lines if line]
+                mutable_lines = []
                 
                 if not lines:
-                    lines = None
+                    mutable_lines = None
                 
                 # Check if all lines have the same length
                 first_line_length = len(lines[0])
+
                 for i, line in enumerate(lines):
                     if len(line) != first_line_length:
                         print(f"Warning: Line {i+1} has different length than first line")
+                        line = line.ljust(first_line_length)
+
+                    mutable_lines.append(list(line))
 
         except FileNotFoundError:
             print(f"Error: File '{file_path}' not found.")
-            lines = None
+            mutable_lines = None
 
         except Exception as e:
             print(f"Error loading map: {e}")
-            lines = None
+            mutable_lines = None
 
-        return lines
+        return mutable_lines
 
     #Get the character at a specific position
     def get_cell(self, row, col):
@@ -73,20 +78,28 @@ class PacmanMap:
     
     def move_player(self,key):
 
-        new_position = (self.player[0],self.player[1])
+        row,col = self.player
+        new_row,new_col = row,col
 
         if key == "N":
-            new_position[0] -=1
+            new_row -=1
         elif key == "S":
-            new_position[0] +=1
+            new_row +=1
         elif key == "E":
-            new_position[1] +=1
+            new_col +=1
         elif key == "W":
-            new_position[1] -=1
+            new_col -=1
 
-        self.map_data[self.player[0]][self.player[1]] = " "
-        self.map_data[new_position[0]][new_position[1]] = "P"
-        self.player = (new_position[0],new_position[1]) 
+         #Move Cavewoman first - Checks if valid move (is there a wall)
+         #                     - If Blocked does nothing
+         #                     - If not blocked, moves to new position, previous position is blank
+         #                     - Updates map - if berry adds 1 to score
+         #                                   - if deer adds 10
+         #                                   - if bear - dies
+        print(row,col,new_row,new_col)
+        self.map_data[row][col] = " "
+        self.map_data[new_row][new_col] = "P"
+        self.player = (new_row,new_col)
 
     #Print the map
     def print_map(self):
@@ -114,4 +127,5 @@ class PacmanMap:
 4 September 2025 - Created File
 5 September 2025 - Starting tidying up file
 8 September 2025 - Added getter for retrieving map
+10 September 2025 - Movement now works
 """

@@ -25,13 +25,7 @@ if __name__ == "__main__":
             running = False
         pacman_map.move_player(action)
         game_screen.update_screen(pacman_map.get_map())
-         #Move Cavewoman first - create controller and use arrow keys
-         #                     - Takes position, changes it based of movement,
-         #                     - If Blocked does nothing
-         #                     - If not blocked, moves to new position, previous position is blank
-         #                     - Updates map - if berry adds 1 to score
-         #                                   - if deer adds 10
-         #                                   - if bear - dies
+        #Move bear & move Deer
 
     if pacman_map.map_data:
         print(f"Map loaded: {pacman_map.width}x{pacman_map.height}")

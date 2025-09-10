@@ -2,8 +2,8 @@
 File: Caveman Pacman Display 
 Author: David Sarkies
 Initial: 6 September 2025
-Update: 8 September 2025
-Version: 0.2
+Update: 10 September 2025
+Version: 0.3
 """
 
 import pygame
@@ -27,7 +27,7 @@ class View:
 
 	def update_screen(self,pacman_map):
 
-		#self.screen.fill(0,0,0)
+		self.screen.fill((0,0,0))
 
 		for col in range(self.width):
 			for row in range(self.height):
@@ -51,4 +51,5 @@ class View:
 7 September 2025 - Started building display
 8 September 2025 - Basic Map displays
 				 - Completed mathematical display of map
+10 September 2025 - added clear screen function
 """
