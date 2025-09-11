@@ -90,16 +90,21 @@ class PacmanMap:
         elif key == "W":
             new_col -=1
 
+        new_position = self.map_data[new_row][new_col]
+
+        if (new_position == "." or new_position == " " or new_position == "d"):
+            self.map_data[row][col] = " "
+            self.map_data[new_row][new_col] = "P"
+            self.player = (new_row,new_col)
+        
          #Move Cavewoman first - Checks if valid move (is there a wall)
          #                     - If Blocked does nothing
          #                     - If not blocked, moves to new position, previous position is blank
          #                     - Updates map - if berry adds 1 to score
          #                                   - if deer adds 10
          #                                   - if bear - dies
-        print(row,col,new_row,new_col)
-        self.map_data[row][col] = " "
-        self.map_data[new_row][new_col] = "P"
-        self.player = (new_row,new_col)
+
+
 
     #Print the map
     def print_map(self):
