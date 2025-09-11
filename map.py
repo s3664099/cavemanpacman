@@ -2,8 +2,8 @@
 File: Caveman Pacman Map
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 10 September 2025
-Version: 0.3
+Update: 11 September 2025
+Version: 0.4
 """
 
 class PacmanMap:
@@ -80,6 +80,7 @@ class PacmanMap:
 
         row,col = self.player
         new_row,new_col = row,col
+        non_blockers = ["."," ","d"]
 
         if key == "N":
             new_row -=1
@@ -92,7 +93,7 @@ class PacmanMap:
 
         new_position = self.map_data[new_row][new_col]
 
-        if (new_position == "." or new_position == " " or new_position == "d"):
+        if (new_position in non_blockers):
             self.map_data[row][col] = " "
             self.map_data[new_row][new_col] = "P"
             self.player = (new_row,new_col)
@@ -133,4 +134,5 @@ class PacmanMap:
 5 September 2025 - Starting tidying up file
 8 September 2025 - Added getter for retrieving map
 10 September 2025 - Movement now works
+11 September 2025 - Added code to prevent movement through certain blocks
 """
