@@ -25,11 +25,12 @@ class View:
 		self.forest = pygame.transform.scale(pygame.image.load("icons/forest.png"),(self.cell_size,self.cell_size))
 		self.raspberry = pygame.transform.scale(pygame.image.load("icons/raspberry.png"),(self.cell_size,self.cell_size))
 		self.wall = pygame.transform.scale(pygame.image.load("icons/wall.png"),(self.cell_size,self.cell_size))
+		self.puddle = pygame.transform.scale(pygame.image.load("icons/puddle.png"),(self.cell_size,self.cell_size))
 
 	def update_screen(self,pacman_map):
 
 		self.screen.fill((0,0,0))
-		
+
 		score = pacman_map.get_score()
 		game_map = pacman_map.get_map()
 
@@ -63,6 +64,8 @@ class View:
 					self.screen.blit(self.player,(x_pos,y_pos))
 				elif game_map[row][col] == ".":
 					self.screen.blit(self.raspberry,(x_pos,y_pos))
+				elif game_map[row][col] == "w":
+					self.screen.blit(self.puddle,(x_pos,y_pos))
 
 		pygame.display.update()
 
@@ -73,4 +76,5 @@ class View:
 				 - Completed mathematical display of map
 10 September 2025 - added clear screen function
 12 September 2025 - Added score bar
+13 September 2025 - Added puddle
 """

@@ -82,7 +82,7 @@ class PacmanMap:
 
         row,col = self.player
         new_row,new_col = row,col
-        non_blockers = ["."," ","d"]
+        non_blockers = ["."," ","d","w"]
 
         if key == "N":
             new_row -=1

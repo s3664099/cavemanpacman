@@ -2,8 +2,8 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 9 September 2025
-Version: 0.4
+Update: 13 September 2025
+Version: 0.5
 """
 
 from map import PacmanMap
@@ -52,4 +52,5 @@ if __name__ == "__main__":
 7 September 2025 - Added creation of View object
 8 September 2025 - Added call to display screen
 9 September 2025 - Added controls and quit
+13 September 2025 - Passed map object to display as opposed to just map
 """
