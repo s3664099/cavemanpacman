@@ -16,6 +16,7 @@ class PacmanMap:
         self.deer = []
         self.bear = []
         self.score = 0
+        self.running = True
 
         self.player_position = "P"
         self.deer_position = "d"
@@ -108,6 +109,11 @@ class PacmanMap:
                 self.map_data[row][col] = " "
                 self.map_data[new_row][new_col] = "P"
                 self.player = (new_row,new_col)
+            elif (new_position == "B"):
+                self.running = False
+        elif (new_row,new_col == 9,25):
+            self.running = False
+
         
          #Move Cavewoman first - Checks if valid move (is there a wall)
          #                     - If Blocked does nothing
@@ -143,6 +149,12 @@ class PacmanMap:
 
     def get_score(self):
         return self.score
+
+    def get_running(self):
+        return self.running
+
+    def set_running(self,running):
+        self.running = running
 """
 4 September 2025 - Created File
 5 September 2025 - Starting tidying up file
@@ -150,4 +162,5 @@ class PacmanMap:
 10 September 2025 - Movement now works
 11 September 2025 - Added code to prevent movement through certain blocks
 13 September 2025 - Added scoring, updated map and added restrictions for player movement
+                  - Added end game states
 """
