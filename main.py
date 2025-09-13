@@ -9,6 +9,7 @@ Version: 0.5
 from map import PacmanMap
 from display import View
 import control
+import time
 
 # Example usage
 if __name__ == "__main__":
@@ -16,6 +17,7 @@ if __name__ == "__main__":
     pacman_map = PacmanMap("map.txt")
     game_screen = View(pacman_map.get_dimensions())
     game_screen.update_screen(pacman_map)
+    base_time = time.time()
 
     thing=0
     while(pacman_map.get_running()):
@@ -24,7 +26,12 @@ if __name__ == "__main__":
             pacman_map.set_running(False)
         pacman_map.move_player(action)
         game_screen.update_screen(pacman_map)
-        #Move bear & move Deer
+        
+        current_time = time.time()
+        if (current_time-base_time>1):
+            base_time = current_time
+            pacman_map.move_deer()
+        
 
     if pacman_map.map_data:
         print(f"Map loaded: {pacman_map.width}x{pacman_map.height}")

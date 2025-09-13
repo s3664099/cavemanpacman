@@ -4,7 +4,11 @@ Author: David Sarkies
 Initial: 4 September 2025
 Update: 13 September 2025
 Version: 0.5
+
+Remove the deer when encountering it
 """
+
+import random
 
 class PacmanMap:
     def __init__(self, file_path):
@@ -13,8 +17,8 @@ class PacmanMap:
         self.height = len(self.map_data) if self.map_data else 0
         self.width = len(self.map_data[0]) if self.map_data else 0
         self.player = []
-        self.deer = []
-        self.bear = []
+        self.deers = []
+        self.bears = []
         self.score = 0
         self.running = True
 
@@ -75,9 +79,9 @@ class PacmanMap:
                 if self.map_data[row][col] == self.player_position:
                     self.player = (row,col)
                 elif self.map_data[row][col] == self.deer_position:
-                    self.deer.append((row,col))
+                    self.deers.append((row,col))
                 elif self.map_data[row][col] == self.bear_position:
-                    self.bear.append((row,col))
+                    self.bears.append((row,col))
     
     def move_player(self,key):
 
@@ -114,13 +118,19 @@ class PacmanMap:
         elif (new_row,new_col == 9,25):
             self.running = False
 
-        
-         #Move Cavewoman first - Checks if valid move (is there a wall)
-         #                     - If Blocked does nothing
-         #                     - If not blocked, moves to new position, previous position is blank
-         #                     - Updates map - if berry adds 1 to score
-         #                                   - if deer adds 10
-         #                                   - if bear - dies
+    def move_deer(self):
+
+        for deer in self.deers:
+            new_row,new_col = 0,0
+            movement = random.randint(4)
+            if (movement == 0):
+                new_row -=1
+            elif (movement == 1):
+                new_row +=1
+            elif (movement == 2):
+                new_col -=1
+            elif (movement == 3):
+                new_col +=1
 
 
 
@@ -142,10 +152,10 @@ class PacmanMap:
         return self.player
 
     def get_deer(self):
-        return self.deer
+        return self.deers
 
     def get_bear(self):
-        return self.bear
+        return self.bears
 
     def get_score(self):
         return self.score
