@@ -2,8 +2,8 @@
 File: Caveman Pacman Map
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 13 September 2025
-Version: 0.5
+Update: 14 September 2025
+Version: 0.6
 
 Remove the deer when encountering it
 """
@@ -107,6 +107,7 @@ class PacmanMap:
                     self.score += 1
                 elif (self.map_data[new_row][new_col]=="d"):
                     self.score += 10
+                    #remove deer from list
                 elif (self.map_data[new_row][new_col]=="w"):
                     self.score += 5
 
@@ -120,9 +121,13 @@ class PacmanMap:
 
     def move_deer(self):
 
+        non_blockers = ["."," ","w"]
+        new_deers = []
+
         for deer in self.deers:
-            new_row,new_col = 0,0
-            movement = random.randint(4)
+            new_row,new_col = deer
+            row,col = deer
+            movement = random.randint(0,12)
             if (movement == 0):
                 new_row -=1
             elif (movement == 1):
@@ -131,6 +136,16 @@ class PacmanMap:
                 new_col -=1
             elif (movement == 3):
                 new_col +=1
+
+            if (new_col<self.width):
+                new_position = self.map_data[new_row][new_col]
+                if(new_position in non_blockers):
+                    self.map_data[row][col]=" "
+                    self.map_data[new_row][new_col]="d"
+                    row,col = new_row,new_col
+
+            new_deers.append((row,col))
+        self.deers = new_deers
 
 
 
@@ -173,4 +188,5 @@ class PacmanMap:
 11 September 2025 - Added code to prevent movement through certain blocks
 13 September 2025 - Added scoring, updated map and added restrictions for player movement
                   - Added end game states
+14 September 2025 - Added deer movement
 """
