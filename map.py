@@ -97,6 +97,14 @@ class PacmanMap:
             new_position = self.map_data[new_row][new_col]
 
             if (new_position in non_blockers):
+
+                if (self.map_data[new_row][new_col]=="."):
+                    self.score += 1
+                elif (self.map_data[new_row][new_col]=="d"):
+                    self.score += 10
+                elif (self.map_data[new_row][new_col]=="w"):
+                    self.score += 5
+
                 self.map_data[row][col] = " "
                 self.map_data[new_row][new_col] = "P"
                 self.player = (new_row,new_col)

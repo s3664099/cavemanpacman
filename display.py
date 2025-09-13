@@ -29,8 +29,9 @@ class View:
 	def update_screen(self,pacman_map):
 
 		self.screen.fill((0,0,0))
-
-		score = 0
+		
+		score = pacman_map.get_score()
+		game_map = pacman_map.get_map()
 
 		# Draw score bar at the top
 		score_bar_rect = pygame.Rect(0, 0, self.width, self.score_bar_height)
@@ -50,17 +51,17 @@ class View:
 				y_pos = row * self.cell_size + self.score_bar_height
 				x_pos = col * self.cell_size
 
-				if pacman_map[row][col] == "1":
+				if game_map[row][col] == "1":
 					self.screen.blit(self.forest,(x_pos,y_pos))
-				elif pacman_map[row][col] == "B":
+				elif game_map[row][col] == "B":
 					self.screen.blit(self.bear,(x_pos,y_pos))
-				elif pacman_map[row][col] == "d":
+				elif game_map[row][col] == "d":
 					self.screen.blit(self.deer,(x_pos,y_pos))
-				elif pacman_map[row][col] == "2":
+				elif game_map[row][col] == "2":
 					self.screen.blit(self.wall,(x_pos,y_pos))
-				elif pacman_map[row][col] == "P":
+				elif game_map[row][col] == "P":
 					self.screen.blit(self.player,(x_pos,y_pos))
-				elif pacman_map[row][col] == ".":
+				elif game_map[row][col] == ".":
 					self.screen.blit(self.raspberry,(x_pos,y_pos))
 
 		pygame.display.update()

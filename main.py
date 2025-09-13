@@ -15,7 +15,7 @@ if __name__ == "__main__":
     
     pacman_map = PacmanMap("map.txt")
     game_screen = View(pacman_map.get_dimensions())
-    game_screen.update_screen(pacman_map.get_map())
+    game_screen.update_screen(pacman_map)
     running = True
 
     thing=0
@@ -24,7 +24,7 @@ if __name__ == "__main__":
         if action == "Q":
             running = False
         pacman_map.move_player(action)
-        game_screen.update_screen(pacman_map.get_map())
+        game_screen.update_screen(pacman_map)
         #Move bear & move Deer
 
     if pacman_map.map_data:
