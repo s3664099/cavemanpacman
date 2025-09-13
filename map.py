@@ -2,8 +2,8 @@
 File: Caveman Pacman Map
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 11 September 2025
-Version: 0.4
+Update: 13 September 2025
+Version: 0.5
 """
 
 class PacmanMap:
@@ -15,6 +15,7 @@ class PacmanMap:
         self.player = []
         self.deer = []
         self.bear = []
+        self.score = 0
 
         self.player_position = "P"
         self.deer_position = "d"
@@ -61,9 +62,10 @@ class PacmanMap:
 
     #Get the character at a specific position
     def get_cell(self, row, col):
+        character_position = None
         if 0 <= row < self.height and 0 <= col < self.width:
-            return self.map_data[row][col]
-        return None
+            character_position = self.map_data[row][col]
+        return character_position
     
     #Merge all into same, and fill this from constructor
     def find_character(self):
@@ -91,12 +93,13 @@ class PacmanMap:
         elif key == "W":
             new_col -=1
 
-        new_position = self.map_data[new_row][new_col]
+        if (new_col<self.width):
+            new_position = self.map_data[new_row][new_col]
 
-        if (new_position in non_blockers):
-            self.map_data[row][col] = " "
-            self.map_data[new_row][new_col] = "P"
-            self.player = (new_row,new_col)
+            if (new_position in non_blockers):
+                self.map_data[row][col] = " "
+                self.map_data[new_row][new_col] = "P"
+                self.player = (new_row,new_col)
         
          #Move Cavewoman first - Checks if valid move (is there a wall)
          #                     - If Blocked does nothing
@@ -129,10 +132,14 @@ class PacmanMap:
 
     def get_bear(self):
         return self.bear
+
+    def get_score(self):
+        return self.score
 """
 4 September 2025 - Created File
 5 September 2025 - Starting tidying up file
 8 September 2025 - Added getter for retrieving map
 10 September 2025 - Movement now works
 11 September 2025 - Added code to prevent movement through certain blocks
+13 September 2025 - Added scoring, updated map and added restrictions for player movement
 """
