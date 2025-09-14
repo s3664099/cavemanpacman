@@ -107,7 +107,12 @@ class PacmanMap:
                     self.score += 1
                 elif (self.map_data[new_row][new_col]=="d"):
                     self.score += 10
-                    #remove deer from list
+                    new_deer_list = []
+                    for deer in self.deers:
+                        deer_row,deer_col = deer
+                        if deer_row != new_row and deer_col != new_col:
+                            new_deer_list.append((deer_row,deer_col))
+                    self.deers = new_deer_list
                 elif (self.map_data[new_row][new_col]=="w"):
                     self.score += 5
 
@@ -188,5 +193,5 @@ class PacmanMap:
 11 September 2025 - Added code to prevent movement through certain blocks
 13 September 2025 - Added scoring, updated map and added restrictions for player movement
                   - Added end game states
-14 September 2025 - Added deer movement
+14 September 2025 - Added deer movement. Removed deer from list when grab it
 """
