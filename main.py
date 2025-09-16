@@ -5,10 +5,15 @@ Initial: 4 September 2025
 Update: 16 September 2025
 Version: 0.6
 
-Create Bear & Deer object and have movement occur in there.
+Create Deer object and have movement occur in there.
     Stores the position
     Has the flee/chase boolean
     Bear holds what is on the square
+
+Do flee for deer
+    - if see player or bear, runs away (and at double speed)
+    - checks if see every move. Stops once no longer see
+Do chase for beer
 """
 
 from map import PacmanMap

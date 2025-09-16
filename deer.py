@@ -12,7 +12,11 @@ class Deer:
 
 	def __init__(self,row,col):
 		self.position = (row,col)
-		self.running = False
+		self.fleeing = False
+		self.score = 10
+
+	def get_score(self):
+		return self.score
 
 	def get_position(self):
 		return self.position
