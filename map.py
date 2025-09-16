@@ -20,7 +20,6 @@ class PacmanMap:
         self.deers = []
         self.bears = []
         self.score = 0
-        self.running = True
         self.bear_square = [" "," "]
 
         self.player_position = "P"
@@ -164,38 +163,6 @@ class PacmanMap:
         self.bear_square = new_bear_square
         self.bears = new_bears
 
-
-
-    def move_deer(self):
-
-        non_blockers = ["."," ","w"]
-        new_deers = []
-
-        for deer in self.deers:
-            new_row,new_col = deer
-            row,col = deer
-            movement = random.randint(0,12)
-            if (movement == 0):
-                new_row -=1
-            elif (movement == 1):
-                new_row +=1
-            elif (movement == 2):
-                new_col -=1
-            elif (movement == 3):
-                new_col +=1
-
-            if (new_col<self.width):
-                new_position = self.map_data[new_row][new_col]
-                if(new_position in non_blockers):
-                    self.map_data[row][col]=" "
-                    self.map_data[new_row][new_col]="d"
-                    row,col = new_row,new_col
-
-            new_deers.append((row,col))
-        self.deers = new_deers
-
-
-
     #Print the map
     def print_map(self):
         
@@ -204,10 +171,16 @@ class PacmanMap:
 
     def get_map(self):
         return self.map_data
+
+    def set_map(self,map_data):
+        self.map_data = map_data
     
     #Return map dimensions
     def get_dimensions(self):
         return self.width, self.height
+
+    def get_width(self):
+        return self.width
 
     #Getters
     def get_player(self):
@@ -222,11 +195,6 @@ class PacmanMap:
     def get_score(self):
         return self.score
 
-    def get_running(self):
-        return self.running
-
-    def set_running(self,running):
-        self.running = running
 """
 4 September 2025 - Created File
 5 September 2025 - Starting tidying up file
@@ -237,4 +205,5 @@ class PacmanMap:
                   - Added end game states
 14 September 2025 - Added deer movement. Removed deer from list when grab it
 15 September 2025 - Added bear movement
+16 September 2025 - Moved move deer function to deer class
 """

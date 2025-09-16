@@ -24,17 +24,17 @@ if __name__ == "__main__":
     game_screen = View(pacman_map.get_dimensions())
     game_screen.update_screen(pacman_map)
     base_time = time.time()
+    running = True
 
     deers = []
 
     for deer in pacman_map.get_deers():
         deers.append(Deer(deer[0],deer[1]))
 
-    thing=0
-    while(pacman_map.get_running()):
+    while(running):
         action = control.get_keypress()
         if action == "Q":
-            pacman_map.set_running(False)
+            running = False
         pacman_map.move_player(action)
         game_screen.update_screen(pacman_map)
         
@@ -42,10 +42,9 @@ if __name__ == "__main__":
         if (current_time-base_time>1):
             base_time = current_time
 
-            #Move the move deer function to deer
-            #send map in with it
+            for deer in deers:
+                pacman_map.set_map(deer.move_deer(pacman_map.get_map(),pacman_map.get_width()))
 
-            pacman_map.move_deer()
             pacman_map.move_bear()
         
 
@@ -76,4 +75,5 @@ if __name__ == "__main__":
 9 September 2025 - Added controls and quit
 13 September 2025 - Passed map object to display as opposed to just map
 16 September 2025 - Added Deer class
+                  - Moved move deer function to Deer Class
 """
