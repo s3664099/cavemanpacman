@@ -12,7 +12,7 @@ class Deer:
 		self.position = (row,col)
 		self.running = False
 
-	def get_position:
+	def get_position(self):
 		return self.position
 
 	def check_position(self,row,col):
@@ -21,7 +21,7 @@ class Deer:
 	def set_position(self,row,col):
 		self.position = (row,col)
 
-	
+
 
 
 """

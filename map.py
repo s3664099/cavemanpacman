@@ -213,7 +213,7 @@ class PacmanMap:
     def get_player(self):
         return self.player
 
-    def get_deer(self):
+    def get_deers(self):
         return self.deers
 
     def get_bear(self):

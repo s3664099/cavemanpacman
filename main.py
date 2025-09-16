@@ -2,8 +2,8 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 13 September 2025
-Version: 0.5
+Update: 16 September 2025
+Version: 0.6
 
 Create Bear & Deer object and have movement occur in there.
     Stores the position
@@ -12,6 +12,7 @@ Create Bear & Deer object and have movement occur in there.
 """
 
 from map import PacmanMap
+from deer import Deer
 from display import View
 import control
 import time
@@ -24,6 +25,11 @@ if __name__ == "__main__":
     game_screen.update_screen(pacman_map)
     base_time = time.time()
 
+    deers = []
+
+    for deer in pacman_map.get_deers():
+        deers.append(Deer(deer[0],deer[1]))
+
     thing=0
     while(pacman_map.get_running()):
         action = control.get_keypress()
@@ -35,6 +41,10 @@ if __name__ == "__main__":
         current_time = time.time()
         if (current_time-base_time>1):
             base_time = current_time
+
+            #Move the move deer function to deer
+            #send map in with it
+
             pacman_map.move_deer()
             pacman_map.move_bear()
         
@@ -50,7 +60,7 @@ if __name__ == "__main__":
             print(f"\nPac-Man starts at: {pacman_positions[0]}")
 
         # Example: Find deer starting position (usually 'P')
-        deer_positions = pacman_map.get_deer()
+        deer_positions = pacman_map.get_deers()
         if deer_positions:
             print(f"\nDeer start at: {deer_positions}")
 
@@ -65,4 +75,5 @@ if __name__ == "__main__":
 8 September 2025 - Added call to display screen
 9 September 2025 - Added controls and quit
 13 September 2025 - Passed map object to display as opposed to just map
+16 September 2025 - Added Deer class
 """
