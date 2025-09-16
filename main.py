@@ -4,6 +4,11 @@ Author: David Sarkies
 Initial: 4 September 2025
 Update: 13 September 2025
 Version: 0.5
+
+Create Bear & Deer object and have movement occur in there.
+    Stores the position
+    Has the flee/chase boolean
+    Bear holds what is on the square
 """
 
 from map import PacmanMap
@@ -31,6 +36,7 @@ if __name__ == "__main__":
         if (current_time-base_time>1):
             base_time = current_time
             pacman_map.move_deer()
+            pacman_map.move_bear()
         
 
     if pacman_map.map_data:
