@@ -18,6 +18,7 @@ Do chase for beer
 
 from map import PacmanMap
 from deer import Deer
+from bear import Bear
 from display import View
 import control
 import time
@@ -32,9 +33,14 @@ if __name__ == "__main__":
     running = True
 
     deers = []
+    bears = []
 
     for deer in pacman_map.get_deers():
         deers.append(Deer(deer[0],deer[1]))
+
+    for bear in pacman_map.get_bears():
+        bears.append(Bear(bear[0],bear[1]))
+
 
     while(running):
         action = control.get_keypress()
@@ -50,8 +56,8 @@ if __name__ == "__main__":
             for deer in deers:
                 pacman_map.set_map(deer.move_deer(pacman_map.get_map(),pacman_map.get_width()))
 
-            pacman_map.move_bear()
-        
+            for bear in bears:
+                pacman_map.set_map(bear.move_bear(pacman_map.get_map(),pacman_map.get_width()))
 
     if pacman_map.map_data:
         print(f"Map loaded: {pacman_map.width}x{pacman_map.height}")
@@ -69,7 +75,7 @@ if __name__ == "__main__":
             print(f"\nDeer start at: {deer_positions}")
 
         # Example: Find bear starting position (usually 'P')
-        bear_positions = pacman_map.get_bear()
+        bear_positions = pacman_map.get_bears()
         if bear_positions:
             print(f"\nBears start at: {bear_positions}")
         

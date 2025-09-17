@@ -124,45 +124,6 @@ class PacmanMap:
         elif (new_row,new_col == 9,25):
             self.running = False
 
-    def move_bear(self):
-
-        non_blockers = ["."," ","w","P","d"]
-        bear_no = 0
-        new_bear_square = []
-        new_bears = []
-
-        for bear in self.bears:
-            new_row,new_col = bear
-            row,col = bear
-            move = False
-
-            while not move:
-                movement = random.randint(0,3)
-                new_row,new_col = row,col
-
-                if (movement == 0):
-                    new_row -=1
-                elif (movement == 1):
-                    new_row +=1
-                elif (movement == 2):
-                    new_col -=1
-                elif (movement == 3):
-                    new_col +=1
-
-                if (new_col<self.width):
-                    new_position = self.map_data[new_row][new_col]
-                    if(new_position in non_blockers):
-
-                        self.map_data[row][col]=self.bear_square[bear_no]
-                        new_bear_square.append(self.map_data[new_row][new_col])
-                        self.map_data[new_row][new_col]="B"
-                        move = True
-                        new_bears.append((new_row,new_col))
-            bear_no += 1
-
-        self.bear_square = new_bear_square
-        self.bears = new_bears
-
     #Print the map
     def print_map(self):
         
@@ -189,7 +150,7 @@ class PacmanMap:
     def get_deers(self):
         return self.deers
 
-    def get_bear(self):
+    def get_bears(self):
         return self.bears
 
     def get_score(self):
