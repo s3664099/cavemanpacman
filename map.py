@@ -82,47 +82,6 @@ class PacmanMap:
                     self.deers.append((row,col))
                 elif self.map_data[row][col] == self.bear_position:
                     self.bears.append((row,col))
-    
-    def move_player(self,key):
-
-        row,col = self.player
-        new_row,new_col = row,col
-        non_blockers = ["."," ","d","w"]
-
-        if key == "N":
-            new_row -=1
-        elif key == "S":
-            new_row +=1
-        elif key == "E":
-            new_col +=1
-        elif key == "W":
-            new_col -=1
-
-        if (new_col<self.width):
-            new_position = self.map_data[new_row][new_col]
-
-            if (new_position in non_blockers):
-
-                if (self.map_data[new_row][new_col]=="."):
-                    self.score += 1
-                elif (self.map_data[new_row][new_col]=="d"):
-                    self.score += 10
-                    new_deer_list = []
-                    for deer in self.deers:
-                        deer_row,deer_col = deer
-                        if deer_row != new_row and deer_col != new_col:
-                            new_deer_list.append((deer_row,deer_col))
-                    self.deers = new_deer_list
-                elif (self.map_data[new_row][new_col]=="w"):
-                    self.score += 5
-
-                self.map_data[row][col] = " "
-                self.map_data[new_row][new_col] = "P"
-                self.player = (new_row,new_col)
-            elif (new_position == "B"):
-                self.running = False
-        elif (new_row,new_col == 9,25):
-            self.running = False
 
     #Print the map
     def print_map(self):
