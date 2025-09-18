@@ -48,6 +48,20 @@ class Player:
 		elif (new_row,new_col == 9,25):
 			self.running = False
 
+		return map_data
+
+	def get_score(self):
+		return self.score
+
+	def get_position(self):
+		return self.position
+
+	def get_running(self):
+		return self.running
+
+	def set_running(self,running):
+		self.running = running
+
 
 """
 18 September 2025 - Created File

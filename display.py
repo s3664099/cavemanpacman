@@ -2,8 +2,8 @@
 File: Caveman Pacman Display 
 Author: David Sarkies
 Initial: 6 September 2025
-Update: 12 September 2025
-Version: 0.4
+Update: 18 September 2025
+Version: 0.5
 """
 
 import pygame
@@ -27,11 +27,9 @@ class View:
 		self.wall = pygame.transform.scale(pygame.image.load("icons/wall.png"),(self.cell_size,self.cell_size))
 		self.puddle = pygame.transform.scale(pygame.image.load("icons/puddle.png"),(self.cell_size,self.cell_size))
 
-	def update_screen(self,pacman_map):
+	def update_screen(self,pacman_map,score):
 
 		self.screen.fill((0,0,0))
-
-		score = pacman_map.get_score()
 		game_map = pacman_map.get_map()
 
 		# Draw score bar at the top
@@ -77,4 +75,5 @@ class View:
 10 September 2025 - added clear screen function
 12 September 2025 - Added score bar
 13 September 2025 - Added puddle
+18 September 2025 - Updated with player score
 """

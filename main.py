@@ -2,8 +2,8 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 16 September 2025
-Version: 0.6
+Update: 18 September 2025
+Version: 0.8
 
 Do flee for deer
     - if see player or bear, runs away (and at double speed)
@@ -21,6 +21,7 @@ After player Moves
 from map import PacmanMap
 from deer import Deer
 from bear import Bear
+from player import Player
 from display import View
 import control
 import time
@@ -30,12 +31,13 @@ if __name__ == "__main__":
     
     pacman_map = PacmanMap("map.txt")
     game_screen = View(pacman_map.get_dimensions())
-    game_screen.update_screen(pacman_map)
+    game_screen.update_screen(pacman_map,0)
     base_time = time.time()
-    running = True
 
     deers = []
     bears = []
+
+    player = Player(pacman_map.get_player()[0],pacman_map.get_player()[1])
 
     for deer in pacman_map.get_deers():
         deers.append(Deer(deer[0],deer[1]))
@@ -44,12 +46,12 @@ if __name__ == "__main__":
         bears.append(Bear(bear[0],bear[1]))
 
 
-    while(running):
+    while(player.get_running()):
         action = control.get_keypress()
         if action == "Q":
-            running = False
-        pacman_map.move_player(action)
-        game_screen.update_screen(pacman_map)
+            running = player.set_running(False)
+        pacman_map.set_map(player.move_player(action,pacman_map.get_map(),pacman_map.get_width()))
+        game_screen.update_screen(pacman_map,player.get_score())
         
         current_time = time.time()
         if (current_time-base_time>1):
@@ -89,4 +91,7 @@ if __name__ == "__main__":
 13 September 2025 - Passed map object to display as opposed to just map
 16 September 2025 - Added Deer class
                   - Moved move deer function to Deer Class
+17 September 2025 - Added Bear Class
+                  - Moved move bear function to Bear Class
+18 September 2025 - Added player class and moved player move function to player class
 """

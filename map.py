@@ -2,8 +2,8 @@
 File: Caveman Pacman Map
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 15 September 2025
-Version: 0.7
+Update: 18 September 2025
+Version: 0.6
 
 Remove the deer when encountering it
 """
@@ -112,9 +112,6 @@ class PacmanMap:
     def get_bears(self):
         return self.bears
 
-    def get_score(self):
-        return self.score
-
 """
 4 September 2025 - Created File
 5 September 2025 - Starting tidying up file
@@ -126,4 +123,5 @@ class PacmanMap:
 14 September 2025 - Added deer movement. Removed deer from list when grab it
 15 September 2025 - Added bear movement
 16 September 2025 - Moved move deer function to deer class
+18 September 2025 - Removed player functions and variable
 """
