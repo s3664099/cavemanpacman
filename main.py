@@ -26,6 +26,22 @@ from display import View
 import control
 import time
 
+def remove_deers(deers,player,bears):
+    update_deers = []
+    for deer in deers:
+        add_deer = True
+        if deer.check_position(player.get_position()[0],player.get_position()[1]):
+            add_deer = False
+
+        for bear in bears:
+            if (deer.check_position(bear.get_position()[0],bear.get_position()[1])):
+                add_deer = False
+
+        if add_deer:
+            update_deers.append(deer)
+
+    return update_deers
+
 # Example usage
 if __name__ == "__main__":
     
@@ -63,22 +79,7 @@ if __name__ == "__main__":
             for bear in bears:
                 pacman_map.set_map(bear.move_bear(pacman_map.get_map(),pacman_map.get_width()))
 
-        update_deers = []
-        for deer in deers:
-
-            add_deer = True
-
-            if deer.check_position(player.get_position()[0],player.get_position()[1]):
-                add_deer = False
-
-            for bear in bears:
-                if (deer.check_position(bear.get_position()[0],bear.get_position()[1])):
-                    add_deer = False
-
-            if add_deer:
-                update_deers.append(deer)
-
-        deers = update_deers
+        deers = remove_deers(deers,player,bears)
 
     if pacman_map.map_data:
         print(f"Map loaded: {pacman_map.width}x{pacman_map.height}")
