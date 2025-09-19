@@ -2,8 +2,8 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 18 September 2025
-Version: 0.8
+Update: 19 September 2025
+Version: 0.9
 
 Do flee for deer
     - if see player or bear, runs away (and at double speed)
@@ -63,6 +63,23 @@ if __name__ == "__main__":
             for bear in bears:
                 pacman_map.set_map(bear.move_bear(pacman_map.get_map(),pacman_map.get_width()))
 
+        update_deers = []
+        for deer in deers:
+
+            add_deer = True
+
+            if deer.check_position(player.get_position()[0],player.get_position()[1]):
+                add_deer = False
+
+            for bear in bears:
+                if (deer.check_position(bear.get_position()[0],bear.get_position()[1])):
+                    add_deer = False
+
+            if add_deer:
+                update_deers.append(deer)
+
+        deers = update_deers
+
     if pacman_map.map_data:
         print(f"Map loaded: {pacman_map.width}x{pacman_map.height}")
         print("\nMap:")
@@ -94,4 +111,5 @@ if __name__ == "__main__":
 17 September 2025 - Added Bear Class
                   - Moved move bear function to Bear Class
 18 September 2025 - Added player class and moved player move function to player class
+19 September 2025 - Added section to remove deers from deer list
 """
