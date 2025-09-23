@@ -77,7 +77,7 @@ if __name__ == "__main__":
                 pacman_map.set_map(deer.move_deer(pacman_map.get_map(),pacman_map.get_width()))
 
             for bear in bears:
-                pacman_map.set_map(bear.move_bear(pacman_map.get_map(),pacman_map.get_width()))
+                pacman_map.set_map(bear.move_bear(pacman_map.get_map(),pacman_map.get_width(),pacman_map.get_entrance()))
 
         deers = remove_deers(deers,player,bears)
 

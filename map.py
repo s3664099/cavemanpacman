@@ -84,7 +84,7 @@ class PacmanMap:
                 elif self.map_data[row][col] == self.bear_position:
                     self.bears.append((row,col))
                 elif self.map_data[row][col] == self.cave_entrance:
-                    self.entrance.append((row,col))
+                    self.entrance = (row,col)
 
     #Print the map
     def print_map(self):
@@ -116,7 +116,7 @@ class PacmanMap:
         return self.bears
 
     def get_entrance(self):
-        returns self.entrance
+        return self.entrance
 
 """
 4 September 2025 - Created File
