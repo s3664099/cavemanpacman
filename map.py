@@ -2,8 +2,8 @@
 File: Caveman Pacman Map
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 18 September 2025
-Version: 0.6
+Update: 23 September 2025
+Version: 0.7
 
 Remove the deer when encountering it
 """
@@ -19,12 +19,13 @@ class PacmanMap:
         self.player = []
         self.deers = []
         self.bears = []
+        self.entrance = []
         self.score = 0
-        self.bear_square = [" "," "]
 
         self.player_position = "P"
         self.deer_position = "d"
         self.bear_position = "B"
+        self.cave_entrance = "#"
 
         self.find_character()
     
@@ -82,6 +83,8 @@ class PacmanMap:
                     self.deers.append((row,col))
                 elif self.map_data[row][col] == self.bear_position:
                     self.bears.append((row,col))
+                elif self.map_data[row][col] == self.cave_entrance:
+                    self.entrance.append((row,col))
 
     #Print the map
     def print_map(self):
@@ -112,6 +115,9 @@ class PacmanMap:
     def get_bears(self):
         return self.bears
 
+    def get_entrance(self):
+        returns self.entrance
+
 """
 4 September 2025 - Created File
 5 September 2025 - Starting tidying up file
@@ -124,4 +130,5 @@ class PacmanMap:
 15 September 2025 - Added bear movement
 16 September 2025 - Moved move deer function to deer class
 18 September 2025 - Removed player functions and variable
+23 September 2025 - Added Cave Entrance Tile
 """

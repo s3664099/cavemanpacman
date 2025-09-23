@@ -4,6 +4,11 @@ Author: David Sarkies
 Initial: 17 September 2025
 Update: 17 September 2025
 Version: 0.0
+
+Bear Movement
+	- if in cave - moves towards exit. If other bear in way, pauses
+	- when outside will move forward only (first will not be back into the cave)
+	- if lands on deer will move back to the cave.
 """
 
 import random
