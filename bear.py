@@ -20,6 +20,8 @@ class Bear:
 		self.position = (row,col)
 		self.chasing = False
 		self.square = " "
+		self.start = True
+		self.has_food = False
 
 	def get_position(self):
 		return self.position
@@ -42,6 +44,8 @@ class Bear:
 		new_row,new_col = self.position
 		row,col = self.position
 		move = False
+
+		#If start - moves toward entrance, and then stops
 
 		while not move:
 			movement = random.randint(0,3)
