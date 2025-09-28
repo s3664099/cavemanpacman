@@ -81,12 +81,10 @@ class Bear:
 				elif (movement == 3):
 					new_col +=1
 
-				if (new_col<width):
-					new_position = map_data[new_row][new_col]
-					if(new_position in non_blockers):
-						map_data = self.bear_move(map_data,row,col,new_row,new_col)
-						move = True
-						self.movement = movement
+				map_data = self.bear_move(map_data,row,col,new_row,new_col)
+				move = True
+				self.movement = movement
+		
 		return map_data
 
 	def determine_movement(self,map_data,row,col):
@@ -118,10 +116,13 @@ class Bear:
 	def bear_move(self,map_data,row,col,new_row,new_col):
 		map_data[row][col] = self.square
 		self.square = map_data[new_row][new_col]
+
+		if (self.square=="d"):
+			self.square = " "
+
 		map_data[new_row][new_col]="B"
 		self.position = (new_row,new_col)
 		return map_data
-
 
 """
 17 September 2025 - Created file
