@@ -2,12 +2,11 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 23 September 2025
-Version: 0.1
+Update: 28 September 2025
+Version: 0.2
 
 Bear Movement
-	- if in cave - moves towards exit. If other bear in way, pauses
-	- when outside will move forward only (first will not be back into the cave)
+	- if sees 
 	- if lands on deer will move back to the cave.
 """
 
@@ -22,6 +21,7 @@ class Bear:
 		self.square = " "
 		self.start = True
 		self.has_food = False
+		self.movement = 0
 
 	def get_position(self):
 		return self.position
@@ -67,9 +67,9 @@ class Bear:
 
 				if cave_entrance_row==row and cave_entrance_col==col:
 					self.start = False
-
 			else:
-				movement = random.randint(0,3)
+
+				movement = self.determine_movement(map_data,row,col)
 				new_row,new_col = row,col
 
 				if (movement == 0):
@@ -86,7 +86,34 @@ class Bear:
 					if(new_position in non_blockers):
 						map_data = self.bear_move(map_data,row,col,new_row,new_col)
 						move = True
+						self.movement = movement
 		return map_data
+
+	def determine_movement(self,map_data,row,col):
+
+		movement_options = ["","","",""]
+		non_blockers = ["."," ","w","P","d"]
+		valid_move = False
+		movement = 0
+
+		if ((map_data[row-1][col]) not in non_blockers) or self.movement ==1:
+			movement_options[0] = "X"
+
+		if ((map_data[row+1][col]) not in non_blockers) or self.movement ==0:
+			movement_options[1] = "X"
+
+		if ((map_data[row][col-1]) not in non_blockers) or self.movement ==3:
+			movement_options[2] = "X"
+
+		if ((map_data[row][col+1]) not in non_blockers) or self.movement ==2:
+			movement_options[3] = "X"
+
+		while not valid_move:
+			movement = random.randint(0,3)
+			if movement_options[movement] != "X":
+				valid_move = True
+
+		return movement
 
 	def bear_move(self,map_data,row,col,new_row,new_col):
 		map_data[row][col] = self.square
@@ -99,4 +126,5 @@ class Bear:
 """
 17 September 2025 - Created file
 23 September 2025 - Added movement of bear out of cave
+28 September 2025 - Added movement of bear so only moves forward.
 """
