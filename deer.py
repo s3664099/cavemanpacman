@@ -4,6 +4,8 @@ Author: David Sarkies
 Initial: 16 September 2025
 Update: 16 September 2025
 Version: 0.0
+
+- If sees bear/player moves in opposite direction
 """
 
 import random

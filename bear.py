@@ -93,54 +93,63 @@ class Bear:
 
 		movement = -1
 		distance = 0
-		found_stop = False
-		position = 0
-		map_pos = 0
 
 		try:
+			found_stop = False
+			position = 0
+			map_pos = 0
+			new_movement = -1
+
 			while not found_stop:
 				map_pos -=1
 				position +=1
-				found_stop,movement,distance = self.check_position(map_data,row+map_pos,col,position,0)
+				found_stop,new_movement,distance = self.check_position(map_data,row+map_pos,col,position,0)
+			movement,distance = self.check_move(new_movement,movement,position,distance)
 		except:
 			print("North")
 			print(row+map_pos,col)
 
-		found_stop = False
-		position = 0
-		map_pos = 0
-
 		try:
+			found_stop = False
+			position = 0
+			map_pos = 0
+			new_movement = -1
+
 			while not found_stop:
 				map_pos +=1
 				position +=1
-				found_stop,movement,distance = self.check_position(map_data,row+map_pos,col,position,1)
+				found_stop,new_movement,distance = self.check_position(map_data,row+map_pos,col,position,1)
+			movement,distance = self.check_move(new_movement,movement,position,distance)
 		except:
 			print("South")
 			print(row+map_pos,col)
 
-		found_stop = False
-		position = 0
-		map_pos = 0
-
 		try:
+			found_stop = False
+			position = 0
+			map_pos = 0
+			new_movement = -1
+
 			while not found_stop:
 				map_pos -=1
 				position +=1
-				found_stop,movement,distance = self.check_position(map_data,row,col+map_pos,position,2)
+				found_stop,new_movement,distance = self.check_position(map_data,row,col+map_pos,position,2)
+			movement,distance = self.check_move(new_movement,movement,position,distance)
 		except:
 			print("East")
 			print(row,col+map_pos)
 
-		found_stop = False
-		position = 0
-		map_pos = 0
-
 		try:
+			found_stop = False
+			position = 0
+			map_pos = 0
+			new_movement = -1
+
 			while not found_stop:
 				map_pos +=1
 				position +=1
-				found_stop,movement,distance = self.check_position(map_data,row,col+map_pos,position,3)
+				found_stop,new_movement,distance = self.check_position(map_data,row,col+map_pos,position,3)
+			movement,distance = self.check_move(new_movement,movement,position,distance)
 		except:
 			print("West")
 			print(row,col+map_pos)
@@ -161,6 +170,18 @@ class Bear:
 		elif map_data[row][col] == "1" or map_data[row][col] == "2" or map_data[row][col] == "/":
 			found_stop = True
 		return found_stop,movement,distance
+
+	def check_move(self,new_movement,movement,position,distance):
+
+		if new_movement != -1:
+			if position<distance:
+				movement = new_movement
+				distance = position
+			elif movement == -1:
+				movement = new_movement
+				distance = position
+
+		return movement,distance
 
 	def determine_movement(self,map_data,row,col):
 
