@@ -2,11 +2,10 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 28 September 2025
-Version: 0.2
+Update: 2 October 2025
+Version: 0.3
 
 Bear Movement
-	- if sees 
 	- if lands on deer will move back to the cave.
 """
 
@@ -69,8 +68,11 @@ class Bear:
 					self.start = False
 			else:
 
-				movement = self.determine_movement(map_data,row,col)
-				new_row,new_col = row,col
+				movement = self.find_prey(map_data,row,col)
+
+				if (movement == -1):
+					movement = self.determine_movement(map_data,row,col)
+					new_row,new_col = row,col
 
 				if (movement == 0):
 					new_row -=1
@@ -86,6 +88,78 @@ class Bear:
 				self.movement = movement
 		
 		return map_data
+
+	def find_prey(self,map_data,row,col):
+
+		movement = -1
+		distance = 0
+		found_stop = False
+		position = 0
+		map_pos = 0
+		north = -1
+		south = -1
+		east = -1
+		west = -1
+
+
+		while not found_stop:
+			map_pos -=1
+			position +=1
+			if map_data[row+map_pos][col] == "P" or map_data[row+map_pos][col] == "d":
+				found_stop = True
+				movement = 0
+				distance = position
+				north = position
+			elif map_data[row+map_pos][col] == "1" or map_data[row+map_pos][col] == "2" or map_data[row+map_pos][col] == "/":
+				found_stop = True
+				north = position
+
+		found_stop = False
+		position = 0
+		map_pos = 0
+		while not found_stop:
+			map_pos +=1
+			position +=1
+			if map_data[row+map_pos][col] == "P" or map_data[row+map_pos][col] == "d":
+				found_stop = True
+				movement = 1
+				distance = position
+				south = position
+			elif map_data[row+map_pos][col] == "1" or map_data[row+map_pos][col] == "2" or map_data[row+map_pos][col] == "/":
+				found_stop = True
+				south = position
+
+		found_stop = False
+		position = 0
+		map_pos = 0
+		while not found_stop:
+			map_pos -=1
+			position +=1
+			if map_data[row][col+map_pos] == "P" or map_data[row][col+map_pos] == "d":
+				found_stop = True
+				movement = 2
+				distance = position
+				east = position
+			elif map_data[row][col+map_pos] == "1" or map_data[row][col+map_pos] == "2" or map_data[row][col+map_pos] == "/":
+				found_stop = True
+				east = position
+
+		found_stop = False
+		position = 0
+		map_pos = 0
+		while not found_stop:
+			map_pos +=1
+			position +=1
+			if map_data[row][col+map_pos] == "P" or map_data[row][col+map_pos] == "d":
+				found_stop = True
+				movement = 3
+				distance = position
+				west = position
+			elif map_data[row][col+map_pos] == "1" or map_data[row][col+map_pos] == "2" or map_data[row][col+map_pos] == "/":
+				found_stop = True
+				west = position
+
+		return movement
 
 	def determine_movement(self,map_data,row,col):
 
@@ -128,4 +202,5 @@ class Bear:
 17 September 2025 - Created file
 23 September 2025 - Added movement of bear out of cave
 28 September 2025 - Added movement of bear so only moves forward.
+2 October 2025 - Added movement to prey
 """

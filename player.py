@@ -17,7 +17,7 @@ class Player:
 
 		row,col = self.position
 		new_row,new_col = self.position
-		non_blockers = ["."," ","d","w"]
+		non_blockers = ["."," ","d","w","/"]
 
 		if key == "N":
 			new_row -=1
