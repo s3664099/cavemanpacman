@@ -96,70 +96,71 @@ class Bear:
 		found_stop = False
 		position = 0
 		map_pos = 0
-		north = -1
-		south = -1
-		east = -1
-		west = -1
 
-
-		while not found_stop:
-			map_pos -=1
-			position +=1
-			if map_data[row+map_pos][col] == "P" or map_data[row+map_pos][col] == "d":
-				found_stop = True
-				movement = 0
-				distance = position
-				north = position
-			elif map_data[row+map_pos][col] == "1" or map_data[row+map_pos][col] == "2" or map_data[row+map_pos][col] == "/":
-				found_stop = True
-				north = position
+		try:
+			while not found_stop:
+				map_pos -=1
+				position +=1
+				found_stop,movement,distance = self.check_position(map_data,row+map_pos,col,position,0)
+		except:
+			print("North")
+			print(row+map_pos,col)
 
 		found_stop = False
 		position = 0
 		map_pos = 0
-		while not found_stop:
-			map_pos +=1
-			position +=1
-			if map_data[row+map_pos][col] == "P" or map_data[row+map_pos][col] == "d":
-				found_stop = True
-				movement = 1
-				distance = position
-				south = position
-			elif map_data[row+map_pos][col] == "1" or map_data[row+map_pos][col] == "2" or map_data[row+map_pos][col] == "/":
-				found_stop = True
-				south = position
+
+		try:
+			while not found_stop:
+				map_pos +=1
+				position +=1
+				found_stop,movement,distance = self.check_position(map_data,row+map_pos,col,position,1)
+		except:
+			print("South")
+			print(row+map_pos,col)
 
 		found_stop = False
 		position = 0
 		map_pos = 0
-		while not found_stop:
-			map_pos -=1
-			position +=1
-			if map_data[row][col+map_pos] == "P" or map_data[row][col+map_pos] == "d":
-				found_stop = True
-				movement = 2
-				distance = position
-				east = position
-			elif map_data[row][col+map_pos] == "1" or map_data[row][col+map_pos] == "2" or map_data[row][col+map_pos] == "/":
-				found_stop = True
-				east = position
+
+		try:
+			while not found_stop:
+				map_pos -=1
+				position +=1
+				found_stop,movement,distance = self.check_position(map_data,row,col+map_pos,position,2)
+		except:
+			print("East")
+			print(row,col+map_pos)
 
 		found_stop = False
 		position = 0
 		map_pos = 0
-		while not found_stop:
-			map_pos +=1
-			position +=1
-			if map_data[row][col+map_pos] == "P" or map_data[row][col+map_pos] == "d":
-				found_stop = True
-				movement = 3
-				distance = position
-				west = position
-			elif map_data[row][col+map_pos] == "1" or map_data[row][col+map_pos] == "2" or map_data[row][col+map_pos] == "/":
-				found_stop = True
-				west = position
+
+		try:
+			while not found_stop:
+				map_pos +=1
+				position +=1
+				found_stop,movement,distance = self.check_position(map_data,row,col+map_pos,position,3)
+		except:
+			print("West")
+			print(row,col+map_pos)
+
+		print(movement)
 
 		return movement
+
+	def check_position(self,map_data,row,col,position,direction):
+		found_stop = False
+		movement = -1
+		distance = 0
+		if map_data[row][col] == "P" or map_data[row][col] == "d":
+			found_stop = True
+			movement = direction
+			distance = position
+			print("Move ",direction)
+		elif map_data[row][col] == "1" or map_data[row][col] == "2" or map_data[row][col] == "/":
+			found_stop = True
+		return found_stop,movement,distance
 
 	def determine_movement(self,map_data,row,col):
 
