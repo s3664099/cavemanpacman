@@ -70,7 +70,14 @@ if __name__ == "__main__":
         game_screen.update_screen(pacman_map,player.get_score())
         
         current_time = time.time()
-        if (current_time-base_time>1):
+
+        if (current_time-base_time>0.5) and (current_time-base_time<1):
+            for bear in bears:
+                if (bear.get_chasing()):
+                    pacman_map.set_map(bear.move_bear(pacman_map.get_map(),pacman_map.get_width(),pacman_map.get_entrance()))
+                    bear.set_chasing(False)
+
+        elif (current_time-base_time>1):
             base_time = current_time
 
             for deer in deers:
