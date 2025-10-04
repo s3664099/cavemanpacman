@@ -2,8 +2,8 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 3 October 2025
-Version: 0.4
+Update: 4 October 2025
+Version: 0.5
 """
 
 import random
@@ -21,9 +21,6 @@ class Bear:
 
 	def get_position(self):
 		return self.position
-
-	def check_position(self,row,col):
-		return (row,col) == self.position
 
 	def set_position(self,row,col):
 		self.position = (row,col)
@@ -231,4 +228,5 @@ class Bear:
 28 September 2025 - Added movement of bear so only moves forward.
 2 October 2025 - Added movement to prey
 3 October 2025 - Made bear move faster if sees prey
+4 October 2025 - Removed second check position
 """

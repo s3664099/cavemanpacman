@@ -30,11 +30,11 @@ def remove_deers(deers,player,bears):
     update_deers = []
     for deer in deers:
         add_deer = True
-        if deer.check_position(player.get_position()[0],player.get_position()[1]):
+        if deer.check_current_position(player.get_position()[0],player.get_position()[1]):
             add_deer = False
 
         for bear in bears:
-            if (deer.check_position(bear.get_position()[0],bear.get_position()[1])):
+            if (deer.check_current_position(bear.get_position()[0],bear.get_position()[1])):
                 add_deer = False
 
         if add_deer:

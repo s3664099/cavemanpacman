@@ -23,7 +23,7 @@ class Deer:
 	def get_position(self):
 		return self.position
 
-	def check_position(self,row,col):
+	def check_current_position(self,row,col):
 		return (row,col) == self.position
 
 	def set_position(self,row,col):
@@ -33,6 +33,9 @@ class Deer:
 		non_blockers = ["."," ","w"]
 		new_row,new_col = self.position
 		row,col = self.position
+
+		print(self.find_predator(map_data,row,col))
+
 		movement = random.randint(0,12)
 
 		if (movement == 0):
