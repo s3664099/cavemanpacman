@@ -80,7 +80,10 @@ if __name__ == "__main__":
         elif (current_time-base_time>1):
             base_time = current_time
 
+            dear_no = 0
             for deer in deers:
+                dear_no +=1
+                print("Deer ",dear_no)
                 pacman_map.set_map(deer.move_deer(pacman_map.get_map(),pacman_map.get_width()))
 
             for bear in bears:
