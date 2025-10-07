@@ -34,10 +34,39 @@ class Deer:
 		new_row,new_col = self.position
 		row,col = self.position
 
-		print(self.find_predator(map_data,row,col))
 		movement_options,predator_found = self.find_predator(map_data,row,col)
-
 		movement = random.randint(0,12)
+
+		if (predator_found):
+
+			if map_data[row-1][col] not in non_blockers:
+				movement_options[0] = "X"
+			elif map_data[row+1][col] not in non_blockers:
+				movement_options[1] = "X"
+			elif map_data[row][col-1] not in non_blockers:
+				movement_options[2] = "X"
+			elif map_data[row][col+1] not in non_blockers:
+				movement_options[3] = "X"
+
+			can_move = False
+
+			for x in movement_options:
+				if x == "":
+					can_move = True
+
+			if can_move:
+				found_move = False
+				while not can_move:
+					movement_options = random.randint(0,3)
+					if movement_options[movement] == "":
+						map_data = self.calculate_move(movement,map_data)
+
+		else:
+			map_data = self.calculate_move(movement,map_data)
+
+		return map_data
+
+	def calculate_move(self,movement,map_data):
 
 		if (movement == 0):
 			new_row -=1
@@ -127,7 +156,7 @@ class Deer:
 			print("West")
 			print(row,col+map_pos)
 
-		return movement,prey_found
+		return movement,predator_found
 
 	def check_position(self,map_data,row,col,position,direction):
 		found_stop = False
