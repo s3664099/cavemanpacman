@@ -2,8 +2,8 @@
 File: Caveman Pacman Deer
 Author: David Sarkies
 Initial: 16 September 2025
-Update: 4 October 2025
-Version: 0.1
+Update: 7 October 2025
+Version: 0.2
 
 - If sees bear/player moves in opposite direction
 """
@@ -35,6 +35,7 @@ class Deer:
 		row,col = self.position
 
 		print(self.find_predator(map_data,row,col))
+		movement_options,predator_found = self.find_predator(map_data,row,col)
 
 		movement = random.randint(0,12)
 
@@ -58,8 +59,9 @@ class Deer:
 
 	def find_predator(self,map_data,row,col):
 
-		movement = -1
+		movement = ["","","",""]
 		distance = 0
+		predator_found = False
 
 		try:
 			found_stop = False
@@ -71,7 +73,8 @@ class Deer:
 				map_pos -=1
 				position +=1
 				found_stop,new_movement,distance = self.check_position(map_data,row+map_pos,col,position,0)
-			movement,distance = self.check_move(new_movement,movement,position,distance)
+			movement[0] = self.check_move(new_movement,movement,position,distance)
+			predator_found = True
 		except:
 			print("North")
 			print(row+map_pos,col)
@@ -86,7 +89,8 @@ class Deer:
 				map_pos +=1
 				position +=1
 				found_stop,new_movement,distance = self.check_position(map_data,row+map_pos,col,position,1)
-			movement,distance = self.check_move(new_movement,movement,position,distance)
+			movement[1] = self.check_move(new_movement,movement,position,distance)
+			predator_found = True
 		except:
 			print("South")
 			print(row+map_pos,col)
@@ -101,7 +105,8 @@ class Deer:
 				map_pos -=1
 				position +=1
 				found_stop,new_movement,distance = self.check_position(map_data,row,col+map_pos,position,2)
-			movement,distance = self.check_move(new_movement,movement,position,distance)
+			movement[2] = self.check_move(new_movement,movement,position,distance)
+			predator_found = True
 		except:
 			print("East")
 			print(row,col+map_pos)
@@ -116,12 +121,13 @@ class Deer:
 				map_pos +=1
 				position +=1
 				found_stop,new_movement,distance = self.check_position(map_data,row,col+map_pos,position,3)
-			movement,distance = self.check_move(new_movement,movement,position,distance)
+			movement[3] = self.check_move(new_movement,movement,position,distance)
+			predator_found = True
 		except:
 			print("West")
 			print(row,col+map_pos)
 
-		return movement
+		return movement,prey_found
 
 	def check_position(self,map_data,row,col,position,direction):
 		found_stop = False
@@ -152,4 +158,5 @@ class Deer:
 """
 16 September 2025 - Created file
 4 October 2025 - Added check for predators
+7 October 2025 - Updated predetorFound
 """
