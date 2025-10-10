@@ -2,8 +2,8 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 4 October 2025
-Version: 0.5
+Update: 10 October 2025
+Version: 0.6
 """
 
 import random
@@ -156,8 +156,6 @@ class Bear:
 			print("West")
 			print(row,col+map_pos)
 
-		print(movement)
-
 		return movement
 
 	def check_position(self,map_data,row,col,position,direction):
@@ -168,8 +166,7 @@ class Bear:
 			found_stop = True
 			movement = direction
 			distance = position
-			print("Move ",direction)
-		elif map_data[row][col] == "1" or map_data[row][col] == "2" or map_data[row][col] == "/":
+		elif map_data[row][col] == "1" or map_data[row][col] == "2" or map_data[row][col] == "3":
 			found_stop = True
 		return found_stop,movement,distance
 
@@ -229,4 +226,5 @@ class Bear:
 2 October 2025 - Added movement to prey
 3 October 2025 - Made bear move faster if sees prey
 4 October 2025 - Removed second check position
+10 October 2025 - Removed some of the prints
 """

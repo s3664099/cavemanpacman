@@ -2,8 +2,8 @@
 File: Caveman Pacman Deer
 Author: David Sarkies
 Initial: 16 September 2025
-Update: 8 October 2025
-Version: 0.3
+Update: 10 October 2025
+Version: 0.4
 
 - Tighten Code
 - If deer fleeing then doesn't pick up stuff
@@ -18,6 +18,7 @@ class Deer:
 		self.fleeing = False
 		self.score = 10
 		self.non_blockers = ["."," ","w"]
+		self.square = " "
 
 	def get_score(self):
 		return self.score
@@ -39,6 +40,9 @@ class Deer:
 		movement = random.randint(0,12)
 
 		if (predator_found):
+			print("Found Predator",self.position)
+
+			self.fleeing = True
 
 			if map_data[row-1][col] not in self.non_blockers:
 				movement_options[0] = "X"
@@ -54,19 +58,18 @@ class Deer:
 			for x in movement_options:
 				if x == "":
 					can_move = True
-
+			print("Can Move",can_move)
 			if can_move:
 				found_move = False
 				while not found_move:
 					movement = random.randint(0,3)
-					print(movement)
-					print(movement_options[movement])
 					if movement_options[movement] == "":
-						print(movement)
+						map_data[row][col] = self.square
 						map_data = self.calculate_move(movement,map_data,width,row,col)
 						found_move = True
 
 		else:
+			self.fleeing = False
 			map_data = self.calculate_move(movement,map_data,width,row,col)
 
 		return map_data
@@ -88,9 +91,16 @@ class Deer:
 		if (new_col<width):
 			new_position = map_data[new_row][new_col]
 			if (new_position in self.non_blockers):
-				map_data[row][col] = " "
+				print("Deer Move",movement)
+				print("Fleeing",self.fleeing)
+				if not self.fleeing:
+					print("Moving")
+					map_data[row][col] = " "
+
+				self.square = map_data[new_row][new_col]
 				map_data[new_row][new_col]="d"
 				self.position = (new_row,new_col)
+				print("Move to ",self.position)
 		return map_data
 
 	def find_predator(self,map_data,row,col):
@@ -187,4 +197,5 @@ class Deer:
 4 October 2025 - Added check for predators
 7 October 2025 - Updated predetorFound
 8 October 2025 - Deer now flees
+10 October 2025 - Added code so deer doesn't pick up stuff when fleeing
 """
