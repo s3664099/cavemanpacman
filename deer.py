@@ -2,11 +2,8 @@
 File: Caveman Pacman Deer
 Author: David Sarkies
 Initial: 16 September 2025
-Update: 10 October 2025
-Version: 0.4
-
-- Tighten Code
-- If deer fleeing then doesn't pick up stuff
+Update: 11 October 2025
+Version: 0.5
 """
 
 import random
@@ -40,17 +37,15 @@ class Deer:
 		movement = random.randint(0,12)
 
 		if (predator_found):
-			print("Found Predator",self.position)
 
 			self.fleeing = True
-
 			if map_data[row-1][col] not in self.non_blockers:
 				movement_options[0] = "X"
-			elif map_data[row+1][col] not in self.non_blockers:
+			if map_data[row+1][col] not in self.non_blockers:
 				movement_options[1] = "X"
-			elif map_data[row][col-1] not in self.non_blockers:
+			if map_data[row][col-1] not in self.non_blockers:
 				movement_options[2] = "X"
-			elif map_data[row][col+1] not in self.non_blockers:
+			if map_data[row][col+1] not in self.non_blockers:
 				movement_options[3] = "X"
 
 			can_move = False
@@ -58,7 +53,6 @@ class Deer:
 			for x in movement_options:
 				if x == "":
 					can_move = True
-					print("Can Move",can_move)
 			if can_move:
 				found_move = False
 				while not found_move:
@@ -87,20 +81,16 @@ class Deer:
 			new_col -=1
 		elif (movement == 3):
 			new_col +=1
-
+		print(new_row,new_col,width)
 		if (new_col<width):
 			new_position = map_data[new_row][new_col]
 			if (new_position in self.non_blockers):
-				print("Deer Move",movement)
-				print("Fleeing",self.fleeing)
 				if not self.fleeing:
-					print("Moving")
 					map_data[row][col] = " "
 
 				self.square = map_data[new_row][new_col]
 				map_data[new_row][new_col]="d"
 				self.position = (new_row,new_col)
-				print("Move to ",self.position)
 		return map_data
 
 	def find_predator(self,map_data,row,col):
@@ -198,4 +188,5 @@ class Deer:
 7 October 2025 - Updated predetorFound
 8 October 2025 - Deer now flees
 10 October 2025 - Added code so deer doesn't pick up stuff when fleeing
+11 October 2025 - Fixed bug where deer disappears when fleeing
 """
