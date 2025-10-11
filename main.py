@@ -4,18 +4,6 @@ Author: David Sarkies
 Initial: 4 September 2025
 Update: 11 October 2025
 Version: 0.10
-
-Do flee for deer
-    - if see player or bear, runs away (and at double speed)
-    - checks if see every move. Stops once no longer see
-Do chase for beer
-    - if sees player or deer, follows them.
-    - continues until goes no further. Once there, checks again, and follows
-
-After player Moves
-    - checks if on a bear/deer position
-    - if so flags and removes bear/deer from object
-    - resets the flag
 """
 
 from map import PacmanMap

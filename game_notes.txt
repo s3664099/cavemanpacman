@@ -1,17 +1,3 @@
-- Load the map and display it with Pygame using the icons
-
-
-Basically Pacman
-
-
-
-- The ghosts are bears, but there are only two. The bears wander aimlessly unless they see something and
-then they move towards it. Will continue in the direction unless reach a t-intersection, if see will follow, if not will wander aimlessly
-- The power pills are deer. Will wander aimlessly and if there is a berry, will take it. If sees something will move away.
-- If bear catches deer, will return to cave.
-- Extra points for player if catch deer.
-- Game ends when all berries are collected.
-
 <a href="https://www.flaticon.com/free-icons/forest" title="forest icons">Forest icons created by Freepik - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/raspberry" title="Raspberry icons">Raspberry icons created by AngDiz - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/bear" title="bear icons">Bear icons created by Culmbio - Flaticon</a>
