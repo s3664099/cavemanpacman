@@ -16,6 +16,10 @@ class Deer:
 		self.score = 10
 		self.non_blockers = ["."," ","w"]
 		self.square = " "
+		self.north = 0
+		self.south = 1
+		self.west = 2
+		self.east = 3
 
 	def get_score(self):
 		return self.score
@@ -40,13 +44,13 @@ class Deer:
 
 			self.fleeing = True
 			if map_data[row-1][col] not in self.non_blockers:
-				movement_options[0] = "X"
+				movement_options[self.north] = "X"
 			if map_data[row+1][col] not in self.non_blockers:
-				movement_options[1] = "X"
+				movement_options[self.south] = "X"
 			if map_data[row][col-1] not in self.non_blockers:
-				movement_options[2] = "X"
+				movement_options[self.west] = "X"
 			if map_data[row][col+1] not in self.non_blockers:
-				movement_options[3] = "X"
+				movement_options[self.east] = "X"
 
 			can_move = False
 
@@ -73,15 +77,15 @@ class Deer:
 		new_row = row
 		new_col = col
 
-		if (movement == 0):
+		if (movement == self.north):
 			new_row -=1
-		elif (movement == 1):
+		elif (movement == self.south):
 			new_row +=1
-		elif (movement == 2):
+		elif (movement == self.west):
 			new_col -=1
-		elif (movement == 3):
+		elif (movement == self.east):
 			new_col +=1
-		print(new_row,new_col,width)
+
 		if (new_col<width):
 			new_position = map_data[new_row][new_col]
 			if (new_position in self.non_blockers):
@@ -93,77 +97,59 @@ class Deer:
 				self.position = (new_row,new_col)
 		return map_data
 
+	def look_for_predator(self,map_data,row,col,direction,predator_found):
+
+		found_stop = False
+		position = 0
+		row_pos = 0
+		col_pos = 0
+		movement = ""
+
+		while not found_stop:
+			if direction == self.north:
+				row_pos -=1
+			elif direction == self.south:
+				row_pos +=1
+			elif direction == self.west:
+				col_pos -=1
+			else:
+				col_pos +=1
+
+			position +=1
+			found_stop,found_predator = self.check_position(map_data,row+row_pos,col+col_pos,position,0)
+		if found_predator:
+			movement = "X"
+			predator_found = True
+
+		return movement,predator_found
+
 	def find_predator(self,map_data,row,col):
 
 		movement = ["","","",""]
 		predator_found = False
 
 		try:
-			found_stop = False
-			position = 0
-			map_pos = 0
-
-			while not found_stop:
-				map_pos -=1
-				position +=1
-				found_stop,new_movement,distance,found_predator = self.check_position(map_data,row+map_pos,col,position,0)
-			if found_predator:
-				movement[0] = "X"
-				predator_found = True
+			movement[self.north],predator_found = self.look_for_predator(map_data,row,col,self.north,predator_found)
 		except Exception as e: 
 			print("North")
-			print(row+map_pos,col)
 			print(e)
 
 		try:
-			found_stop = False
-			position = 0
-			map_pos = 0
-
-			while not found_stop:
-				map_pos +=1
-				position +=1
-				found_stop,new_movement,distance,found_predator = self.check_position(map_data,row+map_pos,col,position,1)
-			if found_predator:
-				movement[1] = "X"
-				predator_found = True
+			movement[self.south],predator_found = self.look_for_predator(map_data,row,col,self.south,predator_found)
 		except Exception as e:
 			print("South")
-			print(row+map_pos,col)
 			print(e)
 
 		try:
-			found_stop = False
-			position = 0
-			map_pos = 0
-
-			while not found_stop:
-				map_pos -=1
-				position +=1
-				found_stop,new_movement,distafound_predatornce,found_predator = self.check_position(map_data,row,col+map_pos,position,2)
-			if found_predator:
-				movement[2] = "X"
-				predator_found = True
-		except Exception as e:
-			print("East")
-			print(row,col+map_pos)
-			print(e)
-
-		try:
-			found_stop = False
-			position = 0
-			map_pos = 0
-
-			while not found_stop:
-				map_pos +=1
-				position +=1
-				found_stop,new_movement,distance,found_predator = self.check_position(map_data,row,col+map_pos,position,3)
-			if found_predator:
-				movement[3] = "X"
-				predator_found = True
+			movement[self.west],predator_found = self.look_for_predator(map_data,row,col,self.west,predator_found)
 		except Exception as e:
 			print("West")
-			print(row,col+map_pos)
+			print(e)
+
+		try:
+			movement[self.east],predator_found = self.look_for_predator(map_data,row,col,self.east,predator_found)
+		except Exception as e:
+			print("East")
 			print(e)
 
 		return movement,predator_found
@@ -171,16 +157,13 @@ class Deer:
 	def check_position(self,map_data,row,col,position,direction):
 		found_stop = False
 		found_predator = False
-		movement = -1
-		distance = 0
+
 		if map_data[row][col] == "P" or map_data[row][col] == "d":
 			found_stop = True
 			found_predator = True
-			movement = -direction
-			distance = position
 		elif map_data[row][col] == "1" or map_data[row][col] == "2" or map_data[row][col] == "/":
 			found_stop = True
-		return found_stop,movement,distance,found_predator
+		return found_stop,found_predator
 
 """
 16 September 2025 - Created file

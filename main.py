@@ -93,7 +93,6 @@ if __name__ == "__main__":
             dear_no = 0
             for deer in deers:
                 dear_no +=1
-                print("Deer ",dear_no)
                 pacman_map.set_map(deer.move_deer(pacman_map.get_map(),pacman_map.get_width()))
 
             for bear in bears:
