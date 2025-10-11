@@ -2,8 +2,8 @@
 File: Caveman Pacman Control 
 Author: David Sarkies
 Initial: 9 September 2025
-Update: 9 September 2025
-Version: 0.0
+Update: 11 October 2025
+Version: 0.1
 """
 
 import pygame
@@ -25,10 +25,13 @@ def get_keypress():
 				key = "E"
 			elif event.key == pygame.K_q:
 				key = "Q"
+			elif event.key == pygame.K_p:
+				key = "P"
 
 	return key
 
 
 """
 9 September 2025 - Created file
+11 October 2025 - Added pause keystroke
 """

@@ -2,8 +2,8 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 19 September 2025
-Version: 0.9
+Update: 11 October 2025
+Version: 0.10
 
 Do flee for deer
     - if see player or bear, runs away (and at double speed)
@@ -42,6 +42,23 @@ def remove_deers(deers,player,bears):
 
     return update_deers
 
+def pause(action,player):
+    pause = False
+    if action != "":
+        print(action)
+    if action == "P":
+        pause = True
+    while(pause):
+        action = control.get_keypress()
+        if action == "P" or action == "Q":
+            pause = False
+        quit(action,player)
+
+def quit(action,player):
+    if action == "Q":
+        player.set_running(False)
+
+
 # Example usage
 if __name__ == "__main__":
     
@@ -64,8 +81,8 @@ if __name__ == "__main__":
 
     while(player.get_running()):
         action = control.get_keypress()
-        if action == "Q":
-            running = player.set_running(False)
+        quit(action,player)
+        pause(action,player)
         pacman_map.set_map(player.move_player(action,pacman_map.get_map(),pacman_map.get_width()))
         game_screen.update_screen(pacman_map,player.get_score())
         
@@ -90,7 +107,7 @@ if __name__ == "__main__":
                 pacman_map.set_map(bear.move_bear(pacman_map.get_map(),pacman_map.get_width(),pacman_map.get_entrance()))
 
         deers = remove_deers(deers,player,bears)
-        
+
 """
 4 September 2025 - Created File
 7 September 2025 - Added creation of View object
@@ -103,4 +120,5 @@ if __name__ == "__main__":
                   - Moved move bear function to Bear Class
 18 September 2025 - Added player class and moved player move function to player class
 19 September 2025 - Added section to remove deers from deer list
+11 October 2025 - Added a pause game function
 """

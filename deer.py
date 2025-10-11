@@ -58,7 +58,7 @@ class Deer:
 			for x in movement_options:
 				if x == "":
 					can_move = True
-			print("Can Move",can_move)
+					print("Can Move",can_move)
 			if can_move:
 				found_move = False
 				while not found_move:
