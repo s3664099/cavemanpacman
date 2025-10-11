@@ -4,6 +4,11 @@ Author: David Sarkies
 Initial: 4 September 2025
 Update: 11 October 2025
 Version: 0.10
+
+- Tighten code
+- Deer flees faster (add it also where bear chases)
+- move main game into a function and return the score.
+- see what Deepseek thinks (good, bad, ugly)
 """
 
 from map import PacmanMap
