@@ -2,12 +2,10 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 11 October 2025
-Version: 0.10
+Update: 12 October 2025
+Version: 0.11
 
-- Tighten code
 - Deer flees faster (add it also where bear chases)
-- move main game into a function and return the score.
 - see what Deepseek thinks (good, bad, ugly)
 """
 
@@ -19,6 +17,9 @@ from display import View
 import control
 import time
 
+half_move_counter = 0.5
+move_counter = 1
+ 
 def remove_deers(deers,player,bears):
     update_deers = []
     for deer in deers:
@@ -37,8 +38,7 @@ def remove_deers(deers,player,bears):
 
 def pause(action,player):
     pause = False
-    if action != "":
-        print(action)
+
     if action == "P":
         pause = True
     while(pause):
@@ -52,9 +52,7 @@ def quit(action,player):
         player.set_running(False)
 
 
-# Example usage
-if __name__ == "__main__":
-    
+def main():
     pacman_map = PacmanMap("map.txt")
     game_screen = View(pacman_map.get_dimensions())
     game_screen.update_screen(pacman_map,0)
@@ -81,13 +79,13 @@ if __name__ == "__main__":
         
         current_time = time.time()
 
-        if (current_time-base_time>0.5) and (current_time-base_time<1):
+        if (current_time-base_time>half_move_counter) and (current_time-base_time<move_counter):
             for bear in bears:
                 if (bear.get_chasing()):
                     pacman_map.set_map(bear.move_bear(pacman_map.get_map(),pacman_map.get_width(),pacman_map.get_entrance()))
                     bear.set_chasing(False)
 
-        elif (current_time-base_time>1):
+        elif (current_time-base_time>move_counter):
             base_time = current_time
 
             dear_no = 0
@@ -99,6 +97,13 @@ if __name__ == "__main__":
                 pacman_map.set_map(bear.move_bear(pacman_map.get_map(),pacman_map.get_width(),pacman_map.get_entrance()))
 
         deers = remove_deers(deers,player,bears)
+
+    return player.get_score()
+
+# Example usage
+if __name__ == "__main__":
+    main()
+
 
 """
 4 September 2025 - Created File
@@ -113,4 +118,5 @@ if __name__ == "__main__":
 18 September 2025 - Added player class and moved player move function to player class
 19 September 2025 - Added section to remove deers from deer list
 11 October 2025 - Added a pause game function
+12 October 2025 - Move code into main function
 """
