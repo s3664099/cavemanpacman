@@ -2,8 +2,8 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 10 October 2025
-Version: 0.6
+Update: 13 October 2025
+Version: 0.7
 """
 
 import random
@@ -107,9 +107,10 @@ class Bear:
 				position +=1
 				found_stop,new_movement,distance = self.check_position(map_data,row+map_pos,col,position,0)
 			movement,distance = self.check_move(new_movement,movement,position,distance)
-		except:
-			print("North")
+		except Exception as e:
+			print("Bear North")
 			print(row+map_pos,col)
+			print(e)
 
 		try:
 			found_stop = False
@@ -122,9 +123,10 @@ class Bear:
 				position +=1
 				found_stop,new_movement,distance = self.check_position(map_data,row+map_pos,col,position,1)
 			movement,distance = self.check_move(new_movement,movement,position,distance)
-		except:
-			print("South")
+		except Exception as e:
+			print("Bear South")
 			print(row+map_pos,col)
+			print(e)
 
 		try:
 			found_stop = False
@@ -137,9 +139,10 @@ class Bear:
 				position +=1
 				found_stop,new_movement,distance = self.check_position(map_data,row,col+map_pos,position,2)
 			movement,distance = self.check_move(new_movement,movement,position,distance)
-		except:
-			print("East")
+		except Exception as e:
+			print("Bear East")
 			print(row,col+map_pos)
+			print(e)
 
 		try:
 			found_stop = False
@@ -152,9 +155,10 @@ class Bear:
 				position +=1
 				found_stop,new_movement,distance = self.check_position(map_data,row,col+map_pos,position,3)
 			movement,distance = self.check_move(new_movement,movement,position,distance)
-		except:
-			print("West")
+		except Exception as e:
+			print("Bear West")
 			print(row,col+map_pos)
+			print(e)
 
 		return movement
 
@@ -227,4 +231,5 @@ class Bear:
 3 October 2025 - Made bear move faster if sees prey
 4 October 2025 - Removed second check position
 10 October 2025 - Removed some of the prints
+13 October 2025 - Added further details for errors
 """

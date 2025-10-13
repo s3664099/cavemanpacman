@@ -2,8 +2,8 @@
 File: Caveman Pacman Deer
 Author: David Sarkies
 Initial: 16 September 2025
-Update: 11 October 2025
-Version: 0.5
+Update: 13 October 2025
+Version: 0.6
 """
 
 import random
@@ -27,11 +27,17 @@ class Deer:
 	def get_position(self):
 		return self.position
 
+	def get_fleeing(self):
+		return self.fleeing
+
 	def check_current_position(self,row,col):
 		return (row,col) == self.position
 
 	def set_position(self,row,col):
 		self.position = (row,col)
+
+	def set_fleeing(self,is_fleeing):
+		self.fleeing = is_fleeing
 
 	def move_deer(self,map_data,width):
 		new_row,new_col = self.position
@@ -131,25 +137,29 @@ class Deer:
 		try:
 			movement[self.north],predator_found = self.look_for_predator(map_data,row,col,self.north,predator_found)
 		except Exception as e: 
-			print("North")
+			print("Deer North")
+			print(row+map_pos,col)
 			print(e)
 
 		try:
 			movement[self.south],predator_found = self.look_for_predator(map_data,row,col,self.south,predator_found)
 		except Exception as e:
-			print("South")
+			print("Deer South")
+			print(row+map_pos,col)
 			print(e)
 
 		try:
 			movement[self.west],predator_found = self.look_for_predator(map_data,row,col,self.west,predator_found)
 		except Exception as e:
-			print("West")
+			print("Deer West")
+			print(row+map_pos,col)
 			print(e)
 
 		try:
 			movement[self.east],predator_found = self.look_for_predator(map_data,row,col,self.east,predator_found)
 		except Exception as e:
-			print("East")
+			print("Deer East")
+			print(row+map_pos,col)
 			print(e)
 
 		return movement,predator_found
@@ -172,4 +182,5 @@ class Deer:
 8 October 2025 - Deer now flees
 10 October 2025 - Added code so deer doesn't pick up stuff when fleeing
 11 October 2025 - Fixed bug where deer disappears when fleeing
+13 October 2025 - Added getter/setter for fleeing
 """
