@@ -8,6 +8,7 @@ Version: 0.14
 - Find out why errors appear when bear moves
 - Find out why the blocker for the exit doesn't work
 - see what Deepseek thinks (good, bad, ugly)
+- The time option doesn't work deepseek suggests - moves too fast
 """
 
 from map import PacmanMap
@@ -53,9 +54,11 @@ def main():
 
 
     while(player.get_running()):
+
         action = control.get_keypress()
         handle_quit(action,player)
         is_paused = handle_pause(action, is_paused)
+        
         game_screen.update_screen(pacman_map,player.get_score())
         
         if not is_paused:
@@ -73,8 +76,6 @@ def main():
                         pacman_map.set_map(deer.move_deer(pacman_map.get_map(),pacman_map.get_width()))
                         deer.set_fleeing(False)
 
-
-                game_screen.update_screen(pacman_map,player.get_score())
             elif (current_time-base_time>FULL_MOVE_INTERVAL):
                 base_time = current_time
 
