@@ -40,19 +40,14 @@ def handle_quit(action,player):
     if action == "Q":
         player.set_running(False)
 
-
 def main():
     pacman_map = PacmanMap("map.txt")
     game_screen = View(pacman_map.get_dimensions())
-    game_screen.update_screen(pacman_map,0)
+
     base_time = time.time()
     is_paused = False
 
-    deers = []
-    bears = []
-
-    player = Player(pacman_map.get_player()[0],pacman_map.get_player()[1])
-
+    player = Player(*pacman_map.get_player())
     deers = [Deer(*pos) for pos in pacman_map.get_deers()]
     bears = [Bear(*pos) for pos in pacman_map.get_bears()]
 
