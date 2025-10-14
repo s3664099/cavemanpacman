@@ -53,11 +53,8 @@ def main():
 
     player = Player(pacman_map.get_player()[0],pacman_map.get_player()[1])
 
-    for deer in pacman_map.get_deers():
-        deers.append(Deer(deer[0],deer[1]))
-
-    for bear in pacman_map.get_bears():
-        bears.append(Bear(bear[0],bear[1]))
+    deers = [Deer(*pos) for pos in pacman_map.get_deers()]
+    bears = [Bear(*pos) for pos in pacman_map.get_bears()]
 
 
     while(player.get_running()):
