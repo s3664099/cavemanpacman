@@ -72,9 +72,9 @@ def main():
                         bear.set_chasing(False)
 
                 for deer in deers:
-                    if (deer.get_fleeing()):
+                    if (deer.is_fleeing()):
                         pacman_map.set_map(deer.move_deer(pacman_map.get_map(),pacman_map.get_width()))
-                        deer.set_fleeing(False)
+                        deer.stop_fleeing()
 
             elif (current_time-base_time>FULL_MOVE_INTERVAL):
                 base_time = current_time

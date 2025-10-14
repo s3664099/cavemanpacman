@@ -27,17 +27,20 @@ class Deer:
 	def get_position(self):
 		return self.position
 
-	def get_fleeing(self):
-		return self.fleeing
-
 	def collides_with(self,encounter):
 		return (encounter.get_position()[0],encounter.get_position()[1]) ==self.position
 
 	def set_position(self,row,col):
 		self.position = (row,col)
 
-	def set_fleeing(self,is_fleeing):
-		self.fleeing = is_fleeing
+	def is_fleeing(self):
+		return self.fleeing
+
+	def set_fleeing(self):
+		self.fleeing = True
+
+	def stop_fleeing(self):
+		self.fleeing = False
 
 	def move_deer(self,map_data,width):
 		new_row,new_col = self.position
@@ -48,7 +51,7 @@ class Deer:
 
 		if (predator_found):
 
-			self.fleeing = True
+			self.set_fleeing()
 			if map_data[row-1][col] not in self.non_blockers:
 				movement_options[self.north] = "X"
 			if map_data[row+1][col] not in self.non_blockers:
@@ -183,5 +186,7 @@ class Deer:
 10 October 2025 - Added code so deer doesn't pick up stuff when fleeing
 11 October 2025 - Fixed bug where deer disappears when fleeing
 13 October 2025 - Added getter/setter for fleeing
-14 October 2025 - Changed check position to collides with
+14 October 2025 - Changed check position to collides with bear/player
+				- updated the fleeing checks and sets
+
 """
