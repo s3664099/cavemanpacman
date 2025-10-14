@@ -2,8 +2,8 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 13 October 2025
-Version: 0.13
+Update: 14 October 2025
+Version: 0.14
 
 - Find out why errors appear when bear moves
 - Find out why the blocker for the exit doesn't work
@@ -18,24 +18,16 @@ from display import View
 import control
 import time
 
-half_move_counter = 0.5
-move_counter = 1
+HALF_MOVE_INTERVAL = 0.5
+FULL_MOVE_INTERVAL = 1
  
+"""Remove deer that collided with player or bears using list comprehension"""
 def remove_deers(deers,player,bears):
-    update_deers = []
-    for deer in deers:
-        add_deer = True
-        if deer.check_current_position(player.get_position()[0],player.get_position()[1]):
-            add_deer = False
-
-        for bear in bears:
-            if (deer.check_current_position(bear.get_position()[0],bear.get_position()[1])):
-                add_deer = False
-
-        if add_deer:
-            update_deers.append(deer)
-
-    return update_deers
+    return [
+        deer for deer in deers 
+        if not (deer.collides_with(player) or 
+                any(deer.collides_with(bear) for bear in bears))
+    ]
 
 def pause(action,player):
     pause = False
@@ -80,7 +72,7 @@ def main():
         
         current_time = time.time()
 
-        if (current_time-base_time>half_move_counter) and (current_time-base_time<move_counter):
+        if (current_time-base_time>HALF_MOVE_INTERVAL) and (current_time-base_time<FULL_MOVE_INTERVAL):
             for bear in bears:
                 if (bear.get_chasing()):
                     pacman_map.set_map(bear.move_bear(pacman_map.get_map(),pacman_map.get_width(),pacman_map.get_entrance()))
@@ -93,7 +85,7 @@ def main():
 
 
             game_screen.update_screen(pacman_map,player.get_score())
-        elif (current_time-base_time>move_counter):
+        elif (current_time-base_time>FULL_MOVE_INTERVAL):
             base_time = current_time
 
             for deer in deers:
@@ -126,4 +118,5 @@ if __name__ == "__main__":
 11 October 2025 - Added a pause game function
 12 October 2025 - Move code into main function
 13 October 2025 - Made deer move faster if fleeing
+14 October 2024 - Created constants and tightened remove deer function
 """

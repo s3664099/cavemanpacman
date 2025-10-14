@@ -2,8 +2,8 @@
 File: Caveman Pacman Deer
 Author: David Sarkies
 Initial: 16 September 2025
-Update: 13 October 2025
-Version: 0.6
+Update: 14 October 2025
+Version: 0.7
 """
 
 import random
@@ -30,8 +30,8 @@ class Deer:
 	def get_fleeing(self):
 		return self.fleeing
 
-	def check_current_position(self,row,col):
-		return (row,col) == self.position
+	def collides_with(self,encounter):
+		return (encounter.get_position()[0],encounter.get_position()[1]) ==self.position
 
 	def set_position(self,row,col):
 		self.position = (row,col)
@@ -183,4 +183,5 @@ class Deer:
 10 October 2025 - Added code so deer doesn't pick up stuff when fleeing
 11 October 2025 - Fixed bug where deer disappears when fleeing
 13 October 2025 - Added getter/setter for fleeing
+14 October 2025 - Changed check position to collides with
 """
