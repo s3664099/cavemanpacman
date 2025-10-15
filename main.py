@@ -2,13 +2,12 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 14 October 2025
-Version: 0.14
+Update: 15 October 2025
+Version: 0.15
 
 - Find out why errors appear when bear moves
 - Find out why the blocker for the exit doesn't work
 - see what Deepseek thinks (good, bad, ugly)
-- The time option doesn't work deepseek suggests - moves too fast
 """
 
 from map import PacmanMap
@@ -67,9 +66,9 @@ def main():
 
             if (current_time-base_time>HALF_MOVE_INTERVAL) and (current_time-base_time<FULL_MOVE_INTERVAL):
                 for bear in bears:
-                    if (bear.get_chasing()):
+                    if (bear.is_chasing()):
                         pacman_map.set_map(bear.move_bear(pacman_map.get_map(),pacman_map.get_width(),pacman_map.get_entrance()))
-                        bear.set_chasing(False)
+                        bear.stop_chasing()
 
                 for deer in deers:
                     if (deer.is_fleeing()):
@@ -109,6 +108,7 @@ if __name__ == "__main__":
 11 October 2025 - Added a pause game function
 12 October 2025 - Move code into main function
 13 October 2025 - Made deer move faster if fleeing
-14 October 2024 - Created constants and tightened remove deer function
+14 October 2025 - Created constants and tightened remove deer function
                 - Added non blocking pause
+15 October 2025 - Updated Bear chasing routine
 """

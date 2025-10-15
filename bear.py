@@ -2,8 +2,8 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 13 October 2025
-Version: 0.7
+Update: 15 October 2025
+Version: 0.8
 """
 
 import random
@@ -31,11 +31,14 @@ class Bear:
 	def set_square(self,square):
 		self.square = square
 
-	def get_chasing(self):
+	def is_chasing(self):
 		return self.chasing
 
-	def set_chasing(self,chasing):
-		self.chasing = chasing
+	def stop_chasing(self):
+		self.chasing = False
+
+	def start_chasing(self):
+		self.chasing = True
 
 	def move_bear(self,map_data,width,entrance):
 
@@ -74,7 +77,7 @@ class Bear:
 					movement = self.determine_movement(map_data,row,col)
 					new_row,new_col = row,col
 				else:
-					self.chasing = True
+					self.start_chasing()
 
 				if (movement == 0):
 					new_row -=1
@@ -232,4 +235,5 @@ class Bear:
 4 October 2025 - Removed second check position
 10 October 2025 - Removed some of the prints
 13 October 2025 - Added further details for errors
+15 October 2025 - Update bear chasing routine to make it clearer
 """
