@@ -2,8 +2,8 @@
 File: Caveman Pacman Deer
 Author: David Sarkies
 Initial: 16 September 2025
-Update: 14 October 2025
-Version: 0.7
+Update: 15 October 2025
+Version: 0.8
 """
 
 import random
@@ -42,7 +42,10 @@ class Deer:
 	def stop_fleeing(self):
 		self.fleeing = False
 
-	def move_deer(self,map_data,width):
+	def move_deer(self,pacman_map):
+		map_data = pacman_map.get_map()
+		width = pacman_map.get_width()
+
 		new_row,new_col = self.position
 		row,col = self.position
 
@@ -188,5 +191,6 @@ class Deer:
 13 October 2025 - Added getter/setter for fleeing
 14 October 2025 - Changed check position to collides with bear/player
 				- updated the fleeing checks and sets
+15 October 2025 - Changed so only map object passed through to move function
 
 """

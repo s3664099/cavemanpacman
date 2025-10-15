@@ -7,7 +7,7 @@ Version: 0.15
 
 - Find out why errors appear when bear moves
 - Find out why the blocker for the exit doesn't work
-- see what Deepseek thinks (good, bad, ugly)
+- update the move bear so only the map gets passed
 """
 
 from map import PacmanMap
@@ -70,18 +70,17 @@ def main():
             if elapsed_time >= HALF_MOVE_INTERVAL and not half_move_done:
                 for bear in bears:
                     if (bear.is_chasing()):
-                        pacman_map.set_map(bear.move_bear(pacman_map.get_map(),pacman_map.get_width(),pacman_map.get_entrance()))
+                        pacman_map.set_map(bear.move_bear(pacman_map))
                         bear.stop_chasing()
 
                 for deer in deers:
                     if (deer.is_fleeing()):
-                        pacman_map.set_map(deer.move_deer(pacman_map.get_map(),pacman_map.get_width()))
+                        pacman_map.set_map(deer.move_deer(pacman_map))
                         deer.stop_fleeing()
 
                 half_move_done = True
 
             if elapsed_time >= FULL_MOVE_INTERVAL:
-                base_time = current_time
 
                 for deer in deers:
                     pacman_map.set_map(deer.move_deer(pacman_map.get_map(),pacman_map.get_width()))
@@ -124,4 +123,5 @@ if __name__ == "__main__":
                 - Added non blocking pause
 15 October 2025 - Updated Bear chasing routine
                 - Updated timing
+                - Changed so only map object passed through to move function
 """

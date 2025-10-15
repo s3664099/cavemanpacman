@@ -40,7 +40,10 @@ class Bear:
 	def start_chasing(self):
 		self.chasing = True
 
-	def move_bear(self,map_data,width,entrance):
+	def move_bear(self,pacman_map):
+		map_data = pacman_map.get_map()
+		width = pacman_map.get_width()
+		entrance = pacman_map.get_entrance()
 
 		non_blockers = ["."," ","w","P","d","#"]
 		new_row,new_col = self.position
@@ -236,4 +239,5 @@ class Bear:
 10 October 2025 - Removed some of the prints
 13 October 2025 - Added further details for errors
 15 October 2025 - Update bear chasing routine to make it clearer
+				- Changed so only map object passed through to move function
 """
