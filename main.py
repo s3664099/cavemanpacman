@@ -44,8 +44,9 @@ def main():
     pacman_map = PacmanMap("map.txt")
     game_screen = View(pacman_map.get_dimensions())
 
-    base_time = time.time()
+    last_update_time = time.time()
     is_paused = False
+    half_move_done = False
 
     player = Player(*pacman_map.get_player())
     deers = [Deer(*pos) for pos in pacman_map.get_deers()]
@@ -54,17 +55,19 @@ def main():
 
     while(player.get_running()):
 
+        current_time = time.time()
+        elapsed_time = current_time - last_update_time
         action = control.get_keypress()
+        
         handle_quit(action,player)
         is_paused = handle_pause(action, is_paused)
         
-        game_screen.update_screen(pacman_map,player.get_score())
-        
         if not is_paused:
-            pacman_map.set_map(player.move_player(action,pacman_map.get_map(),pacman_map.get_width()))
-            current_time = time.time()
 
-            if (current_time-base_time>HALF_MOVE_INTERVAL) and (current_time-base_time<FULL_MOVE_INTERVAL):
+            updated_map = player.move_player(action,pacman_map.get_map(),pacman_map.get_width())
+            pacman_map.set_map(updated_map)
+
+            if elapsed_time >= HALF_MOVE_INTERVAL and not half_move_done:
                 for bear in bears:
                     if (bear.is_chasing()):
                         pacman_map.set_map(bear.move_bear(pacman_map.get_map(),pacman_map.get_width(),pacman_map.get_entrance()))
@@ -75,7 +78,9 @@ def main():
                         pacman_map.set_map(deer.move_deer(pacman_map.get_map(),pacman_map.get_width()))
                         deer.stop_fleeing()
 
-            elif (current_time-base_time>FULL_MOVE_INTERVAL):
+                half_move_done = True
+
+            if elapsed_time >= FULL_MOVE_INTERVAL:
                 base_time = current_time
 
                 for deer in deers:
@@ -84,7 +89,14 @@ def main():
                 for bear in bears:
                     pacman_map.set_map(bear.move_bear(pacman_map.get_map(),pacman_map.get_width(),pacman_map.get_entrance()))
 
+                # Reset timing
+                last_update_time = current_time
+                half_move_done = False
+
             deers = remove_deers(deers,player,bears)
+
+        game_screen.update_screen(pacman_map,player.get_score())
+        time.sleep(0.01)
 
     return player.get_score()
 
@@ -111,4 +123,5 @@ if __name__ == "__main__":
 14 October 2025 - Created constants and tightened remove deer function
                 - Added non blocking pause
 15 October 2025 - Updated Bear chasing routine
+                - Updated timing
 """
