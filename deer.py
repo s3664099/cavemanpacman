@@ -23,6 +23,8 @@ class Deer:
 		self.height = -1
 		self.width = -1
 
+		self.GRAZING_MOVE_CHANCE = 12
+
 	def get_score(self):
 		return self.score
 
@@ -53,7 +55,7 @@ class Deer:
 		row,col = self.position
 
 		movement_options,predator_found = self.find_predator(map_data,row,col)
-		movement = random.randint(0,12)
+		movement = random.randint(0,self.GRAZING_MOVE_CHANCE)  # 1 in 4 chance to move when grazing
 
 		if (predator_found):
 
@@ -105,7 +107,7 @@ class Deer:
 			new_position = map_data[new_row][new_col]
 			if (new_position in self.non_blockers):
 				if not self.fleeing:
-					map_data[row][col] = " "
+					map_data[row][col] = " " #Deer removes anything in square if not fleeing
 
 				self.square = map_data[new_row][new_col]
 				map_data[new_row][new_col]="d"

@@ -2,8 +2,8 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 15 October 2025
-Version: 0.8
+Update: 16 October 2025
+Version: 0.9
 """
 
 import random
@@ -18,6 +18,8 @@ class Bear:
 		self.start = True
 		self.has_food = False
 		self.movement = 0
+		self.width = -1
+		self.height = -1
 
 	def get_position(self):
 		return self.position
@@ -42,7 +44,8 @@ class Bear:
 
 	def move_bear(self,pacman_map):
 		map_data = pacman_map.get_map()
-		width = pacman_map.get_width()
+		self.width = pacman_map.get_width()
+		self.height = pacman_map.get_height()
 		entrance = pacman_map.get_entrance()
 
 		non_blockers = ["."," ","w","P","d","#"]
@@ -178,6 +181,10 @@ class Bear:
 			distance = position
 		elif map_data[row][col] == "1" or map_data[row][col] == "2" or map_data[row][col] == "3":
 			found_stop = True
+		elif row<0 or row>=self.height-1 or col<0 or col>=self.width-1:
+			found_stop = True
+			print("Exceeds bounds")
+
 		return found_stop,movement,distance
 
 	def check_move(self,new_movement,movement,position,distance):
@@ -240,4 +247,5 @@ class Bear:
 13 October 2025 - Added further details for errors
 15 October 2025 - Update bear chasing routine to make it clearer
 				- Changed so only map object passed through to move function
+16 October 2025 - Added boundaries for search
 """
