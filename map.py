@@ -2,8 +2,8 @@
 File: Caveman Pacman Map
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 23 September 2025
-Version: 0.7
+Update: 16 October 2025
+Version: 0.8
 
 Remove the deer when encountering it
 """
@@ -102,10 +102,13 @@ class PacmanMap:
     def get_dimensions(self):
         return self.width, self.height
 
+    #Getters
     def get_width(self):
         return self.width
 
-    #Getters
+    def get_height(self):
+        return self.height
+
     def get_player(self):
         return self.player
 
@@ -131,4 +134,5 @@ class PacmanMap:
 16 September 2025 - Moved move deer function to deer class
 18 September 2025 - Removed player functions and variable
 23 September 2025 - Added Cave Entrance Tile
+16 October 2025 - Added get height
 """

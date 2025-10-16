@@ -2,12 +2,11 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 15 October 2025
-Version: 0.15
+Update: 16 October 2025
+Version: 0.16
 
 - Find out why errors appear when bear moves
 - Find out why the blocker for the exit doesn't work
-- update the move bear so only the map gets passed
 """
 
 from map import PacmanMap
@@ -83,10 +82,10 @@ def main():
             if elapsed_time >= FULL_MOVE_INTERVAL:
 
                 for deer in deers:
-                    pacman_map.set_map(deer.move_deer(pacman_map.get_map(),pacman_map.get_width()))
+                    pacman_map.set_map(deer.move_deer(pacman_map))
 
                 for bear in bears:
-                    pacman_map.set_map(bear.move_bear(pacman_map.get_map(),pacman_map.get_width(),pacman_map.get_entrance()))
+                    pacman_map.set_map(bear.move_bear(pacman_map))
 
                 # Reset timing
                 last_update_time = current_time
@@ -124,4 +123,5 @@ if __name__ == "__main__":
 15 October 2025 - Updated Bear chasing routine
                 - Updated timing
                 - Changed so only map object passed through to move function
+16 October 2025 - Changed so only map object passed through to deer
 """

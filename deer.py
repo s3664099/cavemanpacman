@@ -2,8 +2,8 @@
 File: Caveman Pacman Deer
 Author: David Sarkies
 Initial: 16 September 2025
-Update: 15 October 2025
-Version: 0.8
+Update: 16 October 2025
+Version: 0.9
 """
 
 import random
@@ -20,6 +20,8 @@ class Deer:
 		self.south = 1
 		self.west = 2
 		self.east = 3
+		self.height = -1
+		self.width = -1
 
 	def get_score(self):
 		return self.score
@@ -44,7 +46,8 @@ class Deer:
 
 	def move_deer(self,pacman_map):
 		map_data = pacman_map.get_map()
-		width = pacman_map.get_width()
+		self.width = pacman_map.get_width()
+		self.height = pacman_map.get_height()
 
 		new_row,new_col = self.position
 		row,col = self.position
@@ -75,16 +78,16 @@ class Deer:
 					movement = random.randint(0,3)
 					if movement_options[movement] == "":
 						map_data[row][col] = self.square
-						map_data = self.calculate_move(movement,map_data,width,row,col)
+						map_data = self.calculate_move(movement,map_data,row,col)
 						found_move = True
 
 		else:
 			self.fleeing = False
-			map_data = self.calculate_move(movement,map_data,width,row,col)
+			map_data = self.calculate_move(movement,map_data,row,col)
 
 		return map_data
 
-	def calculate_move(self,movement,map_data,width,row,col):
+	def calculate_move(self,movement,map_data,row,col):
 
 		new_row = row
 		new_col = col
@@ -98,7 +101,7 @@ class Deer:
 		elif (movement == self.east):
 			new_col +=1
 
-		if (new_col<width):
+		if new_col>=0 and new_col<self.width and new_row>=0 and new_row<self.height:
 			new_position = map_data[new_row][new_col]
 			if (new_position in self.non_blockers):
 				if not self.fleeing:
@@ -144,28 +147,28 @@ class Deer:
 			movement[self.north],predator_found = self.look_for_predator(map_data,row,col,self.north,predator_found)
 		except Exception as e: 
 			print("Deer North")
-			print(row+map_pos,col)
+			print(row,col)
 			print(e)
 
 		try:
 			movement[self.south],predator_found = self.look_for_predator(map_data,row,col,self.south,predator_found)
 		except Exception as e:
 			print("Deer South")
-			print(row+map_pos,col)
+			print(row,col)
 			print(e)
 
 		try:
 			movement[self.west],predator_found = self.look_for_predator(map_data,row,col,self.west,predator_found)
 		except Exception as e:
 			print("Deer West")
-			print(row+map_pos,col)
+			print(row,col)
 			print(e)
 
 		try:
 			movement[self.east],predator_found = self.look_for_predator(map_data,row,col,self.east,predator_found)
 		except Exception as e:
 			print("Deer East")
-			print(row+map_pos,col)
+			print(row,col)
 			print(e)
 
 		return movement,predator_found
@@ -174,11 +177,14 @@ class Deer:
 		found_stop = False
 		found_predator = False
 
-		if map_data[row][col] == "P" or map_data[row][col] == "d":
+		if map_data[row][col] == "P" or map_data[row][col] == "B":
 			found_stop = True
 			found_predator = True
 		elif map_data[row][col] == "1" or map_data[row][col] == "2" or map_data[row][col] == "/":
 			found_stop = True
+		elif row<0 or row>=self.height or col<0 or col>=self.width:
+			found_stop = True
+
 		return found_stop,found_predator
 
 """
@@ -192,5 +198,6 @@ class Deer:
 14 October 2025 - Changed check position to collides with bear/player
 				- updated the fleeing checks and sets
 15 October 2025 - Changed so only map object passed through to move function
+16 October 2025 - Fixed issues and set boundaries
 
 """
