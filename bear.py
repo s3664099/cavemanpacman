@@ -2,8 +2,8 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 16 October 2025
-Version: 0.9
+Update: 17 October 2025
+Version: 0.10
 """
 
 import random
@@ -71,6 +71,7 @@ class Bear:
 					map_data = self.bear_move(map_data,row,col,row,col+1)
 					move = True
 				else:
+					self.start = False
 					move = True
 
 				if cave_entrance_row==row and cave_entrance_col==col:
@@ -118,7 +119,7 @@ class Bear:
 			movement,distance = self.check_move(new_movement,movement,position,distance)
 		except Exception as e:
 			print("Bear North")
-			print(row+map_pos,col)
+			print(f"Position: ({row}, {col})")
 			print(e)
 
 		try:
@@ -134,7 +135,7 @@ class Bear:
 			movement,distance = self.check_move(new_movement,movement,position,distance)
 		except Exception as e:
 			print("Bear South")
-			print(row+map_pos,col)
+			print(f"Position: ({row}, {col})")
 			print(e)
 
 		try:
@@ -150,7 +151,7 @@ class Bear:
 			movement,distance = self.check_move(new_movement,movement,position,distance)
 		except Exception as e:
 			print("Bear East")
-			print(row,col+map_pos)
+			print(f"Position: ({row}, {col})")
 			print(e)
 
 		try:
@@ -159,14 +160,14 @@ class Bear:
 			map_pos = 0
 			new_movement = -1
 
-			while not found_stop:
+			while not found_stop and position<20:
 				map_pos +=1
 				position +=1
 				found_stop,new_movement,distance = self.check_position(map_data,row,col+map_pos,position,3)
 			movement,distance = self.check_move(new_movement,movement,position,distance)
 		except Exception as e:
 			print("Bear West")
-			print(row,col+map_pos)
+			print(f"Position: ({row}, {col})")
 			print(e)
 
 		return movement
@@ -248,4 +249,5 @@ class Bear:
 15 October 2025 - Update bear chasing routine to make it clearer
 				- Changed so only map object passed through to move function
 16 October 2025 - Added boundaries for search
+17 October 2025 - Added search limit and fixed error reporting
 """

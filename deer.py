@@ -2,8 +2,8 @@
 File: Caveman Pacman Deer
 Author: David Sarkies
 Initial: 16 September 2025
-Update: 16 October 2025
-Version: 0.9
+Update: 17 October 2025
+Version: 0.10
 """
 
 import random
@@ -122,7 +122,7 @@ class Deer:
 		col_pos = 0
 		movement = ""
 
-		while not found_stop:
+		while not found_stop and position<20:
 			if direction == self.north:
 				row_pos -=1
 			elif direction == self.south:
@@ -201,5 +201,6 @@ class Deer:
 				- updated the fleeing checks and sets
 15 October 2025 - Changed so only map object passed through to move function
 16 October 2025 - Fixed issues and set boundaries
+17 October 2025 - Added max search distance
 
 """
