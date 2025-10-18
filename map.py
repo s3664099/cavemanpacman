@@ -143,5 +143,5 @@ class PacmanMap:
 18 September 2025 - Removed player functions and variable
 23 September 2025 - Added Cave Entrance Tile
 16 October 2025 - Added get height
-18 October 2025 - Added maze exit
+18 October 2025 - Added maze exit.
 """

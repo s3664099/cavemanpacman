@@ -2,8 +2,8 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 16 October 2025
-Version: 0.16
+Update: 18 October 2025
+Version: 0.17
 
 - Find out why errors appear when bear moves
 - Find out why the blocker for the exit doesn't work
@@ -40,16 +40,16 @@ def handle_quit(action,player):
         player.set_running(False)
 
 def main():
-    pacman_map = PacmanMap("map.txt")
-    game_screen = View(pacman_map.get_dimensions())
+    game_map = PacmanMap("map.txt")
+    game_screen = View(game_map.get_dimensions())
 
     last_update_time = time.time()
     is_paused = False
     half_move_done = False
 
-    player = Player(*pacman_map.get_player())
-    deers = [Deer(*pos) for pos in pacman_map.get_deers()]
-    bears = [Bear(*pos) for pos in pacman_map.get_bears()]
+    player = Player(*game_map.get_player())
+    deers = [Deer(*pos) for pos in game_map.get_deers()]
+    bears = [Bear(*pos) for pos in game_map.get_bears()]
 
 
     while(player.get_running()):
@@ -63,18 +63,18 @@ def main():
         
         if not is_paused:
 
-            updated_map = player.move_player(action,pacman_map.get_map(),pacman_map.get_width())
-            pacman_map.set_map(updated_map)
+            updated_map = player.move_player(action,game_map.get_map(),game_map.get_width(),game_map.get_height())
+            game_map.set_map(updated_map)
 
             if elapsed_time >= HALF_MOVE_INTERVAL and not half_move_done:
                 for bear in bears:
                     if (bear.is_chasing()):
-                        pacman_map.set_map(bear.move_bear(pacman_map))
+                        game_map.set_map(bear.move_bear(game_map))
                         bear.stop_chasing()
 
                 for deer in deers:
                     if (deer.is_fleeing()):
-                        pacman_map.set_map(deer.move_deer(pacman_map))
+                        game_map.set_map(deer.move_deer(game_map))
                         deer.stop_fleeing()
 
                 half_move_done = True
@@ -82,10 +82,10 @@ def main():
             if elapsed_time >= FULL_MOVE_INTERVAL:
 
                 for deer in deers:
-                    pacman_map.set_map(deer.move_deer(pacman_map))
+                    game_map.set_map(deer.move_deer(game_map))
 
                 for bear in bears:
-                    pacman_map.set_map(bear.move_bear(pacman_map))
+                    game_map.set_map(bear.move_bear(game_map))
 
                 # Reset timing
                 last_update_time = current_time
@@ -93,7 +93,7 @@ def main():
 
             deers = remove_deers(deers,player,bears)
 
-        game_screen.update_screen(pacman_map,player.get_score())
+        game_screen.update_screen(game_map,player.get_score())
         time.sleep(0.01)
 
     return player.get_score()
@@ -124,4 +124,5 @@ if __name__ == "__main__":
                 - Updated timing
                 - Changed so only map object passed through to move function
 16 October 2025 - Changed so only map object passed through to deer
+18 October 2025 - Changed pacman_map to game_map
 """

@@ -6,6 +6,8 @@ Update: 18 October 2025
 Version: 0.1
 """
 
+SPECIAL_TILES = ["3"]
+
 class Player:
 
 	def __init__(self,row,col):
@@ -14,7 +16,7 @@ class Player:
 		self.running = True
 		self.square = " "
 
-	def move_player(self,key,map_data,width):
+	def move_player(self,key,map_data,width,height):
 
 		row,col = self.position
 		new_row,new_col = self.position
@@ -29,21 +31,21 @@ class Player:
 		elif key == "W":
 			new_col -=1
 
-		if (new_col<width):
+		if 0 <= new_row < height and 0 <= new_col < width:
 			new_position = map_data[new_row][new_col]
 
 			if (new_position in non_blockers):
 
-				if (map_data[new_row][new_col]=="."):
+				if (new_position=="."):
 					self.score += 1
-				elif (map_data[new_row][new_col]=="d"):
+				elif (new_position=="d"):
 					self.score += 10
-				elif (map_data[new_row][new_col]=="w"):
+				elif (new_position=="w"):
 					self.score += 5
 
 
-				if (self.square == "3"):
-					map_data[row][col] = "3"
+				if self.square in SPECIAL_TILES:
+					map_data[row][col] = self.square
 				else:
 					map_data[row][col] = " "
 
@@ -52,7 +54,7 @@ class Player:
 				self.position = (new_row,new_col)
 			elif (new_position == "B"):
 				self.running = False
-		elif (new_row,new_col == 9,25):
+		else:
 			self.running = False
 
 		return map_data
