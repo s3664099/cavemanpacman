@@ -2,8 +2,8 @@
 File: Caveman Pacman Player
 Author: David Sarkies
 Initial: 18 September 2025
-Update: 18 September 2025
-Version: 0.0
+Update: 18 October 2025
+Version: 0.1
 """
 
 class Player:
@@ -12,6 +12,7 @@ class Player:
 		self.position = (row,col)
 		self.score = 0
 		self.running = True
+		self.square = " "
 
 	def move_player(self,key,map_data,width):
 
@@ -40,7 +41,13 @@ class Player:
 				elif (map_data[new_row][new_col]=="w"):
 					self.score += 5
 
-				map_data[row][col] = " "
+
+				if (self.square == "3"):
+					map_data[row][col] = "3"
+				else:
+					map_data[row][col] = " "
+
+				self.square = map_data[new_row][new_col]
 				map_data[new_row][new_col] = "P"
 				self.position = (new_row,new_col)
 			elif (new_position == "B"):
@@ -65,4 +72,5 @@ class Player:
 
 """
 18 September 2025 - Created File
+18 October 2025 - Added check to preserve maze exit
 """

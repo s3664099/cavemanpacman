@@ -103,66 +103,40 @@ class Bear:
 		
 		return map_data
 
-	def setup_find_pray(self):
-		return False,0,0,-1
+	def search_direction(self,map_data,row,col,row_delta,col_delta,direction):
+		found_stop = False
+		position = 0
+		new_movement = -1
+		distance = 0
+
+		while not found_stop and position < MAX_SEARCH_DISTANCE:
+			position+=1
+			check_row = row + (row_delta*position)
+			check_col = col + (col_delta*position)
+			found_stop,new_movement,distance = self.check_position(map_data,check_row,check_col,position,direction)
+
+		return new_movement,distance
 
 	def find_prey(self,map_data,row,col):
 
 		movement = -1
 		distance = 0
 
-		try:
-			found_stop,position,map_pos,new_movement = self.setup_find_pray()
+		#Search all four directions using the helper
+		directions = [
+			(-1,0,0), # North
+			(1,0,1), # South
+			(0,-1,2), # West
+			(0,1,3) # East
+		]
 
-			while not found_stop and position<MAX_SEARCH_DISTANCE:
-				map_pos -=1
-				position +=1
-				found_stop,new_movement,distance = self.check_position(map_data,row+map_pos,col,position,0)
-			movement,distance = self.check_move(new_movement,movement,position,distance)
-		except Exception as e:
-			print("Bear North")
-			print(f"Position: ({row}, {col})")
-			print(e)
-
-		try:
-			found_stop,position,map_pos,new_movement = self.setup_find_pray()
-
-			while not found_stop and position<MAX_SEARCH_DISTANCE:
-				map_pos +=1
-				position +=1
-				found_stop,new_movement,distance = self.check_position(map_data,row+map_pos,col,position,1)
-			movement,distance = self.check_move(new_movement,movement,position,distance)
-
-		except Exception as e:
-			print("Bear South")
-			print(f"Position: ({row}, {col})")
-			print(e)
-
-		try:
-			found_stop,position,map_pos,new_movement = self.setup_find_pray()
-
-			while not found_stop and position<MAX_SEARCH_DISTANCE:
-				map_pos -=1
-				position +=1
-				found_stop,new_movement,distance = self.check_position(map_data,row,col+map_pos,position,2)
-			movement,distance = self.check_move(new_movement,movement,position,distance)
-		except Exception as e:
-			print("Bear East")
-			print(f"Position: ({row}, {col})")
-			print(e)
-
-		try:
-			found_stop,position,map_pos,new_movement = self.setup_find_pray()
-
-			while not found_stop and position<MAX_SEARCH_DISTANCE:
-				map_pos +=1
-				position +=1
-				found_stop,new_movement,distance = self.check_position(map_data,row,col+map_pos,position,3)
-			movement,distance = self.check_move(new_movement,movement,position,distance)
-		except Exception as e:
-			print("Bear West")
-			print(f"Position: ({row}, {col})")
-			print(e)
+		for row_delta,col_delta,dir_code in directions:
+			try:
+				new_movement,new_distance = self.search_direction(
+					map_data,row,col,row_delta,col_delta,dir_code)
+				movement,distance = self.check_move(new_movement,movement,new_distance,distance)
+			except Exception as e:
+				print(f"Bear direction {dir_code} error at ({row}, {col}): {e}")
 
 		return movement
 
@@ -171,12 +145,13 @@ class Bear:
 		found_stop = False
 		movement = -1
 		distance = 0
-		if map_data[row][col] == "P" or map_data[row][col] == "d":
+
+		if map_data[row][col] == "1" or map_data[row][col] == "2" or map_data[row][col] == "3":
+			found_stop = True
+		elif map_data[row][col] == "P" or map_data[row][col] == "d":
 			found_stop = True
 			movement = direction
 			distance = position
-		elif map_data[row][col] == "1" or map_data[row][col] == "2" or map_data[row][col] == "3":
-			found_stop = True
 		elif row<0 or row>self.height or col<0 or col>self.width:
 			found_stop = True
 			print("Exceeds bounds")

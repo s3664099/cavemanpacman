@@ -20,12 +20,14 @@ class PacmanMap:
         self.deers = []
         self.bears = []
         self.entrance = []
+        self.exit = []
         self.score = 0
 
         self.player_position = "P"
         self.deer_position = "d"
         self.bear_position = "B"
         self.cave_entrance = "#"
+        self.maze_exit = "3"
 
         self.find_character()
     
@@ -85,6 +87,9 @@ class PacmanMap:
                     self.bears.append((row,col))
                 elif self.map_data[row][col] == self.cave_entrance:
                     self.entrance = (row,col)
+                elif self.map_data[row][col] == self.maze_exit:
+                    self.exit = (row,col)
+
 
     #Print the map
     def print_map(self):
@@ -121,6 +126,9 @@ class PacmanMap:
     def get_entrance(self):
         return self.entrance
 
+    def get_exit(self):
+        return self.exit
+
 """
 4 September 2025 - Created File
 5 September 2025 - Starting tidying up file
@@ -135,4 +143,5 @@ class PacmanMap:
 18 September 2025 - Removed player functions and variable
 23 September 2025 - Added Cave Entrance Tile
 16 October 2025 - Added get height
+18 October 2025 - Added maze exit
 """
