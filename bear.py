@@ -152,7 +152,7 @@ class Bear:
 			found_stop = True
 			movement = direction
 			distance = position
-		elif row<0 or row>self.height or col<0 or col>self.width:
+		elif row<0 or row>=self.height or col<0 or col>=self.width:
 			found_stop = True
 			print("Exceeds bounds")
 
@@ -173,7 +173,7 @@ class Bear:
 	def determine_movement(self,map_data,row,col):
 
 		movement_options = ["","","",""]
-		non_blockers = ["."," ","w","P","d" ,"B"]
+		non_blockers = ["."," ","w","P","d"]
 		valid_move = False
 		movement = 0
 
