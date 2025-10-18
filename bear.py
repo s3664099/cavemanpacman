@@ -2,11 +2,14 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 17 October 2025
-Version: 0.10
+Update: 18 October 2025
+Version: 0.11
 """
 
 import random
+
+MAX_SEARCH_DISTANCE = 20
+MOVEABLE_SPACE = ""
 
 class Bear:
 
@@ -71,7 +74,6 @@ class Bear:
 					map_data = self.bear_move(map_data,row,col,row,col+1)
 					move = True
 				else:
-					self.start = False
 					move = True
 
 				if cave_entrance_row==row and cave_entrance_col==col:
@@ -101,18 +103,18 @@ class Bear:
 		
 		return map_data
 
+	def setup_find_pray(self):
+		return False,0,0,-1
+
 	def find_prey(self,map_data,row,col):
 
 		movement = -1
 		distance = 0
 
 		try:
-			found_stop = False
-			position = 0
-			map_pos = 0
-			new_movement = -1
+			found_stop,position,map_pos,new_movement = self.setup_find_pray()
 
-			while not found_stop:
+			while not found_stop and position<MAX_SEARCH_DISTANCE:
 				map_pos -=1
 				position +=1
 				found_stop,new_movement,distance = self.check_position(map_data,row+map_pos,col,position,0)
@@ -123,28 +125,23 @@ class Bear:
 			print(e)
 
 		try:
-			found_stop = False
-			position = 0
-			map_pos = 0
-			new_movement = -1
+			found_stop,position,map_pos,new_movement = self.setup_find_pray()
 
-			while not found_stop:
+			while not found_stop and position<MAX_SEARCH_DISTANCE:
 				map_pos +=1
 				position +=1
 				found_stop,new_movement,distance = self.check_position(map_data,row+map_pos,col,position,1)
 			movement,distance = self.check_move(new_movement,movement,position,distance)
+
 		except Exception as e:
 			print("Bear South")
 			print(f"Position: ({row}, {col})")
 			print(e)
 
 		try:
-			found_stop = False
-			position = 0
-			map_pos = 0
-			new_movement = -1
+			found_stop,position,map_pos,new_movement = self.setup_find_pray()
 
-			while not found_stop:
+			while not found_stop and position<MAX_SEARCH_DISTANCE:
 				map_pos -=1
 				position +=1
 				found_stop,new_movement,distance = self.check_position(map_data,row,col+map_pos,position,2)
@@ -155,12 +152,9 @@ class Bear:
 			print(e)
 
 		try:
-			found_stop = False
-			position = 0
-			map_pos = 0
-			new_movement = -1
+			found_stop,position,map_pos,new_movement = self.setup_find_pray()
 
-			while not found_stop and position<20:
+			while not found_stop and position<MAX_SEARCH_DISTANCE:
 				map_pos +=1
 				position +=1
 				found_stop,new_movement,distance = self.check_position(map_data,row,col+map_pos,position,3)
@@ -173,6 +167,7 @@ class Bear:
 		return movement
 
 	def check_position(self,map_data,row,col,position,direction):
+
 		found_stop = False
 		movement = -1
 		distance = 0
@@ -182,7 +177,7 @@ class Bear:
 			distance = position
 		elif map_data[row][col] == "1" or map_data[row][col] == "2" or map_data[row][col] == "3":
 			found_stop = True
-		elif row<0 or row>=self.height-1 or col<0 or col>=self.width-1:
+		elif row<0 or row>self.height or col<0 or col>self.width:
 			found_stop = True
 			print("Exceeds bounds")
 
@@ -203,7 +198,7 @@ class Bear:
 	def determine_movement(self,map_data,row,col):
 
 		movement_options = ["","","",""]
-		non_blockers = ["."," ","w","P","d"]
+		non_blockers = ["."," ","w","P","d" ,"B"]
 		valid_move = False
 		movement = 0
 
@@ -221,7 +216,12 @@ class Bear:
 
 		while not valid_move:
 			movement = random.randint(0,3)
-			if movement_options[movement] != "X":
+
+			if MOVEABLE_SPACE not in movement_options:
+				print("Don't Move",self.position)
+				movement = -1
+				valid_move = True
+			elif movement_options[movement] != "X":
 				valid_move = True
 
 		return movement
@@ -250,4 +250,5 @@ class Bear:
 				- Changed so only map object passed through to move function
 16 October 2025 - Added boundaries for search
 17 October 2025 - Added search limit and fixed error reporting
+18 October 2025 - Updated some code, and added section if bear not moving
 """
