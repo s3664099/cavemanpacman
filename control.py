@@ -2,8 +2,8 @@
 File: Caveman Pacman Control 
 Author: David Sarkies
 Initial: 9 September 2025
-Update: 11 October 2025
-Version: 0.1
+Update: 19 October 2025
+Version: 0.2
 """
 
 import pygame
@@ -11,27 +11,28 @@ import pygame
 def get_keypress():
 
 	events = pygame.event.get()
-	key = ""
+	keys = []
 
 	for event in events:
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_UP or event.key == pygame.K_w:
-				key = "N"
+				keys.append("N")
 			elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
-				key = "S"
+				keys.append("S")
 			elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
-				key = "W"
+				keys.append("W")
 			elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-				key = "E"
+				keys.append("E")
 			elif event.key == pygame.K_q:
-				key = "Q"
+				keys.append("Q")
 			elif event.key == pygame.K_p:
-				key = "P"
+				keys.append("P")
 
-	return key
+	return keys[-1] if keys else ""
 
 
 """
 9 September 2025 - Created file
 11 October 2025 - Added pause keystroke
+19 October 2025 - Added handling for multiple keystrokes
 """
