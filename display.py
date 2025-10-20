@@ -2,8 +2,8 @@
 File: Caveman Pacman Display 
 Author: David Sarkies
 Initial: 6 September 2025
-Update: 18 September 2025
-Version: 0.5
+Update: 20 October 2025
+Version: 0.6
 """
 
 import pygame
@@ -33,7 +33,7 @@ class View:
 		game_map = pacman_map.get_map()
 
 		# Draw score bar at the top
-		score_bar_rect = pygame.Rect(0, 0, self.width, self.score_bar_height)
+		score_bar_rect = pygame.Rect(0, 0, self.width*self.cell_size, self.score_bar_height)
 		pygame.draw.rect(self.screen, (50, 50, 50), score_bar_rect)  # Dark gray background
 
 		# Draw score, lives, and level text
@@ -76,4 +76,5 @@ class View:
 12 September 2025 - Added score bar
 13 September 2025 - Added puddle
 18 September 2025 - Updated with player score
+20 September 2025 - Fixed score display
 """
