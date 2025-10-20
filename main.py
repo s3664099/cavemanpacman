@@ -4,9 +4,6 @@ Author: David Sarkies
 Initial: 4 September 2025
 Update: 18 October 2025
 Version: 0.17
-
-- Find out why errors appear when bear moves
-- Find out why the blocker for the exit doesn't work
 """
 
 from map import PacmanMap
@@ -95,7 +92,7 @@ def main():
 
         game_screen.update_screen(game_map,player.get_score())
         time.sleep(0.01)
-
+    game_map.print_map()
     return player.get_score()
 
 # Example usage

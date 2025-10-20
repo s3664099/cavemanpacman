@@ -2,18 +2,32 @@
 File: Caveman Pacman Map
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 19 October 2025
-Version: 0.9
+Update: 20 October 2025
+Version: 0.10
 """
 
 import random
 
 class PacmanMap:
+
+    PLAYER_CHAR = "P"
+    DEER_CHAR = "d"
+    BEAR_CHAR = "B"
+    ENTRANCE_CHAR = "#"
+    EXIT_CHAR = "3"
+
     def __init__(self, file_path):
 
-        self.map_data = self.load_map(file_path)
-        self.height = len(self.map_data) if self.map_data else 0
-        self.width = len(self.map_data[0]) if self.map_data else 0
+        #Load Map Data
+        self.map_data = self._load_map(file_path)
+        if not self.map_data:
+            raise ValueError("Failed to load map from {}".format(file_path))
+
+        #Store Map Dimenstions
+        self.height = len(self.map_data)
+        self.width = len(self.map_data[0])
+
+        #Initialise entity positions
         self.player = None
         self.deers = []
         self.bears = []
@@ -21,44 +35,40 @@ class PacmanMap:
         self.exit = None
         self.score = 0
 
-        self.find_character()
+        self.find_characters()
+        self.validate_map()
     
 
-    #Load map from text file
-    def load_map(self, file_path):
+    # --- Map Loading ---
+    def _load_map(self, file_path: str) -> list[list[str]]|None:
 
-        lines = ""
+        map_data = []
 
         try:
             with open(file_path, 'r') as file:
-
-                #Read Lines, filter our any empty lines
-                lines = [line.rstrip('\n') for line in file.readlines()]
-                lines = [line for line in lines if line]
-                mutable_lines = []
+                lines = [line.rstrip('\n') for line in file if line.strip()]
                 
                 if not lines:
-                    mutable_lines = None
+                     map_data = None
                 
                 # Check if all lines have the same length
-                first_line_length = len(lines[0])
+                width = len(lines[0])
 
                 for i, line in enumerate(lines):
-                    if len(line) != first_line_length:
-                        print(f"Warning: Line {i+1} has different length than first line")
-                        line = line.ljust(first_line_length)
-
-                    mutable_lines.append(list(line))
+                    if len(line) != width:
+                        print("Warning: Line {} length mismatch. Padding with spaces.".format(i+1))
+                        line = line.ljust(width)
+                    map_data.append(list(line))
 
         except FileNotFoundError:
-            print(f"Error: File '{file_path}' not found.")
-            mutable_lines = None
+            print("Error: File '{}' not found.".format(file_path))
+            map_data = None
 
         except Exception as e:
-            print(f"Error loading map: {e}")
-            mutable_lines = None
+            print("Error loading map: {}".format(e))
+            map_data = None
 
-        return mutable_lines
+        return map_data
 
     #Get the character at a specific position
     def get_cell(self, row, col):
@@ -68,13 +78,7 @@ class PacmanMap:
         return character_position
     
     #Merge all into same, and fill this from constructor
-    def find_character(self):
-
-        PLAYER_CHAR = "P"
-        DEER_CHAR = "d"
-        BEAR_CHAR = "B"
-        ENTRANCE_CHAR = "#"
-        EXIT_CHAR = "3"
+    def find_characters(self):
 
         player_count = 0
         entrance_count = 0
@@ -105,7 +109,7 @@ class PacmanMap:
     #Print the map
     def print_map(self):
         for row in self.map_data:
-            print(row)
+            print("".join(row))
 
     def get_map(self):
         return self.map_data
@@ -161,4 +165,5 @@ class PacmanMap:
 16 October 2025 - Added get height
 18 October 2025 - Added maze exit.
 19 October 2025 - Fixed error and tightened Code.
+20 October 2025 - Further refactoring of code. Updated init, and load data
 """
