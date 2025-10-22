@@ -35,8 +35,8 @@ class PacmanMap:
         self.exit = None
         self.score = 0
 
-        self.find_characters()
-        self.validate_map()
+        self.__find_characters()
+        self.__validate_map()
     
 
     # --- Map Loading ---
@@ -69,6 +69,56 @@ class PacmanMap:
             map_data = None
 
         return map_data
+    
+    # --- Character Scanning ---
+    def __find_characters(self):
+
+        char_mapping = {
+            self.PLAYER_CHAR: 'player',
+            self.DEER_CHAR: 'deers',
+            self.BEAR_CHAR: 'bears',
+            self.ENTRANCE_CHAR: 'entrance',
+            self.EXIT_CHAR: 'exit'
+        }
+
+        counts = {
+            'player':0,
+            'entrance':0,
+            'exit':0
+        }
+
+        for row in range(self.height):
+            for col in range(self.width):
+                if self.map_data[row][col] == PLAYER_CHAR:
+                    cell = self.map_data[row][col]
+                    if cell in char_mapping:
+                        attr = char_mapping[cell]
+                        if attr in ['player','entrance','exit']:
+                            counts[attr] += 1
+                            if counts[attr] > 1:
+                                print("Warning: Multple {}s found, using last at ({},{})".format(attr,row,col))
+                        if attr == 'player':
+                            self.player = (row,col)
+                        elif attr == 'deers':
+                            self.deers.append((row,col))
+                        elif attr == 'bears':
+                            self.append((row,col))
+                        elif attr == 'entrance':
+                            self.entrance = (row,col)
+                        elif attr == 'exit':
+                            self.exit = (row,col)
+
+    # --- Map Validation ---
+    def __validate_map(self):
+        if self.player is None:
+            raise ValueError("No player fpound in map!")
+
+        if self.entrance is None:
+            raise ValueError("No entrance found in map!")
+
+        if self.exit is None:
+            raise ValueError("No exit found in map!")
+
 
     #Get the character at a specific position
     def get_cell(self, row, col):
@@ -76,35 +126,6 @@ class PacmanMap:
         if 0 <= row < self.height and 0 <= col < self.width:
             character_position = self.map_data[row][col]
         return character_position
-    
-    #Merge all into same, and fill this from constructor
-    def find_characters(self):
-
-        player_count = 0
-        entrance_count = 0
-        exit_count = 0
-
-        for row in range(self.height):
-            for col in range(self.width):
-                if self.map_data[row][col] == PLAYER_CHAR:
-                    if player_count>0:
-                        print(f"Warning: Multple players found, using last at ({row},{col})")
-                    self.player = (row,col)
-                    player_count +=1
-                elif self.map_data[row][col] == DEER_CHAR:
-                    self.deers.append((row,col))
-                elif self.map_data[row][col] == BEAR_CHAR:
-                    self.bears.append((row,col))
-                elif self.map_data[row][col] == ENTRANCE_CHAR:
-                    if entrance_count>0:
-                        print(f"Warning: Multple entrances found, using last at ({row},{col})")
-                    self.entrance = (row,col)
-                    entrance_count += 1
-                elif self.map_data[row][col] == EXIT_CHAR:
-                    if exit_count>0:
-                        print(f"Warning: Multple exits found, using last at ({row},{col})")
-                    self.exit = (row,col)
-                    exit_count += 1
 
     #Print the map
     def print_map(self):
