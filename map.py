@@ -2,8 +2,8 @@
 File: Caveman Pacman Map
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 20 October 2025
-Version: 0.10
+Update: 22 October 2025
+Version: 0.11
 """
 
 import random
@@ -23,7 +23,7 @@ class PacmanMap:
         if not self.map_data:
             raise ValueError("Failed to load map from {}".format(file_path))
 
-        #Store Map Dimenstions
+        #Store Map Dimensions
         self.height = len(self.map_data)
         self.width = len(self.map_data[0])
 
@@ -89,29 +89,28 @@ class PacmanMap:
 
         for row in range(self.height):
             for col in range(self.width):
-                if self.map_data[row][col] == PLAYER_CHAR:
-                    cell = self.map_data[row][col]
-                    if cell in char_mapping:
-                        attr = char_mapping[cell]
-                        if attr in ['player','entrance','exit']:
-                            counts[attr] += 1
-                            if counts[attr] > 1:
-                                print("Warning: Multple {}s found, using last at ({},{})".format(attr,row,col))
-                        if attr == 'player':
-                            self.player = (row,col)
-                        elif attr == 'deers':
-                            self.deers.append((row,col))
-                        elif attr == 'bears':
-                            self.append((row,col))
-                        elif attr == 'entrance':
-                            self.entrance = (row,col)
-                        elif attr == 'exit':
-                            self.exit = (row,col)
+                cell = self.map_data[row][col]
+                if cell in char_mapping:
+                    attr = char_mapping[cell]
+                    if attr in ['player','entrance','exit']:
+                        counts[attr] += 1
+                        if counts[attr] > 1:
+                            print("Warning: Multiple {}s found, using last at ({},{})".format(attr,row,col))
+                    if attr == 'player':
+                        self.player = (row,col)
+                    elif attr == 'deers':
+                        self.deers.append((row,col))
+                    elif attr == 'bears':
+                        self.bears.append((row,col))
+                    elif attr == 'entrance':
+                        self.entrance = (row,col)
+                    elif attr == 'exit':
+                        self.exit = (row,col)
 
     # --- Map Validation ---
     def __validate_map(self):
         if self.player is None:
-            raise ValueError("No player fpound in map!")
+            raise ValueError("No player found in map!")
 
         if self.entrance is None:
             raise ValueError("No entrance found in map!")
@@ -120,55 +119,58 @@ class PacmanMap:
             raise ValueError("No exit found in map!")
 
 
-    #Get the character at a specific position
-    def get_cell(self, row, col):
+    # --- Accessors ---
+    def get_cell(self, row: int, col: int) -> str | None:
         character_position = None
         if 0 <= row < self.height and 0 <= col < self.width:
             character_position = self.map_data[row][col]
         return character_position
 
-    #Print the map
-    def print_map(self):
-        for row in self.map_data:
-            print("".join(row))
+    def get_map(self) -> list[list[str]]:
+        return [row.copy() for row in self.map_data]
 
-    def get_map(self):
-        return self.map_data
+    def set_map(self,map_data: list[list[str]]):
+        
+        if not map_data or not all(len(row) == len(map_data[0]) for row in map_data):
+            raise ValueError("Invalid map data")
+        self.map_data = [row.copy() for row in map_data]
+        self.height = len(self.map_data)
+        self.width = len(self.map_data[0])
 
-    def set_map(self,map_data):
-        self.map_data = map_data
-    
-    #Return map dimensions
-    def get_dimensions(self):
+    def get_dimensions(self) -> tuple[int,int]:
         return self.width, self.height
 
-    #Getters
-    def get_width(self):
+    def get_width(self) -> int:
         return self.width
 
-    def get_height(self):
+    def get_height(self) -> int:
         return self.height
 
-    def get_player(self):
+    def get_player(self) -> tuple[int,int]:
         if self.player is None:
             raise ValueError("No player found in map!")
         return self.player
 
-    def get_deers(self):
+    def get_deers(self) -> list[tuple[int,int]]:
         return self.deers
 
-    def get_bears(self):
+    def get_bears(self) -> list[tuple[int,int]]:
         return self.bears
 
-    def get_entrance(self):
+    def get_entrance(self) -> tuple[int,int]:
         if self.entrance is None:
             raise ValueError("No entrance found in map!")
         return self.entrance
 
-    def get_exit(self):
+    def get_exit(self) -> tuple[int,int]:
         if self.exit is None:
             raise ValueError("No exit found in map!")
         return self.exit
+
+    # --- Utility ---
+    def print_map(self): 
+        for row in self.map_data:
+            print("".join(row))
 
 """
 4 September 2025 - Created File
@@ -187,4 +189,5 @@ class PacmanMap:
 18 October 2025 - Added maze exit.
 19 October 2025 - Fixed error and tightened Code.
 20 October 2025 - Further refactoring of code. Updated init, and load data
+22 October 2025 - Updated code
 """
