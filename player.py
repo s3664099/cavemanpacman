@@ -17,63 +17,86 @@ class Player:
 	TILE_BEAR = "B"
 	TILE_WATER = "w"
 	TILE_PLAYER = "P"
+
 	SCORE_VALUES = {".": 1, "d": 10, "w": 5}
-	NON_BLOCKERS = [TILE_DOT,TILE_EMPTY,TILE_DEER,TILE_WATER,TILE_EXIT]
+
+	MOVE_KEYS = {"N": (-1, 0), "S": (1, 0), "E": (0, 1), "W": (0, -1)}
+
+	STATE_RUNNING = "running"
+	STATE_DEAD = "dead"
+	STATE_ESCAPED = "escaped"
 
 	def __init__(self,row,col):
 		self.position = (row,col)
 		self.score = 0
-		self.running = True
-		self.underlying_tile = " "
+		self.state = self.STATE_RUNNING
+		self.underlying_tile = self.TILE_EMPTY
 
 	def move_player(self,key,map_data,width,height):
 
 		row,col = self.position
 		new_row,new_col = self.get_new_position(row,col,key)
-		map_data = self.can_move_to(row,col,new_row,new_col,height,width,map_data)
+
+		if self.state == self.STATE_RUNNING:
+			map_data = self.process_move(row,col,new_row,new_col,height,width,map_data)
 		
 		return map_data
 
 	def get_new_position(self,row,col,key):
 		new_row,new_col = row,col
 		
-		if key == "N":
-			new_row -=1
-		elif key == "S":
-			new_row +=1
-		elif key == "E":
-			new_col +=1
-		elif key == "W":
-			new_col -=1
+		delta = self.MOVE_KEYS.get(key,(0,0))
+		new_row = row+delta[0]
+		new_col = col+delta[1]
 
 		return new_row,new_col
 
-	def can_move_to(self,row,col,new_row,new_col,height,width,map_data):
+	def process_move(self,row,col,new_row,new_col,height,width,map_data):
 
-		if 0 <= new_row < height and 0 <= new_col < width:
+		if self.is_within_bounds(new_row,new_col,height,width):
 			new_position = map_data[new_row][new_col]
-
-			if new_position in self.NON_BLOCKERS:
-
-				self.update_score(new_position)
-
-				if self.underlying_tile in self.SPECIAL_TILES:
-					map_data[row][col] = self.underlying_tile
-				else:
-					map_data[row][col] = self.TILE_EMPTY
-
-				self.underlying_tile = map_data[new_row][new_col]
-				map_data[new_row][new_col] = self.TILE_PLAYER
-				self.position = (new_row,new_col)
-			elif (new_position == self.TILE_BEAR):
-				self.running = False
+			map_data = self.process_tile_interaction(row,col,new_row,new_col,new_position,map_data)
 		else:
-			self.running = False
+			self.state = self.STATE_ESCAPED
+
+		return map_data
+
+	def is_within_bounds(self,row,col,height,width):
+		within = (0 <= row<height) and (0<= col<width)
+		return within
+
+	def process_tile_interaction(self,row,col,new_row,new_col,new_tile,map_data):
+
+		non_blockers = [
+			self.TILE_DOT,
+			self.TILE_EMPTY,
+			self.TILE_DEER,
+			self.TILE_WATER,
+			self.TILE_EXIT
+		]
+
+		if new_tile in non_blockers:
+			self.update_score(new_tile)
+			map_data = self.update_map_tiles(row,col,new_row,new_col,map_data)
+		elif new_tile == self.TILE_BEAR:
+			self.state = self.STATE_DEAD
+
+		return map_data
+
+	def update_map_tiles(self,old_row,old_col,new_row,new_col,map_data):
+
+		if self.underlying_tile in self.SPECIAL_TILES:
+			map_data[old_row][old_col] = self.underlying_tile
+		else:
+			map_data[old_row][old_col] = self.TILE_EMPTY
+
+		self.underlying_tile = map_data[new_row][new_col]
+		map_data[new_row][new_col] = self.TILE_PLAYER
+		self.position = (new_row,new_col)
 
 		return map_data
 
 	def update_score(self,new_position):
-
 		if new_position in self.SCORE_VALUES:
 			self.score += self.SCORE_VALUES[new_position]
 
@@ -84,10 +107,13 @@ class Player:
 		return self.position
 
 	def get_running(self):
-		return self.running
+		return self.state == self.STATE_RUNNING
 
 	def set_running(self,running):
-		self.running = running
+		if running:
+			self.state = self.STATE_RUNNING
+		else:
+			self.state = self.STATE_DEAD
 
 
 """
