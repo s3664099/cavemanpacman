@@ -18,6 +18,7 @@ class Player:
 	TILE_WATER = "w"
 	TILE_PLAYER = "P"
 	SCORE_VALUES = {".": 1, "d": 10, "w": 5}
+	NON_BLOCKERS = [TILE_DOT,TILE_EMPTY,TILE_DEER,TILE_WATER,TILE_EXIT]
 
 	def __init__(self,row,col):
 		self.position = (row,col)
@@ -49,12 +50,10 @@ class Player:
 
 	def can_move_to(self,row,col,new_row,new_col,height,width,map_data):
 
-		non_blockers = [self.TILE_DOT,self.TILE_EMPTY,self.TILE_DEER,self.TILE_WATER,self.TILE_EXIT]
-
 		if 0 <= new_row < height and 0 <= new_col < width:
 			new_position = map_data[new_row][new_col]
 
-			if (new_position in non_blockers):
+			if new_position in self.NON_BLOCKERS:
 
 				self.update_score(new_position)
 
