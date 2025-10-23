@@ -4,11 +4,12 @@ Author: David Sarkies
 Initial: 18 September 2025
 Update: 23 October 2025
 Version: 0.2
+
+- Add hints and then recommend changes
 """
 
 class Player:
 
-	SPECIAL_TILES = ["3"]
 	TILE_EMPTY = " "
 	TILE_DOT = "."
 	TILE_DEER = "d"
@@ -18,6 +19,7 @@ class Player:
 	TILE_WATER = "w"
 	TILE_PLAYER = "P"
 
+	SPECIAL_TILES = [TILE_EXIT]
 	SCORE_VALUES = {".": 1, "d": 10, "w": 5}
 
 	MOVE_KEYS = {"N": (-1, 0), "S": (1, 0), "E": (0, 1), "W": (0, -1)}
