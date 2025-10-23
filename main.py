@@ -4,6 +4,14 @@ Author: David Sarkies
 Initial: 4 September 2025
 Update: 18 October 2025
 Version: 0.17
+
+player.py
+bear.py
+deer.py
+control.py
+display.py
+main.py
+
 """
 
 from map import PacmanMap
