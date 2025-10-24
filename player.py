@@ -2,8 +2,8 @@
 File: Caveman Pacman Player
 Author: David Sarkies
 Initial: 18 September 2025
-Update: 23 October 2025
-Version: 0.2
+Update: 24 October 2025
+Version: 0.3
 
 - Add hints and then recommend changes
 """
@@ -19,22 +19,22 @@ class Player:
 	TILE_WATER = "w"
 	TILE_PLAYER = "P"
 
-	SPECIAL_TILES = [TILE_EXIT]
-	SCORE_VALUES = {".": 1, "d": 10, "w": 5}
+	SPECIAL_TILES: list[str] = [TILE_EXIT]
+	SCORE_VALUES: dict[str,int] = {".": 1, "d": 10, "w": 5}
 
-	MOVE_KEYS = {"N": (-1, 0), "S": (1, 0), "E": (0, 1), "W": (0, -1)}
+	MOVE_KEYS: dict[str,tuple[int,int]] = {"N": (-1, 0), "S": (1, 0), "E": (0, 1), "W": (0, -1)}
 
 	STATE_RUNNING = "running"
 	STATE_DEAD = "dead"
 	STATE_ESCAPED = "escaped"
 
-	def __init__(self,row,col):
+	def __init__(self,row: int,col: int) -> None:
 		self.position = (row,col)
 		self.score = 0
 		self.state = self.STATE_RUNNING
 		self.underlying_tile = self.TILE_EMPTY
 
-	def move_player(self,key,map_data,width,height):
+	def move_player(self,key: str,map_data: list[list[str]],width: int,height: int) -> list[list[str]]:
 
 		row,col = self.position
 		new_row,new_col = self.get_new_position(row,col,key)
@@ -44,7 +44,7 @@ class Player:
 		
 		return map_data
 
-	def get_new_position(self,row,col,key):
+	def get_new_position(self,row: int,col: int,key: str) -> tuple[int,int]:
 		new_row,new_col = row,col
 		
 		delta = self.MOVE_KEYS.get(key,(0,0))
@@ -53,7 +53,7 @@ class Player:
 
 		return new_row,new_col
 
-	def process_move(self,row,col,new_row,new_col,height,width,map_data):
+	def process_move(self,row: int,col: int,new_row: int,new_col: int,height:int,width:int,map_data: list[list[str]]) -> list[list[str]]:
 
 		if self.is_within_bounds(new_row,new_col,height,width):
 			new_position = map_data[new_row][new_col]
@@ -63,11 +63,11 @@ class Player:
 
 		return map_data
 
-	def is_within_bounds(self,row,col,height,width):
+	def is_within_bounds(self,row: int,col: int,height: int,width:int) -> bool:
 		within = (0 <= row<height) and (0<= col<width)
 		return within
 
-	def process_tile_interaction(self,row,col,new_row,new_col,new_tile,map_data):
+	def process_tile_interaction(self,row:int,col:int,new_row:int,new_col:int,new_tile: str,map_data: list[list[str]]) -> list[list[str]]:
 
 		non_blockers = [
 			self.TILE_DOT,
@@ -85,7 +85,7 @@ class Player:
 
 		return map_data
 
-	def update_map_tiles(self,old_row,old_col,new_row,new_col,map_data):
+	def update_map_tiles(self,old_row: int,old_col:int,new_row:int,new_col:int,map_data:list[list[str]]) -> list[list[str]]:
 
 		if self.underlying_tile in self.SPECIAL_TILES:
 			map_data[old_row][old_col] = self.underlying_tile
@@ -98,20 +98,20 @@ class Player:
 
 		return map_data
 
-	def update_score(self,new_position):
+	def update_score(self,new_position: tuple[int,int]) -> None:
 		if new_position in self.SCORE_VALUES:
 			self.score += self.SCORE_VALUES[new_position]
 
-	def get_score(self):
+	def get_score(self) -> int:
 		return self.score
 
-	def get_position(self):
+	def get_position(self) -> tuple[int,int]:
 		return self.position
 
-	def get_running(self):
+	def get_running(self) -> bool:
 		return self.state == self.STATE_RUNNING
 
-	def set_running(self,running):
+	def set_running(self,running) -> None:
 		if running:
 			self.state = self.STATE_RUNNING
 		else:
@@ -122,4 +122,5 @@ class Player:
 18 September 2025 - Created File
 18 October 2025 - Added check to preserve maze exit
 23 October 2025 - Updated code to made it more maintainable
+24 October 2025 - Added hints to functions
 """
