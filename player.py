@@ -28,6 +28,14 @@ class Player:
 	STATE_DEAD = "dead"
 	STATE_ESCAPED = "escaped"
 
+	PLAYER_NON_BLOCKERS = [
+		TILE_DOT,
+		TILE_EMPTY,
+		TILE_DEER,
+		TILE_WATER,
+		TILE_EXIT
+	]
+
 	def __init__(self,row: int,col: int) -> None:
 		self.position = (row,col)
 		self.score = 0
@@ -69,15 +77,7 @@ class Player:
 
 	def process_tile_interaction(self,row:int,col:int,new_row:int,new_col:int,new_tile: str,map_data: list[list[str]]) -> list[list[str]]:
 
-		non_blockers = [
-			self.TILE_DOT,
-			self.TILE_EMPTY,
-			self.TILE_DEER,
-			self.TILE_WATER,
-			self.TILE_EXIT
-		]
-
-		if new_tile in non_blockers:
+		if new_tile in self.PLAYER_NON_BLOCKERS:
 			self.update_score(new_tile)
 			map_data = self.update_map_tiles(row,col,new_row,new_col,map_data)
 		elif new_tile == self.TILE_BEAR:
@@ -98,7 +98,7 @@ class Player:
 
 		return map_data
 
-	def update_score(self,new_position: tuple[int,int]) -> None:
+	def update_score(self,new_position: str) -> None:
 		if new_position in self.SCORE_VALUES:
 			self.score += self.SCORE_VALUES[new_position]
 
@@ -111,11 +111,8 @@ class Player:
 	def get_running(self) -> bool:
 		return self.state == self.STATE_RUNNING
 
-	def set_running(self,running) -> None:
-		if running:
-			self.state = self.STATE_RUNNING
-		else:
-			self.state = self.STATE_DEAD
+	def set_state_dead(self) -> None:
+		self.state = self.STATE_DEAD
 
 
 """
