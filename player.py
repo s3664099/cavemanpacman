@@ -2,8 +2,8 @@
 File: Caveman Pacman Player
 Author: David Sarkies
 Initial: 18 September 2025
-Update: 24 October 2025
-Version: 0.3
+Update: 26 October 2025
+Version: 0.4
 
 - Add hints and then recommend changes
 """
@@ -38,20 +38,22 @@ class Player:
 
 	def __init__(self,row: int,col: int) -> None:
 		self.position = (row,col)
+		self.map = None
 		self.score = 0
 		self.state = self.STATE_RUNNING
 		self.underlying_tile = self.TILE_EMPTY
 
-	def move_player(self,key: str,map_data: list[list[str]],width: int,height: int) -> list[list[str]]:
+	def move_player(self,key: str,game_map: GameMap) -> None:
 
+		self.map = game_map
 		row,col = self.position
 		new_row,new_col = self.get_new_position(row,col,key)
 
 		if self.state == self.STATE_RUNNING:
-			map_data = self.process_move(row,col,new_row,new_col,height,width,map_data)
-		
-		return map_data
+			self.process_move(row,col,new_row,new_col)
 
+		return self.map
+	
 	def get_new_position(self,row: int,col: int,key: str) -> tuple[int,int]:
 		new_row,new_col = row,col
 		
@@ -61,18 +63,16 @@ class Player:
 
 		return new_row,new_col
 
-	def process_move(self,row: int,col: int,new_row: int,new_col: int,height:int,width:int,map_data: list[list[str]]) -> list[list[str]]:
+	def process_move(self,row: int,col: int,new_row: int,new_col: int) -> None:
 
-		if self.is_within_bounds(new_row,new_col,height,width):
-			new_position = map_data[new_row][new_col]
-			map_data = self.process_tile_interaction(row,col,new_row,new_col,new_position,map_data)
+		if self.is_within_bounds(new_row,new_col):
+			new_tile = self.map.get_tile(new_row,new_col)
+			self.process_tile_interaction(row,col,new_row,new_col,new_tile)
 		else:
 			self.state = self.STATE_ESCAPED
 
-		return map_data
-
-	def is_within_bounds(self,row: int,col: int,height: int,width:int) -> bool:
-		within = (0 <= row<height) and (0<= col<width)
+	def is_within_bounds(self,row: int,col) -> bool:
+		within = (0 <= row<self.map.get_height()) and (0<= col<self.map.get_width())
 		return within
 
 	def process_tile_interaction(self,row:int,col:int,new_row:int,new_col:int,new_tile: str,map_data: list[list[str]]) -> list[list[str]]:
@@ -120,4 +120,6 @@ class Player:
 18 October 2025 - Added check to preserve maze exit
 23 October 2025 - Updated code to made it more maintainable
 24 October 2025 - Added hints to functions
+26 October 2025 - Removed the game map being passed around to a simple game map that is stored
+				  and returned when the player moves
 """
