@@ -2,10 +2,10 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 18 October 2025
-Version: 0.17
+Update: 26 October 2025
+Version: 0.18
 
-player.py
+
 bear.py
 deer.py
 control.py
@@ -42,7 +42,7 @@ def handle_pause(action, is_paused):
 
 def handle_quit(action,player):
     if action == "Q":
-        player.set_running(False)
+        player.set_end()
 
 def main():
     game_map = PacmanMap("map.txt")
@@ -68,8 +68,7 @@ def main():
         
         if not is_paused:
 
-            updated_map = player.move_player(action,game_map.get_map(),game_map.get_width(),game_map.get_height())
-            game_map.set_map(updated_map)
+            game_map = player.move_player(action,game_map)
 
             if elapsed_time >= HALF_MOVE_INTERVAL and not half_move_done:
                 for bear in bears:
@@ -130,4 +129,5 @@ if __name__ == "__main__":
                 - Changed so only map object passed through to move function
 16 October 2025 - Changed so only map object passed through to deer
 18 October 2025 - Changed pacman_map to game_map
+26 October 2025 - Updated script to handle changes to player object
 """

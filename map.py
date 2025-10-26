@@ -2,8 +2,8 @@
 File: Caveman Pacman Map
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 22 October 2025
-Version: 0.11
+Update: 26 October 2025
+Version: 0.12
 """
 
 import random
@@ -129,6 +129,12 @@ class PacmanMap:
     def get_map(self) -> list[list[str]]:
         return [row.copy() for row in self.map_data]
 
+    def get_tile(self,row: int, column: int) -> tuple[int,int]:
+        return self.map_data[row][column]
+
+    def set_tile(self, row: int, column: int, tile: str):
+        self.map_data[row][column] = tile
+
     def set_map(self,map_data: list[list[str]]):
         
         if not map_data or not all(len(row) == len(map_data[0]) for row in map_data):
@@ -190,4 +196,5 @@ class PacmanMap:
 19 October 2025 - Fixed error and tightened Code.
 20 October 2025 - Further refactoring of code. Updated init, and load data
 22 October 2025 - Updated code
+26 October 2025 - Changed code to handle map object being passed into player
 """

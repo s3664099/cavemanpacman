@@ -27,6 +27,7 @@ class Player:
 	STATE_RUNNING = "running"
 	STATE_DEAD = "dead"
 	STATE_ESCAPED = "escaped"
+	STATE_END =  "ended"
 
 	PLAYER_NON_BLOCKERS = [
 		TILE_DOT,
@@ -43,7 +44,7 @@ class Player:
 		self.state = self.STATE_RUNNING
 		self.underlying_tile = self.TILE_EMPTY
 
-	def move_player(self,key: str,game_map: GameMap) -> None:
+	def move_player(self,key: str,game_map: object) -> None:
 
 		self.map = game_map
 		row,col = self.position
@@ -75,28 +76,24 @@ class Player:
 		within = (0 <= row<self.map.get_height()) and (0<= col<self.map.get_width())
 		return within
 
-	def process_tile_interaction(self,row:int,col:int,new_row:int,new_col:int,new_tile: str,map_data: list[list[str]]) -> list[list[str]]:
+	def process_tile_interaction(self,row:int,col:int,new_row:int,new_col:int,new_tile: str):
 
 		if new_tile in self.PLAYER_NON_BLOCKERS:
 			self.update_score(new_tile)
-			map_data = self.update_map_tiles(row,col,new_row,new_col,map_data)
+			self.update_map_tiles(row,col,new_row,new_col)
 		elif new_tile == self.TILE_BEAR:
 			self.state = self.STATE_DEAD
 
-		return map_data
-
-	def update_map_tiles(self,old_row: int,old_col:int,new_row:int,new_col:int,map_data:list[list[str]]) -> list[list[str]]:
+	def update_map_tiles(self,old_row: int,old_col:int,new_row:int,new_col:int):
 
 		if self.underlying_tile in self.SPECIAL_TILES:
-			map_data[old_row][old_col] = self.underlying_tile
+			self.map.set_tile(old_row,old_col,self.underlying_tile)
 		else:
-			map_data[old_row][old_col] = self.TILE_EMPTY
+			self.map.set_tile(old_row,old_col,self.TILE_EMPTY)
 
-		self.underlying_tile = map_data[new_row][new_col]
-		map_data[new_row][new_col] = self.TILE_PLAYER
+		self.underlying_tile = self.map.get_tile(new_row,new_col)
+		self.map.set_tile(new_row,new_col,self.TILE_PLAYER)
 		self.position = (new_row,new_col)
-
-		return map_data
 
 	def update_score(self,new_position: str) -> None:
 		if new_position in self.SCORE_VALUES:
@@ -111,6 +108,9 @@ class Player:
 	def get_running(self) -> bool:
 		return self.state == self.STATE_RUNNING
 
+	def set_end(self):
+		self.state = self.STATE_END
+
 	def set_state_dead(self) -> None:
 		self.state = self.STATE_DEAD
 
@@ -122,4 +122,5 @@ class Player:
 24 October 2025 - Added hints to functions
 26 October 2025 - Removed the game map being passed around to a simple game map that is stored
 				  and returned when the player moves
+				  Moved the map object instead of the map
 """
