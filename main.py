@@ -14,7 +14,7 @@ main.py
 
 """
 
-from map import PacmanMap
+from map import GameMap
 from deer import Deer
 from bear import Bear
 from player import Player
@@ -45,19 +45,19 @@ def handle_quit(action,player):
         player.set_end()
 
 def main():
-    game_map = PacmanMap("map.txt")
+    game_map = GameMap("map.txt")
     game_screen = View(game_map.get_dimensions())
 
     last_update_time = time.time()
     is_paused = False
     half_move_done = False
 
-    player = Player(*game_map.get_player())
+    player = Player(game_map)
     deers = [Deer(*pos) for pos in game_map.get_deers()]
     bears = [Bear(*pos) for pos in game_map.get_bears()]
 
 
-    while(player.get_running()):
+    while(player.is_running()):
 
         current_time = time.time()
         elapsed_time = current_time - last_update_time
@@ -68,7 +68,7 @@ def main():
         
         if not is_paused:
 
-            game_map = player.move_player(action,game_map)
+            player.move_player(action,game_map)
 
             if elapsed_time >= HALF_MOVE_INTERVAL and not half_move_done:
                 for bear in bears:

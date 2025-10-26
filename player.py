@@ -8,6 +8,8 @@ Version: 0.4
 - Add hints and then recommend changes
 """
 
+from map import GameMap
+
 class Player:
 
 	TILE_EMPTY = " "
@@ -37,9 +39,9 @@ class Player:
 		TILE_EXIT
 	]
 
-	def __init__(self,row: int,col: int) -> None:
-		self.position = (row,col)
-		self.map = None
+	def __init__(self,game_map: GameMap) -> None:
+		self.position = game_map.get_player()
+		self.map = game_map
 		self.score = 0
 		self.state = self.STATE_RUNNING
 		self.underlying_tile = self.TILE_EMPTY
@@ -52,8 +54,6 @@ class Player:
 
 		if self.state == self.STATE_RUNNING:
 			self.process_move(row,col,new_row,new_col)
-
-		return self.map
 	
 	def get_new_position(self,row: int,col: int,key: str) -> tuple[int,int]:
 		new_row,new_col = row,col
@@ -72,11 +72,11 @@ class Player:
 		else:
 			self.state = self.STATE_ESCAPED
 
-	def is_within_bounds(self,row: int,col) -> bool:
+	def is_within_bounds(self,row: int,col: int) -> bool:
 		within = (0 <= row<self.map.get_height()) and (0<= col<self.map.get_width())
 		return within
 
-	def process_tile_interaction(self,row:int,col:int,new_row:int,new_col:int,new_tile: str):
+	def process_tile_interaction(self,row:int,col:int,new_row:int,new_col:int,new_tile: str) -> None:
 
 		if new_tile in self.PLAYER_NON_BLOCKERS:
 			self.update_score(new_tile)
@@ -84,7 +84,7 @@ class Player:
 		elif new_tile == self.TILE_BEAR:
 			self.state = self.STATE_DEAD
 
-	def update_map_tiles(self,old_row: int,old_col:int,new_row:int,new_col:int):
+	def update_map_tiles(self,old_row: int,old_col:int,new_row:int,new_col:int) -> None:
 
 		if self.underlying_tile in self.SPECIAL_TILES:
 			self.map.set_tile(old_row,old_col,self.underlying_tile)
@@ -105,7 +105,7 @@ class Player:
 	def get_position(self) -> tuple[int,int]:
 		return self.position
 
-	def get_running(self) -> bool:
+	def is_running(self) -> bool:
 		return self.state == self.STATE_RUNNING
 
 	def set_end(self):

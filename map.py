@@ -8,7 +8,7 @@ Version: 0.12
 
 import random
 
-class PacmanMap:
+class GameMap:
 
     PLAYER_CHAR = "P"
     DEER_CHAR = "d"
