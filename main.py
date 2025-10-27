@@ -54,7 +54,7 @@ def main():
 
     player = Player(game_map)
     deers = [Deer(*pos) for pos in game_map.get_deers()]
-    bears = [Bear(*pos) for pos in game_map.get_bears()]
+    bears = [Bear(*pos,game_map) for pos in game_map.get_bears()]
 
 
     while(player.is_running()):
@@ -73,7 +73,7 @@ def main():
             if elapsed_time >= HALF_MOVE_INTERVAL and not half_move_done:
                 for bear in bears:
                     if (bear.is_chasing()):
-                        game_map.set_map(bear.move_bear(game_map))
+                        bear.move_bear()
                         bear.stop_chasing()
 
                 for deer in deers:
@@ -89,7 +89,7 @@ def main():
                     game_map.set_map(deer.move_deer(game_map))
 
                 for bear in bears:
-                    game_map.set_map(bear.move_bear(game_map))
+                    bear.move_bear()
 
                 # Reset timing
                 last_update_time = current_time

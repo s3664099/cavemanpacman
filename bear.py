@@ -47,31 +47,30 @@ class Bear:
 	def start_chasing(self) -> None:
 		self.chasing = True
 
-	def move_bear(self) ->:
+	def move_bear(self) -> None:
 
 		entrance = self.game_map.get_entrance()
 		non_blockers = ["."," ","w","P","d","#"]
 		new_row,new_col = self.position
 		row,col = self.position
 		move = False
-		map_data = self.game_map.get_map()
 
 		while not move:
 
 			if self.start:
 
 				cave_entrance_row,cave_entrance_col = entrance
-				if cave_entrance_col<col and map_data[row][col-1] in non_blockers:
-					map_data = self.bear_move(row,col,row,col-1)
+				if cave_entrance_col<col and self.game_map.get_tile(row,col-1) in non_blockers:
+					self.bear_move(row,col,row,col-1)
 					move = True
-				elif cave_entrance_row<row and map_data[row-1][col] in non_blockers:
-					map_data = self.bear_move(row,col,row-1,col)
+				elif cave_entrance_row<row and self.game_map.get_tile(row-1,col) in non_blockers:
+					self.bear_move(row,col,row-1,col)
 					move = True
-				elif cave_entrance_row>row and map_data[row+1][col] in non_blockers:
-					map_data = self.bear_move(row,col,row+1,col)
+				elif cave_entrance_row>row and self.game_map.get_tile(row+1,col) in non_blockers:
+					self.bear_move(row,col,row+1,col)
 					move = True
-				elif cave_entrance_col>col and map_data[row][col+1] in non_blockers:
-					map_data = self.bear_move(row,col,row,col+1)
+				elif cave_entrance_col>col and self.game_map.get_tile(row,col+1) in non_blockers:
+					self.bear_move(row,col,row,col+1)
 					move = True
 				else:
 					move = True
@@ -80,7 +79,7 @@ class Bear:
 					self.start = False
 			else:
 
-				movement = self.find_prey(map_data,row,col)
+				movement = self.find_prey(row,col)
 
 				if (movement == -1):
 					movement = self.determine_movement(row,col)
@@ -101,7 +100,7 @@ class Bear:
 				move = True
 				self.movement = movement
 	
-	def search_direction(self,row: int,col: int,row_delta: int,col_delta: int,direction:int) -> int,int:
+	def search_direction(self,row: int,col: int,row_delta: int,col_delta: int,direction:int) -> tuple[int,int]:
 		found_stop = False
 		position = 0
 		new_movement = -1
@@ -134,20 +133,19 @@ class Bear:
 					row,col,row_delta,col_delta,dir_code)
 				movement,distance = self.check_move(new_movement,movement,new_distance,distance)
 			except Exception as e:
-				print(f"Bear direction {dir_code} error at ({row}, {col}): {e}")
+				print("Bear direction {} error at ({}, {}): {}".format(dir_code,row,col,e))
 
 		return movement
 
-	def check_position(self,row:int,col:int,position: int,direction: int) -> bool,int,int:
+	def check_position(self,row:int,col:int,position: int,direction: int) -> tuple[bool,int,int]:
 
 		found_stop = False
 		movement = -1
 		distance = 0
-		map_data = self.game_map.get_map()
 
-		if map_data[row][col] == "1" or map_data[row][col] == "2" or map_data[row][col] == "3":
+		if self.game_map.get_tile(row,col) in ["1","2","3"]:
 			found_stop = True
-		elif map_data[row][col] == "P" or map_data[row][col] == "d":
+		elif self.game_map.get_tile(row,col) in ["P","d"]:
 			found_stop = True
 			movement = direction
 			distance = position
@@ -157,7 +155,7 @@ class Bear:
 
 		return found_stop,movement,distance
 
-	def check_move(self,new_movement: int,movement:int,position:int,distance:int)-> int,int:
+	def check_move(self,new_movement: int,movement:int,position:int,distance:int)-> tuple[int,int]:
 
 		if new_movement != -1:
 			if position<distance:
@@ -171,22 +169,21 @@ class Bear:
 
 	def determine_movement(self,row:int,col:int) -> int:
 
-		map_data = self.game_map.get_map()
 		movement_options = ["","","",""]
 		non_blockers = ["."," ","w","P","d"]
 		valid_move = False
 		movement = 0
 
-		if ((map_data[row-1][col]) not in non_blockers) or self.movement ==1:
+		if (self.game_map.get_tile(row-1,col) not in non_blockers) or self.movement ==1:
 			movement_options[0] = "X"
 
-		if ((map_data[row+1][col]) not in non_blockers) or self.movement ==0:
+		if (self.game_map.get_tile(row+1,col) not in non_blockers) or self.movement ==0:
 			movement_options[1] = "X"
 
-		if ((map_data[row][col-1]) not in non_blockers) or self.movement ==3:
+		if (self.game_map.get_tile(row,col-1) not in non_blockers) or self.movement ==3:
 			movement_options[2] = "X"
 
-		if ((map_data[row][col+1]) not in non_blockers) or self.movement ==2:
+		if (self.game_map.get_tile(row,col+1) not in non_blockers) or self.movement ==2:
 			movement_options[3] = "X"
 
 		while not valid_move:
@@ -201,15 +198,15 @@ class Bear:
 
 		return movement
 
-	def bear_move(self,row: int,col: int,new_row: int,new_col:int):
+	def bear_move(self,old_row: int,old_col: int,new_row: int,new_col:int) -> None:
 		map_data = self.game_map.get_map()
-		map_data[row][col] = self.square
-		self.square = map_data[new_row][new_col]
+		self.game_map.set_tile(old_row,old_col,self.square)
+		self.square = self.game_map.get_tile(new_row,new_col)
 
 		if (self.square=="d"):
 			self.square = " "
 
-		map_data[new_row][new_col]="B"
+		self.game_map.set_tile(new_row,new_col,"B")
 		self.position = (new_row,new_col)
 
 """
