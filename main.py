@@ -2,8 +2,8 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 26 October 2025
-Version: 0.18
+Update: 27 October 2025
+Version: 0.20
 
 
 bear.py
@@ -68,7 +68,7 @@ def main():
         
         if not is_paused:
 
-            player.move_player(action,game_map)
+            player.move_player(action)
 
             if elapsed_time >= HALF_MOVE_INTERVAL and not half_move_done:
                 for bear in bears:
@@ -130,4 +130,5 @@ if __name__ == "__main__":
 16 October 2025 - Changed so only map object passed through to deer
 18 October 2025 - Changed pacman_map to game_map
 26 October 2025 - Updated script to handle changes to player object
+27 October 2025 - Passed game map to player once
 """

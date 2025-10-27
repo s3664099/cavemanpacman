@@ -2,10 +2,8 @@
 File: Caveman Pacman Player
 Author: David Sarkies
 Initial: 18 September 2025
-Update: 26 October 2025
-Version: 0.4
-
-- Add hints and then recommend changes
+Update: 27 October 2025
+Version: 0.5
 """
 
 from map import GameMap
@@ -46,9 +44,8 @@ class Player:
 		self.state = self.STATE_RUNNING
 		self.underlying_tile = self.TILE_EMPTY
 
-	def move_player(self,key: str,game_map: object) -> None:
+	def move_player(self,key: str) -> None:
 
-		self.map = game_map
 		row,col = self.position
 		new_row,new_col = self.get_new_position(row,col,key)
 
@@ -123,4 +120,5 @@ class Player:
 26 October 2025 - Removed the game map being passed around to a simple game map that is stored
 				  and returned when the player moves
 				  Moved the map object instead of the map
+27 October 2025 - Removed GameMap from being passed in
 """
