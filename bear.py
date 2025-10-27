@@ -14,6 +14,18 @@ MOVEABLE_SPACE = ""
 
 class Bear:
 
+	TILE_EMPTY = " "
+	TILE_DOT = "."
+	TILE_DEER = "d"
+	TILE_CAVE = "#"
+	TILE_EXIT = "3"
+	TILE_BEAR = "B"
+	TILE_WATER = "w"
+	TILE_PLAYER = "P"
+	TILE_BLOCKED = "X"
+	TILE_FOREST_WALL = "1"
+	TILE_CAVE_WALL = "2"
+
 	def __init__(self,row: int,col: int, game_map: GameMap) -> None:
 
 		self.position = (row,col)
@@ -50,7 +62,7 @@ class Bear:
 	def move_bear(self) -> None:
 
 		entrance = self.game_map.get_entrance()
-		non_blockers = ["."," ","w","P","d","#"]
+		non_blockers = [self.TILE_DOT,self.TILE_EMPTY,self.TILE_WATER,self.TILE_PLAYER,self.TILE_DEER,self.TILE_CAVE]
 		new_row,new_col = self.position
 		row,col = self.position
 		move = False
@@ -143,9 +155,9 @@ class Bear:
 		movement = -1
 		distance = 0
 
-		if self.game_map.get_tile(row,col) in ["1","2","3"]:
+		if self.game_map.get_tile(row,col) in [self.TILE_FOREST_WALL,self.TILE_CAVE_WALL,self.TILE_EXIT]:
 			found_stop = True
-		elif self.game_map.get_tile(row,col) in ["P","d"]:
+		elif self.game_map.get_tile(row,col) in [self.TILE_PLAYER,self.TILE_DEER]:
 			found_stop = True
 			movement = direction
 			distance = position
@@ -170,21 +182,21 @@ class Bear:
 	def determine_movement(self,row:int,col:int) -> int:
 
 		movement_options = ["","","",""]
-		non_blockers = ["."," ","w","P","d"]
+		non_blockers = [self.TILE_DOT,self.TILE_EMPTY,self.TILE_WATER,self.TILE_PLAYER,self.TILE_DEER]
 		valid_move = False
 		movement = 0
 
 		if (self.game_map.get_tile(row-1,col) not in non_blockers) or self.movement ==1:
-			movement_options[0] = "X"
+			movement_options[0] = self.TILE_BLOCKED
 
 		if (self.game_map.get_tile(row+1,col) not in non_blockers) or self.movement ==0:
-			movement_options[1] = "X"
+			movement_options[1] = self.TILE_BLOCKED
 
 		if (self.game_map.get_tile(row,col-1) not in non_blockers) or self.movement ==3:
-			movement_options[2] = "X"
+			movement_options[2] = self.TILE_BLOCKED
 
 		if (self.game_map.get_tile(row,col+1) not in non_blockers) or self.movement ==2:
-			movement_options[3] = "X"
+			movement_options[3] = self.TILE_BLOCKED
 
 		while not valid_move:
 			movement = random.randint(0,3)
@@ -193,7 +205,7 @@ class Bear:
 				print("Don't Move",self.position)
 				movement = -1
 				valid_move = True
-			elif movement_options[movement] != "X":
+			elif movement_options[movement] != self.TILE_BLOCKED:
 				valid_move = True
 
 		return movement
@@ -203,10 +215,10 @@ class Bear:
 		self.game_map.set_tile(old_row,old_col,self.square)
 		self.square = self.game_map.get_tile(new_row,new_col)
 
-		if (self.square=="d"):
-			self.square = " "
+		if (self.square==self.TILE_DEER):
+			self.square = self.TILE_EMPTY
 
-		self.game_map.set_tile(new_row,new_col,"B")
+		self.game_map.set_tile(new_row,new_col,self.TILE_BEAR)
 		self.position = (new_row,new_col)
 
 """
@@ -223,4 +235,5 @@ class Bear:
 16 October 2025 - Added boundaries for search
 17 October 2025 - Added search limit and fixed error reporting
 18 October 2025 - Updated some code, and added section if bear not moving
+27 October 2025 - Updated with single instance of game map and added hints
 """
