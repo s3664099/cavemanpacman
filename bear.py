@@ -7,54 +7,54 @@ Version: 0.11
 """
 
 import random
+from map import GameMap
 
 MAX_SEARCH_DISTANCE = 20
 MOVEABLE_SPACE = ""
 
 class Bear:
 
-	def __init__(self,row,col):
+	def __init__(self,row: int,col: int, game_map: GameMap) -> None:
 
 		self.position = (row,col)
+		self.game_map = game_map
 		self.chasing = False
 		self.square = " "
 		self.start = True
 		self.has_food = False
 		self.movement = 0
-		self.width = -1
-		self.height = -1
+		self.width = game_map.get_width()
+		self.height = game_map.get_height()
 
-	def get_position(self):
+	def get_position(self) -> tuple[int,int]:
 		return self.position
 
-	def set_position(self,row,col):
+	def set_position(self,row: int,col: int) -> None:
 		self.position = (row,col)
 
-	def get_square(self):
+	def get_square(self) -> str:
 		return self.square
 
-	def set_square(self,square):
+	def set_square(self,square: str) -> None:
 		self.square = square
 
-	def is_chasing(self):
+	def is_chasing(self) -> bool:
 		return self.chasing
 
-	def stop_chasing(self):
+	def stop_chasing(self) -> None:
 		self.chasing = False
 
-	def start_chasing(self):
+	def start_chasing(self) -> None:
 		self.chasing = True
 
-	def move_bear(self,pacman_map):
-		map_data = pacman_map.get_map()
-		self.width = pacman_map.get_width()
-		self.height = pacman_map.get_height()
-		entrance = pacman_map.get_entrance()
+	def move_bear(self) ->:
 
+		entrance = self.game_map.get_entrance()
 		non_blockers = ["."," ","w","P","d","#"]
 		new_row,new_col = self.position
 		row,col = self.position
 		move = False
+		map_data = self.game_map.get_map()
 
 		while not move:
 
@@ -62,16 +62,16 @@ class Bear:
 
 				cave_entrance_row,cave_entrance_col = entrance
 				if cave_entrance_col<col and map_data[row][col-1] in non_blockers:
-					map_data = self.bear_move(map_data,row,col,row,col-1)
+					map_data = self.bear_move(row,col,row,col-1)
 					move = True
 				elif cave_entrance_row<row and map_data[row-1][col] in non_blockers:
-					map_data = self.bear_move(map_data,row,col,row-1,col)
+					map_data = self.bear_move(row,col,row-1,col)
 					move = True
 				elif cave_entrance_row>row and map_data[row+1][col] in non_blockers:
-					map_data = self.bear_move(map_data,row,col,row+1,col)
+					map_data = self.bear_move(row,col,row+1,col)
 					move = True
 				elif cave_entrance_col>col and map_data[row][col+1] in non_blockers:
-					map_data = self.bear_move(map_data,row,col,row,col+1)
+					map_data = self.bear_move(row,col,row,col+1)
 					move = True
 				else:
 					move = True
@@ -83,7 +83,7 @@ class Bear:
 				movement = self.find_prey(map_data,row,col)
 
 				if (movement == -1):
-					movement = self.determine_movement(map_data,row,col)
+					movement = self.determine_movement(row,col)
 					new_row,new_col = row,col
 				else:
 					self.start_chasing()
@@ -97,13 +97,11 @@ class Bear:
 				elif (movement == 3):
 					new_col +=1
 
-				map_data = self.bear_move(map_data,row,col,new_row,new_col)
+				map_data = self.bear_move(row,col,new_row,new_col)
 				move = True
 				self.movement = movement
-		
-		return map_data
-
-	def search_direction(self,map_data,row,col,row_delta,col_delta,direction):
+	
+	def search_direction(self,row: int,col: int,row_delta: int,col_delta: int,direction:int) -> int,int:
 		found_stop = False
 		position = 0
 		new_movement = -1
@@ -113,11 +111,11 @@ class Bear:
 			position+=1
 			check_row = row + (row_delta*position)
 			check_col = col + (col_delta*position)
-			found_stop,new_movement,distance = self.check_position(map_data,check_row,check_col,position,direction)
+			found_stop,new_movement,distance = self.check_position(check_row,check_col,position,direction)
 
 		return new_movement,distance
 
-	def find_prey(self,map_data,row,col):
+	def find_prey(self,row: int,col: int) -> int:
 
 		movement = -1
 		distance = 0
@@ -133,18 +131,19 @@ class Bear:
 		for row_delta,col_delta,dir_code in directions:
 			try:
 				new_movement,new_distance = self.search_direction(
-					map_data,row,col,row_delta,col_delta,dir_code)
+					row,col,row_delta,col_delta,dir_code)
 				movement,distance = self.check_move(new_movement,movement,new_distance,distance)
 			except Exception as e:
 				print(f"Bear direction {dir_code} error at ({row}, {col}): {e}")
 
 		return movement
 
-	def check_position(self,map_data,row,col,position,direction):
+	def check_position(self,row:int,col:int,position: int,direction: int) -> bool,int,int:
 
 		found_stop = False
 		movement = -1
 		distance = 0
+		map_data = self.game_map.get_map()
 
 		if map_data[row][col] == "1" or map_data[row][col] == "2" or map_data[row][col] == "3":
 			found_stop = True
@@ -158,7 +157,7 @@ class Bear:
 
 		return found_stop,movement,distance
 
-	def check_move(self,new_movement,movement,position,distance):
+	def check_move(self,new_movement: int,movement:int,position:int,distance:int)-> int,int:
 
 		if new_movement != -1:
 			if position<distance:
@@ -170,8 +169,9 @@ class Bear:
 
 		return movement,distance
 
-	def determine_movement(self,map_data,row,col):
+	def determine_movement(self,row:int,col:int) -> int:
 
+		map_data = self.game_map.get_map()
 		movement_options = ["","","",""]
 		non_blockers = ["."," ","w","P","d"]
 		valid_move = False
@@ -201,7 +201,8 @@ class Bear:
 
 		return movement
 
-	def bear_move(self,map_data,row,col,new_row,new_col):
+	def bear_move(self,row: int,col: int,new_row: int,new_col:int):
+		map_data = self.game_map.get_map()
 		map_data[row][col] = self.square
 		self.square = map_data[new_row][new_col]
 
@@ -210,7 +211,6 @@ class Bear:
 
 		map_data[new_row][new_col]="B"
 		self.position = (new_row,new_col)
-		return map_data
 
 """
 17 September 2025 - Created file

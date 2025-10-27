@@ -42,7 +42,7 @@ class Player:
 		self.map = game_map
 		self.score = 0
 		self.state = self.STATE_RUNNING
-		self.underlying_tile = self.TILE_EMPTY
+		self.underlying_tile = self.map.get_tile(*self.position)
 
 	def move_player(self,key: str) -> None:
 

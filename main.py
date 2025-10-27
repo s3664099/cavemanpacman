@@ -6,7 +6,7 @@ Update: 27 October 2025
 Version: 0.20
 
 
-bear.py
+
 deer.py
 control.py
 display.py
