@@ -48,43 +48,45 @@ class Player:
 
 	def move_player(self,key: str) -> None:
 
-		row,col = self.position
-		new_row,new_col = self.get_new_position(row,col,key)
+		new_position = self.get_new_position(key)
 
 		if self.state == self.STATE_RUNNING:
-			self.process_move(row,col,new_row,new_col)
+			self.process_move(new_position)
 	
-	def get_new_position(self,row: int,col: int,key: str) -> tuple[int,int]:
-		new_row,new_col = row,col
+	def get_new_position(self,key: str) -> tuple[int,int]:
 		
 		delta = self.MOVE_KEYS.get(key,(0,0))
-		new_row = row+delta[0]
-		new_col = col+delta[1]
+		new_row,new_col = self.position
+		return (new_row+delta[0],new_col+delta[1])
 
-		return new_row,new_col
+	def process_move(self,new_position: tuple[int,int]) -> None:
 
-	def process_move(self,row: int,col: int,new_row: int,new_col: int) -> None:
-
-		if self.is_within_bounds(new_row,new_col):
-			new_tile = self.map.get_tile(new_row,new_col)
-			self.process_tile_interaction(row,col,new_row,new_col,new_tile)
+		if self.is_within_bounds(new_position):
+			new_tile = self.map.get_tile(new_position)
+			self.process_tile_interaction(new_position,new_tile)
 		else:
 			self.state = self.STATE_ESCAPED
 
-	def is_within_bounds(self,row: int,col: int) -> bool:
+	def is_within_bounds(self,new_position: tuple[int,int]) -> bool:
+		row,col = new_position
 		within = (0 <= row<self.map.get_height()) and (0<= col<self.map.get_width())
 		return within
 
-	def process_tile_interaction(self,row:int,col:int,new_row:int,new_col:int,new_tile: str) -> None:
+	def process_tile_interaction(self,new_position: tuple[int,int],new_tile: str) -> None:
 
 		if new_tile in self.PLAYER_NON_BLOCKERS:
 			self.update_score(new_tile)
-			self.update_map_tiles(row,col,new_row,new_col)
+			self.update_map_tiles(new_position)
 		elif new_tile == self.TILE_BEAR:
 			self.state = self.STATE_DEAD
 
-	def update_map_tiles(self,old_row: int,old_col:int,new_row:int,new_col:int) -> None:
+	def update_map_tiles(self,new_position: tuple[int,int]) -> None:
 
+		#Update this by passing tuples
+		#Update other parts of code which uses what has changed
+
+		old_row,old_col = self.position
+		new_row,new_col = new_position
 		if self.underlying_tile in self.SPECIAL_TILES:
 			self.map.set_tile(old_row,old_col,self.underlying_tile)
 		else:
@@ -92,7 +94,7 @@ class Player:
 
 		self.underlying_tile = self.map.get_tile(new_row,new_col)
 		self.map.set_tile(new_row,new_col,self.TILE_PLAYER)
-		self.position = (new_row,new_col)
+		self.position = (new_position)
 
 	def update_score(self,new_position: str) -> None:
 		if new_position in self.SCORE_VALUES:

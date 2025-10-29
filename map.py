@@ -2,8 +2,8 @@
 File: Caveman Pacman Map
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 26 October 2025
-Version: 0.12
+Update: 29 October 2025
+Version: 0.13
 """
 
 import random
@@ -120,8 +120,9 @@ class GameMap:
 
 
     # --- Accessors ---
-    def get_cell(self, row: int, col: int) -> str | None:
+    def get_cell(self, map_postion: tuple[int,int]) -> str | None:
         character_position = None
+        row,col = map_postion
         if 0 <= row < self.height and 0 <= col < self.width:
             character_position = self.map_data[row][col]
         return character_position
@@ -129,7 +130,8 @@ class GameMap:
     def get_map(self) -> list[list[str]]:
         return [row.copy() for row in self.map_data]
 
-    def get_tile(self,row: int, column: int) -> tuple[int,int]:
+    def get_tile(self,position: tuple[int,int]) -> str:
+        row,col = map_postion
         return self.map_data[row][column]
 
     def set_tile(self, row: int, column: int, tile: str):
@@ -197,4 +199,5 @@ class GameMap:
 20 October 2025 - Further refactoring of code. Updated init, and load data
 22 October 2025 - Updated code
 26 October 2025 - Changed code to handle map object being passed into player
+29 October 2025 - Passed tuple through to get tile
 """
