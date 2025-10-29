@@ -26,9 +26,9 @@ class Bear:
 	TILE_FOREST_WALL = "1"
 	TILE_CAVE_WALL = "2"
 
-	def __init__(self,row: int,col: int, game_map: GameMap) -> None:
+	def __init__(self,bear_position: tuple[int,int], game_map: GameMap) -> None:
 
-		self.position = (row,col)
+		self.position = bear_position
 		self.game_map = game_map
 		self.chasing = False
 		self.square = " "
@@ -41,8 +41,8 @@ class Bear:
 	def get_position(self) -> tuple[int,int]:
 		return self.position
 
-	def set_position(self,row: int,col: int) -> None:
-		self.position = (row,col)
+	def set_position(self,position: tuple[int,int]) -> None:
+		self.position = position
 
 	def get_square(self) -> str:
 		return self.square

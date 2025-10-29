@@ -54,7 +54,7 @@ def main():
 
     player = Player(game_map)
     deers = [Deer(*pos) for pos in game_map.get_deers()]
-    bears = [Bear(*pos,game_map) for pos in game_map.get_bears()]
+    bears = [Bear(pos,game_map) for pos in game_map.get_bears()]
 
 
     while(player.is_running()):
