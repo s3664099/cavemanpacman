@@ -2,8 +2,8 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 18 October 2025
-Version: 0.11
+Update: 1 November 2025
+Version: 0.13
 """
 
 import random
@@ -63,8 +63,8 @@ class Bear:
 
 		entrance = self.game_map.get_entrance()
 		non_blockers = [self.TILE_DOT,self.TILE_EMPTY,self.TILE_WATER,self.TILE_PLAYER,self.TILE_DEER,self.TILE_CAVE]
-		new_row,new_col = self.position
 		row,col = self.position
+		directions = [(row-1,col),(row+1,col),(row,col-1),(row,col+1)]
 		move = False
 
 		while not move:
@@ -72,17 +72,17 @@ class Bear:
 			if self.start:
 
 				cave_entrance_row,cave_entrance_col = entrance
-				if cave_entrance_col<col and self.game_map.get_tile(row,col-1) in non_blockers:
-					self.bear_move(row,col,row,col-1)
+				if cave_entrance_col<col and self.game_map.get_tile(directions[2]) in non_blockers:
+					self.bear_move(directions[2])
 					move = True
-				elif cave_entrance_row<row and self.game_map.get_tile(row-1,col) in non_blockers:
-					self.bear_move(row,col,row-1,col)
+				elif cave_entrance_row<row and self.game_map.get_tile(directions[0]) in non_blockers:
+					self.bear_move(directions[0])
 					move = True
-				elif cave_entrance_row>row and self.game_map.get_tile(row+1,col) in non_blockers:
-					self.bear_move(row,col,row+1,col)
+				elif cave_entrance_row>row and self.game_map.get_tile(directions[1]) in non_blockers:
+					self.bear_move(directions[1])
 					move = True
-				elif cave_entrance_col>col and self.game_map.get_tile(row,col+1) in non_blockers:
-					self.bear_move(row,col,row,col+1)
+				elif cave_entrance_col>col and self.game_map.get_tile(directions[3]) in non_blockers:
+					self.bear_move(directions[3])
 					move = True
 				else:
 					move = True
@@ -99,16 +99,7 @@ class Bear:
 				else:
 					self.start_chasing()
 
-				if (movement == 0):
-					new_row -=1
-				elif (movement == 1):
-					new_row +=1
-				elif (movement == 2):
-					new_col -=1
-				elif (movement == 3):
-					new_col +=1
-
-				map_data = self.bear_move(row,col,new_row,new_col)
+				map_data = self.bear_move(directions[movement])
 				move = True
 				self.movement = movement
 	
@@ -210,16 +201,16 @@ class Bear:
 
 		return movement
 
-	def bear_move(self,old_row: int,old_col: int,new_row: int,new_col:int) -> None:
-		map_data = self.game_map.get_map()
-		self.game_map.set_tile(old_row,old_col,self.square)
-		self.square = self.game_map.get_tile(new_row,new_col)
+	def bear_move(self,new_positon: tuple[int,int]) -> None:
+		
+		self.game_map.set_tile(self.position,self.square)
+		self.square = self.game_map.get_tile(new_positon)
 
 		if (self.square==self.TILE_DEER):
 			self.square = self.TILE_EMPTY
 
-		self.game_map.set_tile(new_row,new_col,self.TILE_BEAR)
-		self.position = (new_row,new_col)
+		self.game_map.set_tile(new_positon,self.TILE_BEAR)
+		self.position = new_positon
 
 """
 17 September 2025 - Created file
@@ -236,4 +227,5 @@ class Bear:
 17 October 2025 - Added search limit and fixed error reporting
 18 October 2025 - Updated some code, and added section if bear not moving
 27 October 2025 - Updated with single instance of game map and added hints
+1 November 2025 - Started updating passing tuples for position
 """
