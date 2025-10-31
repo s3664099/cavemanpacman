@@ -2,8 +2,8 @@
 File: Caveman Pacman Player
 Author: David Sarkies
 Initial: 18 September 2025
-Update: 27 October 2025
-Version: 0.5
+Update: 31 October 2025
+Version: 0.6
 
 Tighten the tuples for row,col
 """
@@ -44,7 +44,7 @@ class Player:
 		self.map = game_map
 		self.score = 0
 		self.state = self.STATE_RUNNING
-		self.underlying_tile = self.map.get_tile(*self.position)
+		self.underlying_tile = self.map.get_tile(self.position)
 
 	def move_player(self,key: str) -> None:
 
@@ -82,19 +82,14 @@ class Player:
 
 	def update_map_tiles(self,new_position: tuple[int,int]) -> None:
 
-		#Update this by passing tuples
-		#Update other parts of code which uses what has changed
-
-		old_row,old_col = self.position
-		new_row,new_col = new_position
 		if self.underlying_tile in self.SPECIAL_TILES:
-			self.map.set_tile(old_row,old_col,self.underlying_tile)
+			self.map.set_tile(self.position,self.underlying_tile)
 		else:
-			self.map.set_tile(old_row,old_col,self.TILE_EMPTY)
+			self.map.set_tile(self.position,self.TILE_EMPTY)
 
-		self.underlying_tile = self.map.get_tile(new_row,new_col)
-		self.map.set_tile(new_row,new_col,self.TILE_PLAYER)
-		self.position = (new_position)
+		self.underlying_tile = self.map.get_tile(new_position)
+		self.map.set_tile(new_position,self.TILE_PLAYER)
+		self.position = new_position
 
 	def update_score(self,new_position: str) -> None:
 		if new_position in self.SCORE_VALUES:
@@ -125,4 +120,5 @@ class Player:
 				  and returned when the player moves
 				  Moved the map object instead of the map
 27 October 2025 - Removed GameMap from being passed in
+31 October 2025 - Finalised passing tuples
 """
