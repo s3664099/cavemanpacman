@@ -3,7 +3,7 @@ File: Caveman Pacman Deer
 Author: David Sarkies
 Initial: 16 September 2025
 Update: 17 October 2025
-Version: 0.10
+Version: 1.5
 """
 
 import random

@@ -3,7 +3,7 @@ File: Caveman Pacman Display
 Author: David Sarkies
 Initial: 6 September 2025
 Update: 20 October 2025
-Version: 0.6
+Version: 1.2
 """
 
 import pygame

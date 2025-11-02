@@ -3,7 +3,7 @@ File: Caveman Pacman Main
 Author: David Sarkies
 Initial: 4 September 2025
 Update: 27 October 2025
-Version: 0.20
+Version: 1.6
 
 
 

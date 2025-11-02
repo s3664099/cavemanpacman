@@ -3,7 +3,7 @@ File: Caveman Pacman Map
 Author: David Sarkies
 Initial: 4 September 2025
 Update: 31 October 2025
-Version: 0.14
+Version: 1.8
 """
 
 import random

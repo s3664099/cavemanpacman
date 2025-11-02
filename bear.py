@@ -3,7 +3,7 @@ File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
 Update: 2 November 2025
-Version: 0.14
+Version: 1.4
 """
 
 import random

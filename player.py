@@ -3,7 +3,7 @@ File: Caveman Pacman Player
 Author: David Sarkies
 Initial: 18 September 2025
 Update: 31 October 2025
-Version: 0.6
+Version: 1.5
 
 Tighten the tuples for row,col
 """

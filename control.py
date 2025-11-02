@@ -3,7 +3,7 @@ File: Caveman Pacman Control
 Author: David Sarkies
 Initial: 9 September 2025
 Update: 19 October 2025
-Version: 0.2
+Version: 1.1
 """
 
 import pygame
