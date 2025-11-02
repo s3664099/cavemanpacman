@@ -2,8 +2,8 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 1 November 2025
-Version: 0.13
+Update: 2 November 2025
+Version: 0.14
 """
 
 import random
@@ -91,11 +91,10 @@ class Bear:
 					self.start = False
 			else:
 
-				movement = self.find_prey(row,col)
+				movement = self.find_prey()
 
 				if (movement == -1):
-					movement = self.determine_movement(row,col)
-					new_row,new_col = row,col
+					movement = self.determine_movement()
 				else:
 					self.start_chasing()
 
@@ -103,11 +102,12 @@ class Bear:
 				move = True
 				self.movement = movement
 	
-	def search_direction(self,row: int,col: int,row_delta: int,col_delta: int,direction:int) -> tuple[int,int]:
+	def search_direction(self,row_delta: int,col_delta: int,direction:int) -> tuple[int,int]:
 		found_stop = False
 		position = 0
 		new_movement = -1
 		distance = 0
+		row,col = self.position
 
 		while not found_stop and position < MAX_SEARCH_DISTANCE:
 			position+=1
@@ -117,7 +117,7 @@ class Bear:
 
 		return new_movement,distance
 
-	def find_prey(self,row: int,col: int) -> int:
+	def find_prey(self) -> int:
 
 		movement = -1
 		distance = 0
@@ -133,10 +133,10 @@ class Bear:
 		for row_delta,col_delta,dir_code in directions:
 			try:
 				new_movement,new_distance = self.search_direction(
-					row,col,row_delta,col_delta,dir_code)
+					row_delta,col_delta,dir_code)
 				movement,distance = self.check_move(new_movement,movement,new_distance,distance)
 			except Exception as e:
-				print("Bear direction {} error at ({}, {}): {}".format(dir_code,row,col,e))
+				print("Bear direction {} error at {}: {}".format(dir_code,self.position,e))
 
 		return movement
 
@@ -146,9 +146,9 @@ class Bear:
 		movement = -1
 		distance = 0
 
-		if self.game_map.get_tile(row,col) in [self.TILE_FOREST_WALL,self.TILE_CAVE_WALL,self.TILE_EXIT]:
+		if self.game_map.get_tile((row,col)) in [self.TILE_FOREST_WALL,self.TILE_CAVE_WALL,self.TILE_EXIT]:
 			found_stop = True
-		elif self.game_map.get_tile(row,col) in [self.TILE_PLAYER,self.TILE_DEER]:
+		elif self.game_map.get_tile((row,col)) in [self.TILE_PLAYER,self.TILE_DEER]:
 			found_stop = True
 			movement = direction
 			distance = position
@@ -170,12 +170,13 @@ class Bear:
 
 		return movement,distance
 
-	def determine_movement(self,row:int,col:int) -> int:
+	def determine_movement(self) -> int:
 
 		movement_options = ["","","",""]
 		non_blockers = [self.TILE_DOT,self.TILE_EMPTY,self.TILE_WATER,self.TILE_PLAYER,self.TILE_DEER]
 		valid_move = False
 		movement = 0
+		row,col = self.position
 
 		if (self.game_map.get_tile(row-1,col) not in non_blockers) or self.movement ==1:
 			movement_options[0] = self.TILE_BLOCKED
@@ -228,4 +229,5 @@ class Bear:
 18 October 2025 - Updated some code, and added section if bear not moving
 27 October 2025 - Updated with single instance of game map and added hints
 1 November 2025 - Started updating passing tuples for position
+2 November 2025 - Finalised moving row,col to tuples
 """
