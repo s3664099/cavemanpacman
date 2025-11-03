@@ -45,7 +45,7 @@ class Deer:
 		return self.position
 
 	def collides_with(self,encounter: tuple[int,int])->bool:
-		return encounter==self.position
+		return encounter.get_position()==self.position
 
 	def set_position(self,position: tuple[int,int])->bool:
 		self.position = position
