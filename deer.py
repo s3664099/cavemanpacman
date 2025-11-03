@@ -7,6 +7,7 @@ Version: 1.6
 """
 
 import random
+from map import GameMap
 
 class Deer:
 
@@ -21,8 +22,16 @@ class Deer:
 		self.south = 1
 		self.west = 2
 		self.east = 3
-		self.height = -1
-		self.width = -1
+		self.height = game_map.get_height()
+		self.width = game_map.get_width()
+		self.blank_square = " "
+		self.deer = "d"
+		self.blocked = "X"
+		self.player = "P"
+		self.bear = "B"
+		self.forest_wall = "1"
+		self.cave_wall = "2"
+		self.exit = "3"
 
 		self.GRAZING_MOVE_CHANCE = 12
 
@@ -47,28 +56,25 @@ class Deer:
 	def stop_fleeing(self)->None:
 		self.fleeing = False
 
-	def move_deer(self,pacman_map):
-		map_data = pacman_map.get_map()
-		self.width = pacman_map.get_width()
-		self.height = pacman_map.get_height()
-
-		new_row,new_col = self.position
+	def move_deer(self)->None:
+		
 		row,col = self.position
+		directions = [(row-1,col),(row+1,col),(row,col-1),(row,col+1)]
 
-		movement_options,predator_found = self.find_predator(map_data,row,col)
+		movement_options,predator_found = self.find_predator()
 		movement = random.randint(0,self.GRAZING_MOVE_CHANCE)  # 1 in 4 chance to move when grazing
 
 		if (predator_found):
 
 			self.set_fleeing()
-			if map_data[row-1][col] not in self.non_blockers:
-				movement_options[self.north] = "X"
-			if map_data[row+1][col] not in self.non_blockers:
-				movement_options[self.south] = "X"
-			if map_data[row][col-1] not in self.non_blockers:
-				movement_options[self.west] = "X"
-			if map_data[row][col+1] not in self.non_blockers:
-				movement_options[self.east] = "X"
+			if self.game_map.get_tile(directions[0]) not in self.non_blockers:
+				movement_options[self.north] = self.blocked
+			if self.game_map.get_tile(directions[1]) not in self.non_blockers:
+				movement_options[self.south] = self.blocked
+			if self.game_map.get_tile(directions[2]) not in self.non_blockers:
+				movement_options[self.west] = self.blocked
+			if self.game_map.get_tile(directions[3]) not in self.non_blockers:
+				movement_options[self.east] = self.blocked
 
 			can_move = False
 
@@ -80,20 +86,17 @@ class Deer:
 				while not found_move:
 					movement = random.randint(0,3)
 					if movement_options[movement] == "":
-						map_data[row][col] = self.square
-						map_data = self.calculate_move(movement,map_data,row,col)
+						self.game_map.set_tile(self.position,self.square)
+						map_data = self.calculate_move(movement)
 						found_move = True
 
 		else:
 			self.fleeing = False
-			map_data = self.calculate_move(movement,map_data,row,col)
+			map_data = self.calculate_move(movement)
 
-		return map_data
+	def calculate_move(self,movement: int)->None:
 
-	def calculate_move(self,movement,map_data,row,col):
-
-		new_row = row
-		new_col = col
+		new_row, new_col = self.position
 
 		if (movement == self.north):
 			new_row -=1
@@ -105,17 +108,16 @@ class Deer:
 			new_col +=1
 
 		if new_col>=0 and new_col<self.width and new_row>=0 and new_row<self.height:
-			new_position = map_data[new_row][new_col]
+			new_position = self.game_map.get_tile((new_row,new_col))
 			if (new_position in self.non_blockers):
 				if not self.fleeing:
-					map_data[row][col] = " " #Deer removes anything in square if not fleeing
+					self.game_map.set_tile(self.position,self.blank_square) #Deer removes anything in square if not fleeing
 
-				self.square = map_data[new_row][new_col]
-				map_data[new_row][new_col]="d"
+				self.square = self.game_map.get_tile((new_row,new_col))
+				self.game_map.set_tile(self.position,self.deer)
 				self.position = (new_row,new_col)
-		return map_data
 
-	def look_for_predator(self,map_data,row,col,direction,predator_found):
+	def look_for_predator(self,direction,predator_found)-> tuple[str,bool]:
 
 		found_stop = False
 		position = 0
@@ -134,56 +136,57 @@ class Deer:
 				col_pos +=1
 
 			position +=1
-			found_stop,found_predator = self.check_position(map_data,row+row_pos,col+col_pos,position,0)
+			found_stop,found_predator = self.check_position(row_pos,col_pos,0)
 		if found_predator:
-			movement = "X"
+			movement = self.blocked
 			predator_found = True
 
 		return movement,predator_found
 
-	def find_predator(self,map_data,row,col):
+	def find_predator(self)-> tuple[int,bool]:
 
 		movement = ["","","",""]
 		predator_found = False
 
 		try:
-			movement[self.north],predator_found = self.look_for_predator(map_data,row,col,self.north,predator_found)
+			movement[self.north],predator_found = self.look_for_predator(self.north,predator_found)
 		except Exception as e: 
 			print("Deer North")
-			print(row,col)
+			print(self.position)
 			print(e)
 
 		try:
-			movement[self.south],predator_found = self.look_for_predator(map_data,row,col,self.south,predator_found)
+			movement[self.south],predator_found = self.look_for_predator(self.south,predator_found)
 		except Exception as e:
 			print("Deer South")
-			print(row,col)
+			print(self.position)
 			print(e)
 
 		try:
-			movement[self.west],predator_found = self.look_for_predator(map_data,row,col,self.west,predator_found)
+			movement[self.west],predator_found = self.look_for_predator(self.west,predator_found)
 		except Exception as e:
 			print("Deer West")
-			print(row,col)
+			print(self.position)
 			print(e)
 
 		try:
-			movement[self.east],predator_found = self.look_for_predator(map_data,row,col,self.east,predator_found)
+			movement[self.east],predator_found = self.look_for_predator(self.east,predator_found)
 		except Exception as e:
 			print("Deer East")
-			print(row,col)
+			print(self.position)
 			print(e)
 
 		return movement,predator_found
 
-	def check_position(self,map_data,row,col,position,direction):
+	def check_position(self,row_pos:int,col_pos:int,direction:int)->tuple[bool,bool]:
 		found_stop = False
 		found_predator = False
+		row,col = self.position
 
-		if map_data[row][col] == "P" or map_data[row][col] == "B":
+		if self.game_map.get_tile((row+row_pos,col+col_pos)) == self.player or self.game_map.get_tile((row+row_pos,col+col_pos)) == self.bear:
 			found_stop = True
 			found_predator = True
-		elif map_data[row][col] == "1" or map_data[row][col] == "2" or map_data[row][col] == "/":
+		elif self.game_map.get_tile((row+row_pos,col+col_pos)) == self.cave_wall or self.game_map.get_tile((row+row_pos,col+col_pos)) == self.forest_wall or self.game_map.get_tile((row+row_pos,col+col_pos)) == self.exit:
 			found_stop = True
 		elif row<0 or row>=self.height or col<0 or col>=self.width:
 			found_stop = True

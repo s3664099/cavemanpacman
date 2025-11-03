@@ -177,17 +177,18 @@ class Bear:
 		valid_move = False
 		movement = 0
 		row,col = self.position
+		directions = [(row-1,col),(row+1,col),(row,col-1),(row,col+1)]
 
-		if (self.game_map.get_tile(row-1,col) not in non_blockers) or self.movement ==1:
+		if (self.game_map.get_tile(directions[0]) not in non_blockers) or self.movement ==1:
 			movement_options[0] = self.TILE_BLOCKED
 
-		if (self.game_map.get_tile(row+1,col) not in non_blockers) or self.movement ==0:
+		if (self.game_map.get_tile(directions[1]) not in non_blockers) or self.movement ==0:
 			movement_options[1] = self.TILE_BLOCKED
 
-		if (self.game_map.get_tile(row,col-1) not in non_blockers) or self.movement ==3:
+		if (self.game_map.get_tile(directions[2]) not in non_blockers) or self.movement ==3:
 			movement_options[2] = self.TILE_BLOCKED
 
-		if (self.game_map.get_tile(row,col+1) not in non_blockers) or self.movement ==2:
+		if (self.game_map.get_tile(directions[3]) not in non_blockers) or self.movement ==2:
 			movement_options[3] = self.TILE_BLOCKED
 
 		while not valid_move:

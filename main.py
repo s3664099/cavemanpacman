@@ -5,8 +5,9 @@ Initial: 4 September 2025
 Update: 3 November 2025
 Version: 1.7
 
-
-
+map.py
+player.py
+bear.py
 deer.py
 control.py
 display.py
@@ -78,7 +79,7 @@ def main():
 
                 for deer in deers:
                     if (deer.is_fleeing()):
-                        game_map.set_map(deer.move_deer(game_map))
+                        deer.move_deer()
                         deer.stop_fleeing()
 
                 half_move_done = True
@@ -86,7 +87,7 @@ def main():
             if elapsed_time >= FULL_MOVE_INTERVAL:
 
                 for deer in deers:
-                    game_map.set_map(deer.move_deer(game_map))
+                    deer.move_deer()
 
                 for bear in bears:
                     bear.move_bear()
