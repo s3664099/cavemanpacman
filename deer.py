@@ -24,6 +24,11 @@ class Deer:
 		self.east = 3
 		self.height = game_map.get_height()
 		self.width = game_map.get_width()
+
+		self.GRAZING_MOVE_CHANCE = 12
+
+		#Copy from bear
+		#Deer doesn't disappear when taken
 		self.blank_square = " "
 		self.deer = "d"
 		self.blocked = "X"
@@ -32,8 +37,6 @@ class Deer:
 		self.forest_wall = "1"
 		self.cave_wall = "2"
 		self.exit = "3"
-
-		self.GRAZING_MOVE_CHANCE = 12
 
 	def get_score(self) -> int:
 		return self.score
@@ -112,10 +115,13 @@ class Deer:
 			if (new_position in self.non_blockers):
 				if not self.fleeing:
 					self.game_map.set_tile(self.position,self.blank_square) #Deer removes anything in square if not fleeing
+				else:
+					self.game_map.set_tile(self.position,self.square)
 
-				self.square = self.game_map.get_tile((new_row,new_col))
-				self.game_map.set_tile(self.position,self.deer)
+				self.square = new_position
 				self.position = (new_row,new_col)
+				self.game_map.set_tile(self.position,self.deer)
+				
 
 	def look_for_predator(self,direction,predator_found)-> tuple[str,bool]:
 
