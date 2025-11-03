@@ -2,8 +2,8 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 27 October 2025
-Version: 1.6
+Update: 3 November 2025
+Version: 1.7
 
 
 
@@ -53,7 +53,7 @@ def main():
     half_move_done = False
 
     player = Player(game_map)
-    deers = [Deer(*pos) for pos in game_map.get_deers()]
+    deers = [Deer(pos,game_map) for pos in game_map.get_deers()]
     bears = [Bear(pos,game_map) for pos in game_map.get_bears()]
 
 
@@ -131,4 +131,5 @@ if __name__ == "__main__":
 18 October 2025 - Changed pacman_map to game_map
 26 October 2025 - Updated script to handle changes to player object
 27 October 2025 - Passed game map to player once
+3 November 2025 - Passed tuple into deer class
 """

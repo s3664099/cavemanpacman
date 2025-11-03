@@ -2,16 +2,17 @@
 File: Caveman Pacman Deer
 Author: David Sarkies
 Initial: 16 September 2025
-Update: 17 October 2025
-Version: 1.5
+Update: 3 November 2025
+Version: 1.6
 """
 
 import random
 
 class Deer:
 
-	def __init__(self,row,col):
-		self.position = (row,col)
+	def __init__(self,position: tuple[int,int],game_map: GameMap)-> None:
+		self.position = position
+		self.game_map = game_map
 		self.fleeing = False
 		self.score = 10
 		self.non_blockers = ["."," ","w"]
@@ -25,25 +26,25 @@ class Deer:
 
 		self.GRAZING_MOVE_CHANCE = 12
 
-	def get_score(self):
+	def get_score(self) -> int:
 		return self.score
 
-	def get_position(self):
+	def get_position(self) -> tuple[int,int]:
 		return self.position
 
-	def collides_with(self,encounter):
-		return (encounter.get_position()[0],encounter.get_position()[1]) ==self.position
+	def collides_with(self,encounter: tuple[int,int])->bool:
+		return encounter==self.position
 
-	def set_position(self,row,col):
-		self.position = (row,col)
+	def set_position(self,position: tuple[int,int])->bool:
+		self.position = position
 
-	def is_fleeing(self):
+	def is_fleeing(self)->bool:
 		return self.fleeing
 
-	def set_fleeing(self):
+	def set_fleeing(self)->None:
 		self.fleeing = True
 
-	def stop_fleeing(self):
+	def stop_fleeing(self)->None:
 		self.fleeing = False
 
 	def move_deer(self,pacman_map):
@@ -202,5 +203,6 @@ class Deer:
 15 October 2025 - Changed so only map object passed through to move function
 16 October 2025 - Fixed issues and set boundaries
 17 October 2025 - Added max search distance
+3 November 2025 - Started updating class
 
 """
