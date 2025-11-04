@@ -7,14 +7,9 @@ Version: 1.8
 """
 
 import random
+import map_characters as char
 
 class GameMap:
-
-    PLAYER_CHAR = "P"
-    DEER_CHAR = "d"
-    BEAR_CHAR = "B"
-    ENTRANCE_CHAR = "#"
-    EXIT_CHAR = "3"
 
     def __init__(self, file_path):
 
@@ -35,12 +30,12 @@ class GameMap:
         self.exit = None
         self.score = 0
 
-        self.__find_characters()
-        self.__validate_map()
+        self._find_characters()
+        self._validate_map()
     
 
     # --- Map Loading ---
-    def _load_map(self, file_path: str) -> list[list[str]]|None:
+    def _load_map(self, file_path: str) -> list[list[str]]:
 
         map_data = []
 
@@ -71,14 +66,14 @@ class GameMap:
         return map_data
     
     # --- Character Scanning ---
-    def __find_characters(self):
+    def _find_characters(self)->None:
 
         char_mapping = {
-            self.PLAYER_CHAR: 'player',
-            self.DEER_CHAR: 'deers',
-            self.BEAR_CHAR: 'bears',
-            self.ENTRANCE_CHAR: 'entrance',
-            self.EXIT_CHAR: 'exit'
+            char.PLAYER: 'player',
+            char.DEER: 'deers',
+            char.BEAR: 'bears',
+            char.ENTRANCE: 'entrance',
+            char.EXIT: 'exit'
         }
 
         counts = {
@@ -108,7 +103,7 @@ class GameMap:
                         self.exit = (row,col)
 
     # --- Map Validation ---
-    def __validate_map(self):
+    def _validate_map(self):
         if self.player is None:
             raise ValueError("No player found in map!")
 
@@ -120,9 +115,9 @@ class GameMap:
 
 
     # --- Accessors ---
-    def get_cell(self, map_postion: tuple[int,int]) -> str | None:
+    def get_cell(self, map_position: tuple[int,int]) -> str | None:
         character_position = None
-        row,col = map_postion
+        row,col = map_position
         if 0 <= row < self.height and 0 <= col < self.width:
             character_position = self.map_data[row][col]
         return character_position
@@ -135,8 +130,8 @@ class GameMap:
         return self.map_data[row][col]
 
     def set_tile(self, position: tuple[int,int], tile: str):
-        row,column = position
-        self.map_data[row][column] = tile
+        row,col = position
+        self.map_data[row][col] = tile
 
     def set_map(self,map_data: list[list[str]]):
         
@@ -145,6 +140,7 @@ class GameMap:
         self.map_data = [row.copy() for row in map_data]
         self.height = len(self.map_data)
         self.width = len(self.map_data[0])
+        self._find_characters()
 
     def get_dimensions(self) -> tuple[int,int]:
         return self.width, self.height
