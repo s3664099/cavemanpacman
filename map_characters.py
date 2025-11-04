@@ -22,6 +22,7 @@ FOREST_WALL = "1"
 # Environment
 WATER = "w"
 EMPTY = " "
+BLANK = " "
 DOT = "."
 BLOCKED = "X"
 

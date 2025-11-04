@@ -8,6 +8,7 @@ Version: 1.8
 
 import random
 import map_characters as char
+import logging
 
 class GameMap:
 
@@ -51,16 +52,16 @@ class GameMap:
 
                 for i, line in enumerate(lines):
                     if len(line) != width:
-                        print("Warning: Line {} length mismatch. Padding with spaces.".format(i+1))
+                        logging.warning("Warning: Line {} length mismatch. Padding with spaces.".format(i+1))
                         line = line.ljust(width)
                     map_data.append(list(line))
 
         except FileNotFoundError:
-            print("Error: File '{}' not found.".format(file_path))
+            logging.warning("Error: File '{}' not found.".format(file_path))
             map_data = None
 
         except Exception as e:
-            print("Error loading map: {}".format(e))
+            logging.warning("Error loading map: {}".format(e))
             map_data = None
 
         return map_data
@@ -90,7 +91,7 @@ class GameMap:
                     if attr in ['player','entrance','exit']:
                         counts[attr] += 1
                         if counts[attr] > 1:
-                            print("Warning: Multiple {}s found, using last at ({},{})".format(attr,row,col))
+                            logging.warning("Warning: Multiple {}s found, using last at ({},{})".format(attr,row,col))
                     if attr == 'player':
                         self.player = (row,col)
                     elif attr == 'deers':

@@ -9,19 +9,11 @@ Tighten the tuples for row,col
 """
 
 from map import GameMap
+import map_characters as char
 
 class Player:
 
-	TILE_EMPTY = " "
-	TILE_DOT = "."
-	TILE_DEER = "d"
-	TILE_WALL = "#"
-	TILE_EXIT = "3"
-	TILE_BEAR = "B"
-	TILE_WATER = "w"
-	TILE_PLAYER = "P"
-
-	SPECIAL_TILES: list[str] = [TILE_EXIT]
+	SPECIAL_TILES: list[str] = [char.EXIT]
 	SCORE_VALUES: dict[str,int] = {".": 1, "d": 10, "w": 5}
 
 	MOVE_KEYS: dict[str,tuple[int,int]] = {"N": (-1, 0), "S": (1, 0), "E": (0, 1), "W": (0, -1)}
@@ -32,11 +24,11 @@ class Player:
 	STATE_END =  "ended"
 
 	PLAYER_NON_BLOCKERS = [
-		TILE_DOT,
-		TILE_EMPTY,
-		TILE_DEER,
-		TILE_WATER,
-		TILE_EXIT
+		char.DOT,
+		char.EMPTY,
+		char.DEER,
+		char.WATER,
+		char.EXIT
 	]
 
 	def __init__(self,game_map: GameMap) -> None:
@@ -77,7 +69,7 @@ class Player:
 		if new_tile in self.PLAYER_NON_BLOCKERS:
 			self.update_score(new_tile)
 			self.update_map_tiles(new_position)
-		elif new_tile == self.TILE_BEAR:
+		elif new_tile == char.BEAR:
 			self.state = self.STATE_DEAD
 
 	def update_map_tiles(self,new_position: tuple[int,int]) -> None:
@@ -85,10 +77,10 @@ class Player:
 		if self.underlying_tile in self.SPECIAL_TILES:
 			self.map.set_tile(self.position,self.underlying_tile)
 		else:
-			self.map.set_tile(self.position,self.TILE_EMPTY)
+			self.map.set_tile(self.position,char.EMPTY)
 
 		self.underlying_tile = self.map.get_tile(new_position)
-		self.map.set_tile(new_position,self.TILE_PLAYER)
+		self.map.set_tile(new_position,char.PLAYER)
 		self.position = new_position
 
 	def update_score(self,new_position: str) -> None:

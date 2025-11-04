@@ -2,29 +2,18 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 2 November 2025
-Version: 1.4
+Update: 4 November 2025
+Version: 1.5
 """
 
 import random
+import map_characters as char
 from map import GameMap
 
 MAX_SEARCH_DISTANCE = 20
 MOVEABLE_SPACE = ""
 
 class Bear:
-
-	TILE_EMPTY = " "
-	TILE_DOT = "."
-	TILE_DEER = "d"
-	TILE_CAVE = "#"
-	TILE_EXIT = "3"
-	TILE_BEAR = "B"
-	TILE_WATER = "w"
-	TILE_PLAYER = "P"
-	TILE_BLOCKED = "X"
-	TILE_FOREST_WALL = "1"
-	TILE_CAVE_WALL = "2"
 
 	def __init__(self,bear_position: tuple[int,int], game_map: GameMap) -> None:
 
@@ -62,7 +51,7 @@ class Bear:
 	def move_bear(self) -> None:
 
 		entrance = self.game_map.get_entrance()
-		non_blockers = [self.TILE_DOT,self.TILE_EMPTY,self.TILE_WATER,self.TILE_PLAYER,self.TILE_DEER,self.TILE_CAVE]
+		non_blockers = [char.DOT,char.EMPTY,char.WATER,char.PLAYER,char.DEER,char.ENTRANCE]
 		row,col = self.position
 		directions = [(row-1,col),(row+1,col),(row,col-1),(row,col+1)]
 		move = False
@@ -146,9 +135,9 @@ class Bear:
 		movement = -1
 		distance = 0
 
-		if self.game_map.get_tile((row,col)) in [self.TILE_FOREST_WALL,self.TILE_CAVE_WALL,self.TILE_EXIT]:
+		if self.game_map.get_tile((row,col)) in [char.FOREST_WALL,char.CAVE_WALL,char.EXIT]:
 			found_stop = True
-		elif self.game_map.get_tile((row,col)) in [self.TILE_PLAYER,self.TILE_DEER]:
+		elif self.game_map.get_tile((row,col)) in [char.PLAYER,char.DEER]:
 			found_stop = True
 			movement = direction
 			distance = position
@@ -173,23 +162,23 @@ class Bear:
 	def determine_movement(self) -> int:
 
 		movement_options = ["","","",""]
-		non_blockers = [self.TILE_DOT,self.TILE_EMPTY,self.TILE_WATER,self.TILE_PLAYER,self.TILE_DEER]
+		non_blockers = [char.DOT,char.EMPTY,char.WATER,char.PLAYER,char.DEER]
 		valid_move = False
 		movement = 0
 		row,col = self.position
 		directions = [(row-1,col),(row+1,col),(row,col-1),(row,col+1)]
 
 		if (self.game_map.get_tile(directions[0]) not in non_blockers) or self.movement ==1:
-			movement_options[0] = self.TILE_BLOCKED
+			movement_options[0] = char.BLOCKED
 
 		if (self.game_map.get_tile(directions[1]) not in non_blockers) or self.movement ==0:
-			movement_options[1] = self.TILE_BLOCKED
+			movement_options[1] = char.BLOCKED
 
 		if (self.game_map.get_tile(directions[2]) not in non_blockers) or self.movement ==3:
-			movement_options[2] = self.TILE_BLOCKED
+			movement_options[2] = char.BLOCKED
 
 		if (self.game_map.get_tile(directions[3]) not in non_blockers) or self.movement ==2:
-			movement_options[3] = self.TILE_BLOCKED
+			movement_options[3] = char.BLOCKED
 
 		while not valid_move:
 			movement = random.randint(0,3)
@@ -198,7 +187,7 @@ class Bear:
 				print("Don't Move",self.position)
 				movement = -1
 				valid_move = True
-			elif movement_options[movement] != self.TILE_BLOCKED:
+			elif movement_options[movement] != char.BLOCKED:
 				valid_move = True
 
 		return movement
@@ -208,10 +197,10 @@ class Bear:
 		self.game_map.set_tile(self.position,self.square)
 		self.square = self.game_map.get_tile(new_positon)
 
-		if (self.square==self.TILE_DEER):
-			self.square = self.TILE_EMPTY
+		if (self.square==char.DEER):
+			self.square = char.EMPTY
 
-		self.game_map.set_tile(new_positon,self.TILE_BEAR)
+		self.game_map.set_tile(new_positon,char.BEAR)
 		self.position = new_positon
 
 """
@@ -231,4 +220,5 @@ class Bear:
 27 October 2025 - Updated with single instance of game map and added hints
 1 November 2025 - Started updating passing tuples for position
 2 November 2025 - Finalised moving row,col to tuples
+4 November 2025 - Updated to use file holding constants
 """

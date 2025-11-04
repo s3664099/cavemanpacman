@@ -2,12 +2,13 @@
 File: Caveman Pacman Deer
 Author: David Sarkies
 Initial: 16 September 2025
-Update: 3 November 2025
-Version: 1.6
+Update: 4 November 2025
+Version: 1.7
 """
 
 import random
 from map import GameMap
+import map_characters as char
 
 class Deer:
 
@@ -26,17 +27,6 @@ class Deer:
 		self.width = game_map.get_width()
 
 		self.GRAZING_MOVE_CHANCE = 12
-
-		#Copy from bear
-		#Deer doesn't disappear when taken
-		self.blank_square = " "
-		self.deer = "d"
-		self.blocked = "X"
-		self.player = "P"
-		self.bear = "B"
-		self.forest_wall = "1"
-		self.cave_wall = "2"
-		self.exit = "3"
 
 	def get_score(self) -> int:
 		return self.score
@@ -71,13 +61,13 @@ class Deer:
 
 			self.set_fleeing()
 			if self.game_map.get_tile(directions[0]) not in self.non_blockers:
-				movement_options[self.north] = self.blocked
+				movement_options[self.north] = char.BLOCKED
 			if self.game_map.get_tile(directions[1]) not in self.non_blockers:
-				movement_options[self.south] = self.blocked
+				movement_options[self.south] = char.BLOCKED
 			if self.game_map.get_tile(directions[2]) not in self.non_blockers:
-				movement_options[self.west] = self.blocked
+				movement_options[self.west] = char.BLOCKED
 			if self.game_map.get_tile(directions[3]) not in self.non_blockers:
-				movement_options[self.east] = self.blocked
+				movement_options[self.east] = char.BLOCKED
 
 			can_move = False
 
@@ -114,13 +104,13 @@ class Deer:
 			new_position = self.game_map.get_tile((new_row,new_col))
 			if (new_position in self.non_blockers):
 				if not self.fleeing:
-					self.game_map.set_tile(self.position,self.blank_square) #Deer removes anything in square if not fleeing
+					self.game_map.set_tile(self.position,char.BLANK) #Deer removes anything in square if not fleeing
 				else:
 					self.game_map.set_tile(self.position,self.square)
 
 				self.square = new_position
 				self.position = (new_row,new_col)
-				self.game_map.set_tile(self.position,self.deer)
+				self.game_map.set_tile(self.position,char.DEER)
 				
 
 	def look_for_predator(self,direction,predator_found)-> tuple[str,bool]:
@@ -144,7 +134,7 @@ class Deer:
 			position +=1
 			found_stop,found_predator = self.check_position(row_pos,col_pos,0)
 		if found_predator:
-			movement = self.blocked
+			movement = char.BLOCKED
 			predator_found = True
 
 		return movement,predator_found
@@ -189,10 +179,10 @@ class Deer:
 		found_predator = False
 		row,col = self.position
 
-		if self.game_map.get_tile((row+row_pos,col+col_pos)) == self.player or self.game_map.get_tile((row+row_pos,col+col_pos)) == self.bear:
+		if self.game_map.get_tile((row+row_pos,col+col_pos)) == char.PLAYER or self.game_map.get_tile((row+row_pos,col+col_pos)) == char.BEAR:
 			found_stop = True
 			found_predator = True
-		elif self.game_map.get_tile((row+row_pos,col+col_pos)) == self.cave_wall or self.game_map.get_tile((row+row_pos,col+col_pos)) == self.forest_wall or self.game_map.get_tile((row+row_pos,col+col_pos)) == self.exit:
+		elif self.game_map.get_tile((row+row_pos,col+col_pos)) == char.CAVE_WALL or self.game_map.get_tile((row+row_pos,col+col_pos)) == char.FOREST_WALL or self.game_map.get_tile((row+row_pos,col+col_pos)) == char.EXIT:
 			found_stop = True
 		elif row<0 or row>=self.height or col<0 or col>=self.width:
 			found_stop = True
@@ -213,5 +203,5 @@ class Deer:
 16 October 2025 - Fixed issues and set boundaries
 17 October 2025 - Added max search distance
 3 November 2025 - Started updating class
-
+4 November 2025 - Updated to use file holding constants
 """
