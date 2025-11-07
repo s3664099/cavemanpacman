@@ -5,8 +5,6 @@ Initial: 4 September 2025
 Update: 3 November 2025
 Version: 1.7
 
-map.py
-player.py
 bear.py
 deer.py
 control.py
