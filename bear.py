@@ -2,8 +2,8 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 4 November 2025
-Version: 1.5
+Update: 20 November 2025
+Version: 1.6
 """
 
 import random
@@ -50,7 +50,6 @@ class Bear:
 
 	def move_bear(self) -> None:
 
-		entrance = self.game_map.get_entrance()
 		non_blockers = [char.DOT,char.EMPTY,char.WATER,char.PLAYER,char.DEER,char.ENTRANCE]
 		row,col = self.position
 		directions = [(row-1,col),(row+1,col),(row,col-1),(row,col+1)]
@@ -59,25 +58,7 @@ class Bear:
 		while not move:
 
 			if self.start:
-
-				cave_entrance_row,cave_entrance_col = entrance
-				if cave_entrance_col<col and self.game_map.get_tile(directions[2]) in non_blockers:
-					self.bear_move(directions[2])
-					move = True
-				elif cave_entrance_row<row and self.game_map.get_tile(directions[0]) in non_blockers:
-					self.bear_move(directions[0])
-					move = True
-				elif cave_entrance_row>row and self.game_map.get_tile(directions[1]) in non_blockers:
-					self.bear_move(directions[1])
-					move = True
-				elif cave_entrance_col>col and self.game_map.get_tile(directions[3]) in non_blockers:
-					self.bear_move(directions[3])
-					move = True
-				else:
-					move = True
-
-				if cave_entrance_row==row and cave_entrance_col==col:
-					self.start = False
+				move = self.move_toward_entrance(directions,row,col)
 			else:
 
 				movement = self.find_prey()
@@ -91,6 +72,32 @@ class Bear:
 				move = True
 				self.movement = movement
 	
+	def move_toward_entrance(self,directions: list,row: int, col: int) -> bool:
+
+		cave_entrance_row,cave_entrance_col = self.game_map.get_entrance()
+		non_blockers = [char.DOT,char.EMPTY,char.WATER,char.PLAYER,char.DEER,char.ENTRANCE]
+		move = False
+
+		if cave_entrance_col<col and self.game_map.get_tile(directions[2]) in non_blockers:
+			self.bear_move(directions[2])
+			move = True
+		elif cave_entrance_row<row and self.game_map.get_tile(directions[0]) in non_blockers:
+			self.bear_move(directions[0])
+			move = True
+		elif cave_entrance_row>row and self.game_map.get_tile(directions[1]) in non_blockers:
+			self.bear_move(directions[1])
+			move = True
+		elif cave_entrance_col>col and self.game_map.get_tile(directions[3]) in non_blockers:
+			self.bear_move(directions[3])
+			move = True
+		else:
+			move = True
+
+		if cave_entrance_row==row and cave_entrance_col==col:
+			self.start = False
+
+		return move
+
 	def search_direction(self,row_delta: int,col_delta: int,direction:int) -> tuple[int,int]:
 		found_stop = False
 		position = 0
@@ -221,4 +228,5 @@ class Bear:
 1 November 2025 - Started updating passing tuples for position
 2 November 2025 - Finalised moving row,col to tuples
 4 November 2025 - Updated to use file holding constants
+20 November 2025 - Moved code into a move_toward_entrance function
 """
