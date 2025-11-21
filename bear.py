@@ -56,7 +56,6 @@ class Bear:
 		move = False
 
 		while not move:
-
 			if self.start:
 				move = self._move_toward_entrance(directions,row,col)
 			else:
@@ -85,6 +84,7 @@ class Bear:
 
 		if cave_entrance_row==row and cave_entrance_col==col:
 			self.start = False
+			move = True
 
 		return move
 
@@ -95,10 +95,11 @@ class Bear:
 			movement = self._determine_movement()
 		else:
 			self.start_chasing()
+		self._update_position(directions[movement])
 
-		map_data = self._update_position(directions[movement])
 		move = True
 		self.movement = movement
+		return move
 
 	def _find_prey(self) -> int:
 
@@ -202,7 +203,6 @@ class Bear:
 		return movement,distance
 
 	def _update_position(self,new_positon: tuple[int,int]) -> None:
-		
 		self.game_map.set_tile(self.position,self.square)
 		self.square = self.game_map.get_tile(new_positon)
 
