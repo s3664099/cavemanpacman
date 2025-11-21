@@ -133,16 +133,16 @@ class Bear:
 		directions = [(row-1,col),(row+1,col),(row,col-1),(row,col+1)]
 
 		if (self.game_map.get_tile(directions[0]) not in non_blockers) or self.movement ==1:
-			movement_options[0] = char.BLOCKED
+			movement_options[char.NORTH] = char.BLOCKED
 
 		if (self.game_map.get_tile(directions[1]) not in non_blockers) or self.movement ==0:
-			movement_options[1] = char.BLOCKED
+			movement_options[char.SOUTH] = char.BLOCKED
 
 		if (self.game_map.get_tile(directions[2]) not in non_blockers) or self.movement ==3:
-			movement_options[2] = char.BLOCKED
+			movement_options[char.WEST] = char.BLOCKED
 
 		if (self.game_map.get_tile(directions[3]) not in non_blockers) or self.movement ==2:
-			movement_options[3] = char.BLOCKED
+			movement_options[char.EAST] = char.BLOCKED
 
 		while not valid_move:
 			movement = random.randint(0,3)
