@@ -72,7 +72,7 @@ def main():
             if elapsed_time >= HALF_MOVE_INTERVAL and not half_move_done:
                 for bear in bears:
                     if (bear.is_chasing()):
-                        bear.move_bear()
+                        bear.decide_move()
                         bear.stop_chasing()
 
                 for deer in deers:
@@ -88,7 +88,7 @@ def main():
                     deer.move_deer()
 
                 for bear in bears:
-                    bear.move_bear()
+                    bear.decide_move()
 
                 # Reset timing
                 last_update_time = current_time

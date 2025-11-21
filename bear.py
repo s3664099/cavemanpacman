@@ -2,8 +2,8 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 20 November 2025
-Version: 1.6
+Update: 21 November 2025
+Version: 1.7
 """
 
 import random
@@ -48,7 +48,7 @@ class Bear:
 	def start_chasing(self) -> None:
 		self.chasing = True
 
-	def move_bear(self) -> None:
+	def decide_move(self) -> None:
 
 		non_blockers = [char.DOT,char.EMPTY,char.WATER,char.PLAYER,char.DEER,char.ENTRANCE]
 		row,col = self.position
@@ -58,37 +58,27 @@ class Bear:
 		while not move:
 
 			if self.start:
-				move = self.move_toward_entrance(directions,row,col)
+				move = self._move_toward_entrance(directions,row,col)
 			else:
+				move = self._chase_or_wander(directions)
 
-				movement = self.find_prey()
-
-				if (movement == -1):
-					movement = self.determine_movement()
-				else:
-					self.start_chasing()
-
-				map_data = self.bear_move(directions[movement])
-				move = True
-				self.movement = movement
-	
-	def move_toward_entrance(self,directions: list,row: int, col: int) -> bool:
+	def _move_toward_entrance(self,directions: list,row: int, col: int) -> bool:
 
 		cave_entrance_row,cave_entrance_col = self.game_map.get_entrance()
 		non_blockers = [char.DOT,char.EMPTY,char.WATER,char.PLAYER,char.DEER,char.ENTRANCE]
 		move = False
 
 		if cave_entrance_col<col and self.game_map.get_tile(directions[2]) in non_blockers:
-			self.bear_move(directions[2])
+			self._update_position(directions[2])
 			move = True
 		elif cave_entrance_row<row and self.game_map.get_tile(directions[0]) in non_blockers:
-			self.bear_move(directions[0])
+			self._update_position(directions[0])
 			move = True
 		elif cave_entrance_row>row and self.game_map.get_tile(directions[1]) in non_blockers:
-			self.bear_move(directions[1])
+			self._update_position(directions[1])
 			move = True
 		elif cave_entrance_col>col and self.game_map.get_tile(directions[3]) in non_blockers:
-			self.bear_move(directions[3])
+			self._update_position(directions[3])
 			move = True
 		else:
 			move = True
@@ -98,22 +88,19 @@ class Bear:
 
 		return move
 
-	def search_direction(self,row_delta: int,col_delta: int,direction:int) -> tuple[int,int]:
-		found_stop = False
-		position = 0
-		new_movement = -1
-		distance = 0
-		row,col = self.position
+	def _chase_or_wander(self,directions:list) -> bool:
+		movement = self._find_prey()
 
-		while not found_stop and position < MAX_SEARCH_DISTANCE:
-			position+=1
-			check_row = row + (row_delta*position)
-			check_col = col + (col_delta*position)
-			found_stop,new_movement,distance = self.check_position(check_row,check_col,position,direction)
+		if (movement == -1):
+			movement = self._determine_movement()
+		else:
+			self.start_chasing()
 
-		return new_movement,distance
+		map_data = self._update_position(directions[movement])
+		move = True
+		self.movement = movement
 
-	def find_prey(self) -> int:
+	def _find_prey(self) -> int:
 
 		movement = -1
 		distance = 0
@@ -128,7 +115,7 @@ class Bear:
 
 		for row_delta,col_delta,dir_code in directions:
 			try:
-				new_movement,new_distance = self.search_direction(
+				new_movement,new_distance = self._search_direction(
 					row_delta,col_delta,dir_code)
 				movement,distance = self.check_move(new_movement,movement,new_distance,distance)
 			except Exception as e:
@@ -136,37 +123,7 @@ class Bear:
 
 		return movement
 
-	def check_position(self,row:int,col:int,position: int,direction: int) -> tuple[bool,int,int]:
-
-		found_stop = False
-		movement = -1
-		distance = 0
-
-		if self.game_map.get_tile((row,col)) in [char.FOREST_WALL,char.CAVE_WALL,char.EXIT]:
-			found_stop = True
-		elif self.game_map.get_tile((row,col)) in [char.PLAYER,char.DEER]:
-			found_stop = True
-			movement = direction
-			distance = position
-		elif row<0 or row>=self.height or col<0 or col>=self.width:
-			found_stop = True
-			print("Exceeds bounds")
-
-		return found_stop,movement,distance
-
-	def check_move(self,new_movement: int,movement:int,position:int,distance:int)-> tuple[int,int]:
-
-		if new_movement != -1:
-			if position<distance:
-				movement = new_movement
-				distance = position
-			elif movement == -1:
-				movement = new_movement
-				distance = position
-
-		return movement,distance
-
-	def determine_movement(self) -> int:
+	def _determine_movement(self) -> int:
 
 		movement_options = ["","","",""]
 		non_blockers = [char.DOT,char.EMPTY,char.WATER,char.PLAYER,char.DEER]
@@ -199,7 +156,52 @@ class Bear:
 
 		return movement
 
-	def bear_move(self,new_positon: tuple[int,int]) -> None:
+	def _search_direction(self,row_delta: int,col_delta: int,direction:int) -> tuple[int,int]:
+		found_stop = False
+		position = 0
+		new_movement = -1
+		distance = 0
+		row,col = self.position
+
+		while not found_stop and position < MAX_SEARCH_DISTANCE:
+			position+=1
+			check_row = row + (row_delta*position)
+			check_col = col + (col_delta*position)
+			found_stop,new_movement,distance = self.check_position(check_row,check_col,position,direction)
+
+		return new_movement,distance
+
+	def check_position(self,row:int,col:int,position: int,direction: int) -> tuple[bool,int,int]:
+
+		found_stop = False
+		movement = -1
+		distance = 0
+
+		if self.game_map.get_tile((row,col)) in [char.FOREST_WALL,char.CAVE_WALL,char.EXIT]:
+			found_stop = True
+		elif self.game_map.get_tile((row,col)) in [char.PLAYER,char.DEER]:
+			found_stop = True
+			movement = direction
+			distance = position
+		elif row<0 or row>=self.height or col<0 or col>=self.width:
+			found_stop = True
+			print("Exceeds bounds")
+
+		return found_stop,movement,distance
+
+	def check_move(self,new_movement: int,movement:int,position:int,distance:int)-> tuple[int,int]:
+
+		if new_movement != -1:
+			if position<distance:
+				movement = new_movement
+				distance = position
+			elif movement == -1:
+				movement = new_movement
+				distance = position
+
+		return movement,distance
+
+	def _update_position(self,new_positon: tuple[int,int]) -> None:
 		
 		self.game_map.set_tile(self.position,self.square)
 		self.square = self.game_map.get_tile(new_positon)
@@ -229,4 +231,5 @@ class Bear:
 2 November 2025 - Finalised moving row,col to tuples
 4 November 2025 - Updated to use file holding constants
 20 November 2025 - Moved code into a move_toward_entrance function
+21 November 2025 - Updated function names
 """
