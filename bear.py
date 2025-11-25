@@ -11,7 +11,6 @@ import map_characters as char
 from map import GameMap
 
 MAX_SEARCH_DISTANCE = 20
-MOVEABLE_SPACE = ""
 
 class Bear:
 
@@ -124,7 +123,7 @@ class Bear:
 
 	def _determine_movement(self) -> int:
 
-		movement_options = ["","","",""]
+		movement_options = [char.NULL,char.NULL,char.NULL,char.NULL]
 		valid_move = False
 		movement = 0
 		row,col = self.position
@@ -145,7 +144,7 @@ class Bear:
 		while not valid_move:
 			movement = random.randint(0,3)
 
-			if MOVEABLE_SPACE not in movement_options:
+			if char.NULL not in movement_options:
 				print("Don't Move",self.position)
 				movement = -1
 				valid_move = True
