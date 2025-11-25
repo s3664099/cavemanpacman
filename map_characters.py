@@ -2,8 +2,8 @@
 File: Caveman Pacman Characters
 Author: David Sarkies
 Initial: 4 November 2025
-Update: 4 November 2025
-Version: 1.0
+Update: 25 November 2025
+Version: 1.2
 """
 
 # --- Map Character Constants ---
@@ -34,6 +34,7 @@ EAST = 3
 
 NULL = ""
 
+DIRS = [(-1,0),(1,0),(0,-1),(0,1)]
 BEAR_NON_BLOCKERS = [DOT,EMPTY,WATER,PLAYER,DEER,ENTRANCE]
 BEAR_NON_BLOCKERS_SANS_ENTRANCE = [DOT,EMPTY,WATER,PLAYER,DEER]
 
@@ -41,4 +42,6 @@ BEAR_NON_BLOCKERS_SANS_ENTRANCE = [DOT,EMPTY,WATER,PLAYER,DEER]
 
 """
 4 November 2025 - Created File
+23 November 2025 - Added non-blockers for bears
+25 November - Added null for bear strings
 """

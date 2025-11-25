@@ -2,8 +2,8 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 23 November 2025
-Version: 1.8
+Update: 25 November 2025
+Version: 1.9
 """
 
 import random
@@ -11,6 +11,7 @@ import map_characters as char
 from map import GameMap
 
 MAX_SEARCH_DISTANCE = 20
+DIRS = char.DIRS
 
 class Bear:
 
@@ -50,31 +51,30 @@ class Bear:
 	def decide_move(self) -> None:
 
 		row,col = self.position
-		directions = [(row-1,col),(row+1,col),(row,col-1),(row,col+1)]
 		move = False
 
 		while not move:
 			if self.start:
-				move = self._move_toward_entrance(directions,row,col)
+				move = self._move_toward_entrance(row,col)
 			else:
-				move = self._chase_or_wander(directions)
+				move = self._chase_or_wander()
 
-	def _move_toward_entrance(self,directions: list,row: int, col: int) -> bool:
+	def _move_toward_entrance(self,row: int, col: int) -> bool:
 
 		cave_entrance_row,cave_entrance_col = self.game_map.get_entrance()
 		move = False
 
-		if cave_entrance_col<col and self.game_map.get_tile(directions[2]) in char.BEAR_NON_BLOCKERS:
-			self._update_position(directions[2])
+		if cave_entrance_col<col and self.game_map.get_tile((row+DIRS[2][0],col+DIRS[2][1])) in char.BEAR_NON_BLOCKERS:
+			self._update_position((row+DIRS[2][0],col+DIRS[2][1]))
 			move = True
-		elif cave_entrance_row<row and self.game_map.get_tile(directions[0]) in char.BEAR_NON_BLOCKERS:
-			self._update_position(directions[0])
+		elif cave_entrance_row<row and self.game_map.get_tile((row+DIRS[0],col+DIRS[0])) in char.BEAR_NON_BLOCKERS:
+			self._update_position((row+DIRS[0][0],col+DIRS[0][1]))
 			move = True
-		elif cave_entrance_row>row and self.game_map.get_tile(directions[1]) in char.BEAR_NON_BLOCKERS:
-			self._update_position(directions[1])
+		elif cave_entrance_row>row and self.game_map.get_tile((row+DIRS[1],col+DIRS[1])) in char.BEAR_NON_BLOCKERS:
+			self._update_position((row+DIRS[1][0],col+DIRS[1][1]))
 			move = True
-		elif cave_entrance_col>col and self.game_map.get_tile(directions[3]) in char.BEAR_NON_BLOCKERS:
-			self._update_position(directions[3])
+		elif cave_entrance_col>col and self.game_map.get_tile((row+DIRS[3],col+DIRS[3])) in char.BEAR_NON_BLOCKERS:
+			self._update_position((row+DIRS[3][0],col+DIRS[3][1]))
 			move = True
 		else:
 			move = True
@@ -85,14 +85,14 @@ class Bear:
 
 		return move
 
-	def _chase_or_wander(self,directions:list) -> bool:
+	def _chase_or_wander(self) -> bool:
 		movement = self._find_prey()
 
 		if (movement == -1):
 			movement = self._determine_movement()
 		else:
 			self.start_chasing()
-		self._update_position(directions[movement])
+		self._update_position((row+DIRS[movement],col+DIRS[movement]))
 
 		move = True
 		self.movement = movement
@@ -127,18 +127,17 @@ class Bear:
 		valid_move = False
 		movement = 0
 		row,col = self.position
-		directions = [(row-1,col),(row+1,col),(row,col-1),(row,col+1)]
 
-		if (self.game_map.get_tile(directions[0]) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==1:
+		if (self.game_map.get_tile((row+DIRS[0],col+DIRS[0])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==1:
 			movement_options[char.NORTH] = char.BLOCKED
 
-		if (self.game_map.get_tile(directions[1]) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==0:
+		if (self.game_map.get_tile((row+DIRS[1],col+DIRS[1])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==0:
 			movement_options[char.SOUTH] = char.BLOCKED
 
-		if (self.game_map.get_tile(directions[2]) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==3:
+		if (self.game_map.get_tile((row+DIRS[2],col+DIRS[2])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==3:
 			movement_options[char.WEST] = char.BLOCKED
 
-		if (self.game_map.get_tile(directions[3]) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==2:
+		if (self.game_map.get_tile((row+DIRS[3],col+DIRS[3])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==2:
 			movement_options[char.EAST] = char.BLOCKED
 
 		while not valid_move:
@@ -229,4 +228,5 @@ class Bear:
 20 November 2025 - Moved code into a move_toward_entrance function
 21 November 2025 - Updated function names
 23 November 2025 - Moved non-blockers out
+25 November 2025 - Removed null strings and started updated the movements methods
 """
