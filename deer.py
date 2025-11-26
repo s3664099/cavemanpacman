@@ -2,13 +2,15 @@
 File: Caveman Pacman Deer
 Author: David Sarkies
 Initial: 16 September 2025
-Update: 4 November 2025
-Version: 1.7
+Update: 26 November 2025
+Version: 1.8
 """
 
 import random
 from map import GameMap
 import map_characters as char
+
+DIRS = char.DIRS
 
 class Deer:
 
@@ -17,16 +19,13 @@ class Deer:
 		self.game_map = game_map
 		self.fleeing = False
 		self.score = 10
-		self.non_blockers = ["."," ","w"]
-		self.square = " "
-		self.north = 0
-		self.south = 1
-		self.west = 2
-		self.east = 3
+		self.non_blockers = [char.DOT,char.EMPTY,char.WATER]
+		self.square = char.EMPTY
 		self.height = game_map.get_height()
 		self.width = game_map.get_width()
 
 		self.GRAZING_MOVE_CHANCE = 12
+		self.WILL_MOVE_LIMIT = 3
 
 	def get_score(self) -> int:
 		return self.score
@@ -56,18 +55,17 @@ class Deer:
 
 		movement_options,predator_found = self.find_predator()
 		movement = random.randint(0,self.GRAZING_MOVE_CHANCE)  # 1 in 4 chance to move when grazing
-
 		if (predator_found):
 
 			self.set_fleeing()
 			if self.game_map.get_tile(directions[0]) not in self.non_blockers:
-				movement_options[self.north] = char.BLOCKED
+				movement_options[char.NORTH] = char.BLOCKED
 			if self.game_map.get_tile(directions[1]) not in self.non_blockers:
-				movement_options[self.south] = char.BLOCKED
+				movement_options[char.SOUTH] = char.BLOCKED
 			if self.game_map.get_tile(directions[2]) not in self.non_blockers:
-				movement_options[self.west] = char.BLOCKED
+				movement_options[char.WEST] = char.BLOCKED
 			if self.game_map.get_tile(directions[3]) not in self.non_blockers:
-				movement_options[self.east] = char.BLOCKED
+				movement_options[char.EAST] = char.BLOCKED
 
 			can_move = False
 
@@ -85,20 +83,13 @@ class Deer:
 
 		else:
 			self.fleeing = False
-			map_data = self.calculate_move(movement)
+			if(movement<self.WILL_MOVE_LIMIT):
+				map_data = self.calculate_move(movement)
 
 	def calculate_move(self,movement: int)->None:
 
 		new_row, new_col = self.position
-
-		if (movement == self.north):
-			new_row -=1
-		elif (movement == self.south):
-			new_row +=1
-		elif (movement == self.west):
-			new_col -=1
-		elif (movement == self.east):
-			new_col +=1
+		new_row, new_col = new_row+DIRS[movement][0],new_col+DIRS[movement][1]
 
 		if new_col>=0 and new_col<self.width and new_row>=0 and new_row<self.height:
 			new_position = self.game_map.get_tile((new_row,new_col))
@@ -117,22 +108,13 @@ class Deer:
 
 		found_stop = False
 		position = 0
-		row_pos = 0
-		col_pos = 0
+		row_pos,col_pos = self.position
 		movement = ""
 
 		while not found_stop and position<20:
-			if direction == self.north:
-				row_pos -=1
-			elif direction == self.south:
-				row_pos +=1
-			elif direction == self.west:
-				col_pos -=1
-			else:
-				col_pos +=1
-
 			position +=1
-			found_stop,found_predator = self.check_position(row_pos,col_pos,0)
+			row_pos,col_pos = row_pos+DIRS[direction][0],col_pos+DIRS[direction][1]
+			found_stop,found_predator = self.check_position(row_pos,col_pos)
 		if found_predator:
 			movement = char.BLOCKED
 			predator_found = True
@@ -145,28 +127,28 @@ class Deer:
 		predator_found = False
 
 		try:
-			movement[self.north],predator_found = self.look_for_predator(self.north,predator_found)
+			movement[char.NORTH],predator_found = self.look_for_predator(char.NORTH,predator_found)
 		except Exception as e: 
 			print("Deer North")
 			print(self.position)
 			print(e)
 
 		try:
-			movement[self.south],predator_found = self.look_for_predator(self.south,predator_found)
+			movement[char.SOUTH],predator_found = self.look_for_predator(char.SOUTH,predator_found)
 		except Exception as e:
 			print("Deer South")
 			print(self.position)
 			print(e)
 
 		try:
-			movement[self.west],predator_found = self.look_for_predator(self.west,predator_found)
+			movement[char.WEST],predator_found = self.look_for_predator(char.WEST,predator_found)
 		except Exception as e:
 			print("Deer West")
 			print(self.position)
 			print(e)
 
 		try:
-			movement[self.east],predator_found = self.look_for_predator(self.east,predator_found)
+			movement[char.EAST],predator_found = self.look_for_predator(char.EAST,predator_found)
 		except Exception as e:
 			print("Deer East")
 			print(self.position)
@@ -174,17 +156,16 @@ class Deer:
 
 		return movement,predator_found
 
-	def check_position(self,row_pos:int,col_pos:int,direction:int)->tuple[bool,bool]:
+	def check_position(self,row_pos:int,col_pos:int)->tuple[bool,bool]:
 		found_stop = False
 		found_predator = False
-		row,col = self.position
-
-		if self.game_map.get_tile((row+row_pos,col+col_pos)) == char.PLAYER or self.game_map.get_tile((row+row_pos,col+col_pos)) == char.BEAR:
+		
+		if self.game_map.get_tile((row_pos,col_pos)) == char.PLAYER or self.game_map.get_tile((row_pos,col_pos)) == char.BEAR:
 			found_stop = True
 			found_predator = True
-		elif self.game_map.get_tile((row+row_pos,col+col_pos)) == char.CAVE_WALL or self.game_map.get_tile((row+row_pos,col+col_pos)) == char.FOREST_WALL or self.game_map.get_tile((row+row_pos,col+col_pos)) == char.EXIT:
+		elif self.game_map.get_tile((row_pos,col_pos)) == char.CAVE_WALL or self.game_map.get_tile((row_pos,col_pos)) == char.FOREST_WALL or self.game_map.get_tile((row_pos,col_pos)) == char.EXIT:
 			found_stop = True
-		elif row<0 or row>=self.height or col<0 or col>=self.width:
+		elif row_pos<0 or row_pos>=self.height or col_pos<0 or col_pos>=self.width:
 			found_stop = True
 
 		return found_stop,found_predator
@@ -204,4 +185,5 @@ class Deer:
 17 October 2025 - Added max search distance
 3 November 2025 - Started updating class
 4 November 2025 - Updated to use file holding constants
+26 November 2025 - Updated code to make it tighter
 """

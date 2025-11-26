@@ -2,8 +2,8 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 25 November 2025
-Version: 1.9
+Update: 26 November 2025
+Version: 1.10
 """
 
 import random
@@ -57,7 +57,7 @@ class Bear:
 			if self.start:
 				move = self._move_toward_entrance(row,col)
 			else:
-				move = self._chase_or_wander()
+				move = self._chase_or_wander(row,col)
 
 	def _move_toward_entrance(self,row: int, col: int) -> bool:
 
@@ -67,13 +67,13 @@ class Bear:
 		if cave_entrance_col<col and self.game_map.get_tile((row+DIRS[2][0],col+DIRS[2][1])) in char.BEAR_NON_BLOCKERS:
 			self._update_position((row+DIRS[2][0],col+DIRS[2][1]))
 			move = True
-		elif cave_entrance_row<row and self.game_map.get_tile((row+DIRS[0],col+DIRS[0])) in char.BEAR_NON_BLOCKERS:
+		elif cave_entrance_row<row and self.game_map.get_tile((row+DIRS[0][0],col+DIRS[0][1])) in char.BEAR_NON_BLOCKERS:
 			self._update_position((row+DIRS[0][0],col+DIRS[0][1]))
 			move = True
-		elif cave_entrance_row>row and self.game_map.get_tile((row+DIRS[1],col+DIRS[1])) in char.BEAR_NON_BLOCKERS:
+		elif cave_entrance_row>row and self.game_map.get_tile((row+DIRS[1][0],col+DIRS[1][1])) in char.BEAR_NON_BLOCKERS:
 			self._update_position((row+DIRS[1][0],col+DIRS[1][1]))
 			move = True
-		elif cave_entrance_col>col and self.game_map.get_tile((row+DIRS[3],col+DIRS[3])) in char.BEAR_NON_BLOCKERS:
+		elif cave_entrance_col>col and self.game_map.get_tile((row+DIRS[3][0],col+DIRS[3][1])) in char.BEAR_NON_BLOCKERS:
 			self._update_position((row+DIRS[3][0],col+DIRS[3][1]))
 			move = True
 		else:
@@ -85,14 +85,14 @@ class Bear:
 
 		return move
 
-	def _chase_or_wander(self) -> bool:
+	def _chase_or_wander(self,row:int,col:int) -> bool:
 		movement = self._find_prey()
 
 		if (movement == -1):
 			movement = self._determine_movement()
 		else:
 			self.start_chasing()
-		self._update_position((row+DIRS[movement],col+DIRS[movement]))
+		self._update_position((row+DIRS[movement][0],col+DIRS[movement][1]))
 
 		move = True
 		self.movement = movement
@@ -128,16 +128,16 @@ class Bear:
 		movement = 0
 		row,col = self.position
 
-		if (self.game_map.get_tile((row+DIRS[0],col+DIRS[0])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==1:
+		if (self.game_map.get_tile((row+DIRS[0][0],col+DIRS[0][1])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==1:
 			movement_options[char.NORTH] = char.BLOCKED
 
-		if (self.game_map.get_tile((row+DIRS[1],col+DIRS[1])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==0:
+		if (self.game_map.get_tile((row+DIRS[1][0],col+DIRS[1][1])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==0:
 			movement_options[char.SOUTH] = char.BLOCKED
 
-		if (self.game_map.get_tile((row+DIRS[2],col+DIRS[2])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==3:
+		if (self.game_map.get_tile((row+DIRS[2][0],col+DIRS[2][1])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==3:
 			movement_options[char.WEST] = char.BLOCKED
 
-		if (self.game_map.get_tile((row+DIRS[3],col+DIRS[3])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==2:
+		if (self.game_map.get_tile((row+DIRS[3][0],col+DIRS[3][1])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==2:
 			movement_options[char.EAST] = char.BLOCKED
 
 		while not valid_move:
@@ -229,4 +229,5 @@ class Bear:
 21 November 2025 - Updated function names
 23 November 2025 - Moved non-blockers out
 25 November 2025 - Removed null strings and started updated the movements methods
+26 November 2025 - Fixed errors
 """
