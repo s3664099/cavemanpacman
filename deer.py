@@ -33,7 +33,7 @@ class Deer:
 	def get_position(self) -> tuple[int,int]:
 		return self.position
 
-	def collides_with(self,encounter: tuple[int,int])->bool:
+	def collides_with(self,encounter: object)->bool:
 		return encounter.get_position()==self.position
 
 	def set_position(self,position: tuple[int,int])->bool:
@@ -70,7 +70,7 @@ class Deer:
 			can_move = False
 
 			for x in movement_options:
-				if x == "":
+				if x == char.NULL:
 					can_move = True
 			if can_move:
 				found_move = False
@@ -78,13 +78,13 @@ class Deer:
 					movement = random.randint(0,3)
 					if movement_options[movement] == "":
 						self.game_map.set_tile(self.position,self.square)
-						map_data = self.calculate_move(movement)
+						self.calculate_move(movement)
 						found_move = True
 
 		else:
 			self.fleeing = False
 			if(movement<self.WILL_MOVE_LIMIT):
-				map_data = self.calculate_move(movement)
+				self.calculate_move(movement)
 
 	def calculate_move(self,movement: int)->None:
 
@@ -109,21 +109,21 @@ class Deer:
 		found_stop = False
 		position = 0
 		row_pos,col_pos = self.position
-		movement = ""
+		movement = char.NULL
 
 		while not found_stop and position<20:
 			position +=1
 			row_pos,col_pos = row_pos+DIRS[direction][0],col_pos+DIRS[direction][1]
-			found_stop,found_predator = self.check_position(row_pos,col_pos)
-		if found_predator:
+			found_stop,predator_found = self.check_position(row_pos,col_pos)
+
+		if predator_found:
 			movement = char.BLOCKED
-			predator_found = True
 
 		return movement,predator_found
 
 	def find_predator(self)-> tuple[int,bool]:
 
-		movement = ["","","",""]
+		movement = [char.NULL,char.NULL,char.NULL,char.NULL]
 		predator_found = False
 
 		try:
