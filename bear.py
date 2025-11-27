@@ -2,8 +2,8 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 26 November 2025
-Version: 1.10
+Update: 27 November 2025
+Version: 1.11
 """
 
 import random
@@ -124,21 +124,15 @@ class Bear:
 	def _determine_movement(self) -> int:
 
 		movement_options = [char.NULL,char.NULL,char.NULL,char.NULL]
+		prev_movement = [1,0,3,2]
+		NON_BLOCK = char.BEAR_NON_BLOCKERS_SANS_ENTRANCE
 		valid_move = False
 		movement = 0
 		row,col = self.position
 
-		if (self.game_map.get_tile((row+DIRS[0][0],col+DIRS[0][1])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==1:
-			movement_options[char.NORTH] = char.BLOCKED
-
-		if (self.game_map.get_tile((row+DIRS[1][0],col+DIRS[1][1])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==0:
-			movement_options[char.SOUTH] = char.BLOCKED
-
-		if (self.game_map.get_tile((row+DIRS[2][0],col+DIRS[2][1])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==3:
-			movement_options[char.WEST] = char.BLOCKED
-
-		if (self.game_map.get_tile((row+DIRS[3][0],col+DIRS[3][1])) not in char.BEAR_NON_BLOCKERS_SANS_ENTRANCE) or self.movement ==2:
-			movement_options[char.EAST] = char.BLOCKED
+		for x in range(4):
+			if (self.game_map.get_tile((row+DIRS[x][0],col+DIRS[x][1])) not in NON_BLOCK) or self.movement == prev_movement[x]:
+				movement_options[x] = char.BLOCKED
 
 		while not valid_move:
 			movement = random.randint(0,3)

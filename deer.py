@@ -2,8 +2,8 @@
 File: Caveman Pacman Deer
 Author: David Sarkies
 Initial: 16 September 2025
-Update: 26 November 2025
-Version: 1.8
+Update: 27 November 2025
+Version: 1.9
 """
 
 import random
@@ -55,17 +55,13 @@ class Deer:
 
 		movement_options,predator_found = self.find_predator()
 		movement = random.randint(0,self.GRAZING_MOVE_CHANCE)  # 1 in 4 chance to move when grazing
+		
 		if (predator_found):
-
+			
 			self.set_fleeing()
-			if self.game_map.get_tile(directions[0]) not in self.non_blockers:
-				movement_options[char.NORTH] = char.BLOCKED
-			if self.game_map.get_tile(directions[1]) not in self.non_blockers:
-				movement_options[char.SOUTH] = char.BLOCKED
-			if self.game_map.get_tile(directions[2]) not in self.non_blockers:
-				movement_options[char.WEST] = char.BLOCKED
-			if self.game_map.get_tile(directions[3]) not in self.non_blockers:
-				movement_options[char.EAST] = char.BLOCKED
+			for x in range(4):
+				if self.game_map.get_tile(directions[x]) not in self.non_blockers:
+					movement_options[x] = char.BLOCKED
 
 			can_move = False
 
@@ -76,7 +72,7 @@ class Deer:
 				found_move = False
 				while not found_move:
 					movement = random.randint(0,3)
-					if movement_options[movement] == "":
+					if movement_options[movement] == char.NULL:
 						self.game_map.set_tile(self.position,self.square)
 						self.calculate_move(movement)
 						found_move = True
@@ -95,7 +91,7 @@ class Deer:
 			new_position = self.game_map.get_tile((new_row,new_col))
 			if (new_position in self.non_blockers):
 				if not self.fleeing:
-					self.game_map.set_tile(self.position,char.BLANK) #Deer removes anything in square if not fleeing
+					self.game_map.set_tile(self.position,char.BLANK)
 				else:
 					self.game_map.set_tile(self.position,self.square)
 
@@ -107,6 +103,7 @@ class Deer:
 	def look_for_predator(self,direction,predator_found)-> tuple[str,bool]:
 
 		found_stop = False
+		found_predator = False
 		position = 0
 		row_pos,col_pos = self.position
 		movement = char.NULL
@@ -114,9 +111,10 @@ class Deer:
 		while not found_stop and position<20:
 			position +=1
 			row_pos,col_pos = row_pos+DIRS[direction][0],col_pos+DIRS[direction][1]
-			found_stop,predator_found = self.check_position(row_pos,col_pos)
+			found_stop,found_predator = self.check_position(row_pos,col_pos)
 
-		if predator_found:
+		if found_predator:
+			predator_found = True
 			movement = char.BLOCKED
 
 		return movement,predator_found
@@ -126,40 +124,20 @@ class Deer:
 		movement = [char.NULL,char.NULL,char.NULL,char.NULL]
 		predator_found = False
 
-		try:
-			movement[char.NORTH],predator_found = self.look_for_predator(char.NORTH,predator_found)
-		except Exception as e: 
-			print("Deer North")
-			print(self.position)
-			print(e)
-
-		try:
-			movement[char.SOUTH],predator_found = self.look_for_predator(char.SOUTH,predator_found)
-		except Exception as e:
-			print("Deer South")
-			print(self.position)
-			print(e)
-
-		try:
-			movement[char.WEST],predator_found = self.look_for_predator(char.WEST,predator_found)
-		except Exception as e:
-			print("Deer West")
-			print(self.position)
-			print(e)
-
-		try:
-			movement[char.EAST],predator_found = self.look_for_predator(char.EAST,predator_found)
-		except Exception as e:
-			print("Deer East")
-			print(self.position)
-			print(e)
+		for x in range(4):
+			try:
+				movement[x],predator_found = self.look_for_predator(x,predator_found)
+			except Exception as e: 
+				print("Deer ",x)
+				print(self.position)
+				print(e)
 
 		return movement,predator_found
 
 	def check_position(self,row_pos:int,col_pos:int)->tuple[bool,bool]:
 		found_stop = False
 		found_predator = False
-		
+
 		if self.game_map.get_tile((row_pos,col_pos)) == char.PLAYER or self.game_map.get_tile((row_pos,col_pos)) == char.BEAR:
 			found_stop = True
 			found_predator = True
@@ -186,4 +164,5 @@ class Deer:
 3 November 2025 - Started updating class
 4 November 2025 - Updated to use file holding constants
 26 November 2025 - Updated code to make it tighter
+27 November 2025 - Tightened Code to create loops
 """
