@@ -36,7 +36,7 @@ class Deer:
 	def collides_with(self,encounter: object)->bool:
 		return encounter.get_position()==self.position
 
-	def set_position(self,position: tuple[int,int])->bool:
+	def set_position(self,position: tuple[int,int])->None:
 		self.position = position
 
 	def is_fleeing(self)->bool:
@@ -57,7 +57,7 @@ class Deer:
 		movement = random.randint(0,self.GRAZING_MOVE_CHANCE)  # 1 in 4 chance to move when grazing
 		
 		if (predator_found):
-			
+
 			self.set_fleeing()
 			for x in range(4):
 				if self.game_map.get_tile(directions[x]) not in self.non_blockers:
@@ -105,13 +105,14 @@ class Deer:
 		found_stop = False
 		found_predator = False
 		position = 0
-		row_pos,col_pos = self.position
+		r,c = self.position
 		movement = char.NULL
 
 		while not found_stop and position<20:
 			position +=1
-			row_pos,col_pos = row_pos+DIRS[direction][0],col_pos+DIRS[direction][1]
-			found_stop,found_predator = self.check_position(row_pos,col_pos)
+			r += DIRS[direction][0]
+			c += DIRS[direction][1]
+			found_stop,found_predator = self.check_position(r,c)
 
 		if found_predator:
 			predator_found = True
@@ -125,12 +126,7 @@ class Deer:
 		predator_found = False
 
 		for x in range(4):
-			try:
-				movement[x],predator_found = self.look_for_predator(x,predator_found)
-			except Exception as e: 
-				print("Deer ",x)
-				print(self.position)
-				print(e)
+			movement[x],predator_found = self.look_for_predator(x,predator_found)
 
 		return movement,predator_found
 
