@@ -36,16 +36,20 @@ class View:
 		self.height = dimensions[1]
 		self.screen = pygame.display.set_mode((self.width*self.CELL_SIZE, (self.height+1)*self.CELL_SIZE))
 		pygame.display.set_caption("Caveman Pacman")
-		self.player = pygame.transform.scale(pygame.image.load("icons/cavewoman.png"),(self.CELL_SIZE,self.CELL_SIZE))
-		self.bear = pygame.transform.scale(pygame.image.load("icons/bear.png"),(self.CELL_SIZE,self.CELL_SIZE))
-		self.deer = pygame.transform.scale(pygame.image.load("icons/deer.png"),(self.CELL_SIZE,self.CELL_SIZE))		
-		self.forest = pygame.transform.scale(pygame.image.load("icons/forest.png"),(self.CELL_SIZE,self.CELL_SIZE))
-		self.raspberry = pygame.transform.scale(pygame.image.load("icons/raspberry.png"),(self.CELL_SIZE,self.CELL_SIZE))
-		self.wall = pygame.transform.scale(pygame.image.load("icons/wall.png"),(self.CELL_SIZE,self.CELL_SIZE))
-		self.puddle = pygame.transform.scale(pygame.image.load("icons/puddle.png"),(self.CELL_SIZE,self.CELL_SIZE))
+		self.player = self.load_icon(self.CAVEWOMAN, self.CELL_SIZE)
+		self.bear = self.load_icon(self.BEAR, self.CELL_SIZE)
+		self.deer = self.load_icon(self.DEER, self.CELL_SIZE)	
+		self.forest = self.load_icon(self.FOREST, self.CELL_SIZE)
+		self.raspberry = self.load_icon(self.RASBERRY, self.CELL_SIZE)
+		self.wall = self.load_icon(self.WALL, self.CELL_SIZE)
+		self.puddle = self.load_icon(self.PUDDLE, self.CELL_SIZE)
 
 		# Draw score, lives, and level text
 		self.font = pygame.font.Font(None, self.FONTSIZE)
+
+	def load_icon(self,name, size):
+		path = os.path.join(self.ICON_DIR, name)
+		return pygame.transform.scale(pygame.image.load(path), (size, size))
 
 	def update_screen(self,pacman_map,score):
 
