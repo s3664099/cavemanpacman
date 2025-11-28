@@ -2,19 +2,27 @@
 File: Caveman Pacman Display 
 Author: David Sarkies
 Initial: 6 September 2025
-Update: 20 October 2025
-Version: 1.2
+Update: 28 November 2025
+Version: 1.3
 """
 
 import pygame
+import map_characters as char
 
 class View:
+
+	self.SIZE = 30
+	self.HEIGHT = 30
+	self.FONTSIZE = 24
+	self.SCORE_BAR_COLOUR = (50, 50, 50)
+	self.SCORE_TEXT_COLOUR = (255, 255, 255)
+
 	def __init__ (self,dimensions):
 
 		pygame.init()
 
-		self.cell_size = 30
-		self.score_bar_height = 30  # Height of the score bar
+		self.cell_size = self.SIZE
+		self.score_bar_height = self.HEIGHT  # Height of the score bar
 		self.width = dimensions[0]
 		self.height = dimensions[1]
 		self.screen = pygame.display.set_mode((self.width*self.cell_size, (self.height+1)*self.cell_size))
@@ -27,6 +35,9 @@ class View:
 		self.wall = pygame.transform.scale(pygame.image.load("icons/wall.png"),(self.cell_size,self.cell_size))
 		self.puddle = pygame.transform.scale(pygame.image.load("icons/puddle.png"),(self.cell_size,self.cell_size))
 
+		# Draw score, lives, and level text
+		font = pygame.font.Font(None, self.FONTSIZE)
+
 	def update_screen(self,pacman_map,score):
 
 		self.screen.fill((0,0,0))
@@ -34,13 +45,10 @@ class View:
 
 		# Draw score bar at the top
 		score_bar_rect = pygame.Rect(0, 0, self.width*self.cell_size, self.score_bar_height)
-		pygame.draw.rect(self.screen, (50, 50, 50), score_bar_rect)  # Dark gray background
-
-		# Draw score, lives, and level text
-		font = pygame.font.Font(None, 24)
+		pygame.draw.rect(self.screen, self.SCORE_BAR_COLOUR , score_bar_rect)  # Dark gray background
 
 		# Score text
-		score_text = font.render(f"Score: {score}", True, (255, 255, 255))
+		score_text = font.render(f"Score: {score}", True, self.SCORE_TEXT_COLOUR)
 		self.screen.blit(score_text, (10, 5))
 
 		for col in range(self.width):
@@ -50,19 +58,19 @@ class View:
 				y_pos = row * self.cell_size + self.score_bar_height
 				x_pos = col * self.cell_size
 
-				if game_map[row][col] == "1":
+				if game_map[row][col] == char.FOREST_WALL:
 					self.screen.blit(self.forest,(x_pos,y_pos))
-				elif game_map[row][col] == "B":
+				elif game_map[row][col] == char.BEAR:
 					self.screen.blit(self.bear,(x_pos,y_pos))
-				elif game_map[row][col] == "d":
+				elif game_map[row][col] == char.DEER:
 					self.screen.blit(self.deer,(x_pos,y_pos))
-				elif game_map[row][col] == "2":
+				elif game_map[row][col] == char.CAVE_WALL:
 					self.screen.blit(self.wall,(x_pos,y_pos))
-				elif game_map[row][col] == "P":
+				elif game_map[row][col] == char.PLAYER:
 					self.screen.blit(self.player,(x_pos,y_pos))
-				elif game_map[row][col] == ".":
+				elif game_map[row][col] == char.DOT:
 					self.screen.blit(self.raspberry,(x_pos,y_pos))
-				elif game_map[row][col] == "w":
+				elif game_map[row][col] == char.WATER:
 					self.screen.blit(self.puddle,(x_pos,y_pos))
 
 		pygame.display.update()
@@ -77,4 +85,5 @@ class View:
 13 September 2025 - Added puddle
 18 September 2025 - Updated with player score
 20 September 2025 - Fixed score display
+28 November 2025 - Removed magic numbers
 """

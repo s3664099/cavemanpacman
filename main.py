@@ -5,10 +5,10 @@ Initial: 4 September 2025
 Update: 3 November 2025
 Version: 1.7
 
-- Remove non-blockers from player class
 
-deer.py
-control.py
+
+
+
 display.py
 main.py
 
