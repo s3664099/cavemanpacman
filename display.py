@@ -13,7 +13,7 @@ import os
 class View:
 
 	CELL_SIZE = 30
-	SCROLL_BAR_HEIGHT = 30
+	SCORE_BAR_HEIGHT = 30
 	FONTSIZE = 24
 	SCORE_BAR_COLOUR = (50, 50, 50)
 	SCORE_TEXT_COLOUR = (255, 255, 255)
@@ -24,7 +24,7 @@ class View:
 	BEAR = "bear.png"
 	DEER = "deer.png"
 	FOREST = "forest.png"
-	RASBERRY = "raspberry.png"
+	RASPBERRY = "raspberry.png"
 	WALL = "wall.png"
 	PUDDLE = "puddle.png"
 
@@ -40,12 +40,22 @@ class View:
 		self.bear = self.load_icon(self.BEAR, self.CELL_SIZE)
 		self.deer = self.load_icon(self.DEER, self.CELL_SIZE)	
 		self.forest = self.load_icon(self.FOREST, self.CELL_SIZE)
-		self.raspberry = self.load_icon(self.RASBERRY, self.CELL_SIZE)
+		self.raspberry = self.load_icon(self.RASPBERRY, self.CELL_SIZE)
 		self.wall = self.load_icon(self.WALL, self.CELL_SIZE)
 		self.puddle = self.load_icon(self.PUDDLE, self.CELL_SIZE)
 
 		# Draw score, lives, and level text
 		self.font = pygame.font.Font(None, self.FONTSIZE)
+
+		self.tile_lookup = {
+			char.FOREST_WALL: self.forest,
+			char.BEAR: self.bear,
+			char.DEER: self.deer,
+			char.CAVE_WALL: self.wall,
+			char.PLAYER: self.player,
+			char.DOT: self.raspberry,
+			char.WATER: self.puddle
+		}
 
 	def load_icon(self,name, size):
 		path = os.path.join(self.ICON_DIR, name)
@@ -57,7 +67,7 @@ class View:
 		game_map = pacman_map.get_map()
 
 		# Draw score bar at the top
-		score_bar_rect = pygame.Rect(0, 0, self.width*self.CELL_SIZE, self.SCROLL_BAR_HEIGHT)
+		score_bar_rect = pygame.Rect(0, 0, self.width*self.CELL_SIZE, self.SCORE_BAR_HEIGHT)
 		pygame.draw.rect(self.screen, self.SCORE_BAR_COLOUR , score_bar_rect)  # Dark gray background
 
 		# Score text
@@ -68,23 +78,13 @@ class View:
 			for row in range(self.height):
 
 				# Adjust y-position by score_bar_height to make room for the score bar
-				y_pos = row * self.CELL_SIZE + self.SCROLL_BAR_HEIGHT
+				y_pos = row * self.CELL_SIZE + self.SCORE_BAR_HEIGHT
 				x_pos = col * self.CELL_SIZE
 
-				if game_map[row][col] == char.FOREST_WALL:
-					self.screen.blit(self.forest,(x_pos,y_pos))
-				elif game_map[row][col] == char.BEAR:
-					self.screen.blit(self.bear,(x_pos,y_pos))
-				elif game_map[row][col] == char.DEER:
-					self.screen.blit(self.deer,(x_pos,y_pos))
-				elif game_map[row][col] == char.CAVE_WALL:
-					self.screen.blit(self.wall,(x_pos,y_pos))
-				elif game_map[row][col] == char.PLAYER:
-					self.screen.blit(self.player,(x_pos,y_pos))
-				elif game_map[row][col] == char.DOT:
-					self.screen.blit(self.raspberry,(x_pos,y_pos))
-				elif game_map[row][col] == char.WATER:
-					self.screen.blit(self.puddle,(x_pos,y_pos))
+				tile = game_map[row][col]
+				image = self.tile_lookup.get(tile)
+				if image:
+					self.screen.blit(image, (x_pos,y_pos))
 
 		pygame.display.update()
 
