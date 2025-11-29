@@ -2,8 +2,8 @@
 File: Caveman Pacman Main 
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 3 November 2025
-Version: 1.7
+Update: 29 November 2025
+Version: 2.0
 """
 
 from map import GameMap
@@ -125,4 +125,5 @@ if __name__ == "__main__":
 26 October 2025 - Updated script to handle changes to player object
 27 October 2025 - Passed game map to player once
 3 November 2025 - Passed tuple into deer class
+29 November 2025 - Change variable name and increased version
 """

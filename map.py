@@ -2,8 +2,8 @@
 File: Caveman Pacman Map
 Author: David Sarkies
 Initial: 4 September 2025
-Update: 31 October 2025
-Version: 1.8
+Update: 29 November 2025
+Version: 2.0
 """
 
 import random
@@ -199,4 +199,5 @@ class GameMap:
 26 October 2025 - Changed code to handle map object being passed into player
 29 October 2025 - Passed tuple through to get tile
 31 October 2025 - Updated code to handle tuples
+29 November 2025 - Increased version number
 """

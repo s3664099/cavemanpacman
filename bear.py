@@ -2,8 +2,8 @@
 File: Caveman Pacman Bear
 Author: David Sarkies
 Initial: 17 September 2025
-Update: 27 November 2025
-Version: 1.11
+Update: 29 November 2025
+Version: 2.0
 """
 
 import random
@@ -224,4 +224,5 @@ class Bear:
 23 November 2025 - Moved non-blockers out
 25 November 2025 - Removed null strings and started updated the movements methods
 26 November 2025 - Fixed errors
+29 November 2025 - Increased version number
 """

@@ -2,8 +2,8 @@
 File: Caveman Pacman Control 
 Author: David Sarkies
 Initial: 9 September 2025
-Update: 19 October 2025
-Version: 1.1
+Update: 29 November 2025
+Version: 2.0
 """
 
 import pygame
@@ -38,4 +38,5 @@ def get_keypress():
 11 October 2025 - Added pause keystroke
 19 October 2025 - Added handling for multiple keystrokes
 				- Tightened code
+29 November 2025 - Increased version number
 """

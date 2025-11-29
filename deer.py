@@ -2,8 +2,8 @@
 File: Caveman Pacman Deer
 Author: David Sarkies
 Initial: 16 September 2025
-Update: 27 November 2025
-Version: 1.9
+Update: 29 November 2025
+Version: 2.0
 """
 
 import random
@@ -161,4 +161,5 @@ class Deer:
 4 November 2025 - Updated to use file holding constants
 26 November 2025 - Updated code to make it tighter
 27 November 2025 - Tightened Code to create loops
+29 November 2025 - Increased version number
 """

@@ -2,8 +2,8 @@
 File: Caveman Pacman Display 
 Author: David Sarkies
 Initial: 6 September 2025
-Update: 28 November 2025
-Version: 1.3
+Update: 29 November 2025
+Version: 2.0
 """
 
 import pygame
@@ -99,4 +99,5 @@ class View:
 18 September 2025 - Updated with player score
 20 September 2025 - Fixed score display
 28 November 2025 - Removed magic numbers
+29 November 2025 - Increased version number
 """

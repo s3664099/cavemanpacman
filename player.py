@@ -2,8 +2,8 @@
 File: Caveman Pacman Player
 Author: David Sarkies
 Initial: 18 September 2025
-Update: 31 October 2025
-Version: 1.5
+Update: 29 November 2025
+Version: 2.0
 """
 
 from map import GameMap
@@ -111,4 +111,5 @@ class Player:
 				  Moved the map object instead of the map
 27 October 2025 - Removed GameMap from being passed in
 31 October 2025 - Finalised passing tuples
+29 November 2025 - Increased version number
 """
