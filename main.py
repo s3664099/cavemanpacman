@@ -4,14 +4,6 @@ Author: David Sarkies
 Initial: 4 September 2025
 Update: 3 November 2025
 Version: 1.7
-
-
-
-
-
-display.py
-main.py
-
 """
 
 from map import GameMap
@@ -22,8 +14,8 @@ from display import View
 import control
 import time
 
-HALF_MOVE_INTERVAL = 0.5
-FULL_MOVE_INTERVAL = 1
+REACTION_RATE = 0.5  # Bears chasing and fleeing deer move every 0.5 seconds
+WANDER_RATE = 1.0    # Random deer and bear movement each second
  
 """Remove deer that collided with player or bears using list comprehension"""
 def remove_deers(deers,player,bears):
@@ -47,6 +39,7 @@ def handle_quit(action,player):
 def main():
     game_map = GameMap("map.txt")
     game_screen = View(game_map.get_dimensions())
+    clock = pygame.time.Clock()
 
     last_update_time = time.time()
     is_paused = False
@@ -70,7 +63,7 @@ def main():
 
             player.move_player(action)
 
-            if elapsed_time >= HALF_MOVE_INTERVAL and not half_move_done:
+            if elapsed_time >= REACTION_RATE and not half_move_done:
                 for bear in bears:
                     if (bear.is_chasing()):
                         bear.decide_move()
@@ -83,7 +76,7 @@ def main():
 
                 half_move_done = True
 
-            if elapsed_time >= FULL_MOVE_INTERVAL:
+            if elapsed_time >= WANDER_RATE:
 
                 for deer in deers:
                     deer.move_deer()
@@ -98,7 +91,7 @@ def main():
             deers = remove_deers(deers,player,bears)
 
         game_screen.update_screen(game_map,player.get_score())
-        time.sleep(0.01)
+        clock.tick(60)
     game_map.print_map()
     return player.get_score()
 
